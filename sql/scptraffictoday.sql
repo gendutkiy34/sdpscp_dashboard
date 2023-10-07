@@ -1,0 +1,18 @@
+SELECT CDR_HOUR,CDR_DATE
+,SUM(total) AS attempt
+,SUM(CASE WHEN diameter IN ('2001','4010','4012','5031','5030','5004','5005') THEN total ELSE 0 END) AS success
+FROM
+(SELECT to_char(CDR_TIMESTAMP,'dd-mm-yyyy') AS cdr_date,to_char(CDR_TIMESTAMP,'HH24') AS cdr_hour,DIAMETER_RESULT_CODES AS diameter
+,count(CALL_REFERENCE_NUMBER) AS total
+FROM SCPCDR.INTERNAL_CDR_{day}
+WHERE M_MONTH= '{mon}'
+GROUP BY to_char(CDR_TIMESTAMP,'dd-mm-yyyy'),to_char(CDR_TIMESTAMP,'HH24'),DIAMETER_RESULT_CODES
+UNION ALL
+SELECT to_char(CDR_TIMESTAMP,'dd-mm-yyyy') AS cdr_date,to_char(CDR_TIMESTAMP,'HH24') AS cdr_hour,DIAMETER_RESULT_CODES AS diameter
+,count(CALL_REFERENCE_NUMBER) AS total
+FROM SCPCDR.INTERNAL_CDR_{day}@scpcdr_prod_pk_public
+WHERE M_MONTH= '{mon}'
+GROUP BY to_char(CDR_TIMESTAMP,'dd-mm-yyyy'),to_char(CDR_TIMESTAMP,'HH24'),DIAMETER_RESULT_CODES
+)
+GROUP BY CDR_HOUR,CDR_DATE
+ORDER BY cdr_hour

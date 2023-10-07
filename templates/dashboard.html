@@ -1,0 +1,258 @@
+{% extends "baseapp.html" %}
+{% block content %}
+<section class="section dashboard">
+
+    <div class="row">
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">VOICE <span></span></h5>
+                    <h5>
+                    <span class="card-result-normal">{{ scpatt }} </span>
+                    <span class="card-result-remark">SuccesRate| </span>
+                    {% if scpsr >= 99 %}
+                    <span  class="card-result-ok">{{ scpsr }}%</span>
+                    {% elif scpsr >= 98   and scpsr < 99  %}
+                    <span  class="card-result-warning">{{ scpsr }} %</span>
+                    {% elif scpsr < 98 %}
+                    <span  class="card-result-danger">{{ scpsr }} %</span>
+                    {% else %}
+                    <span  class="card-result-normal">{{ scpsr }} %</span>
+                    {% endif %}
+                  </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">BULK MT <span></span></h5>
+                    <h5>
+                      <span class="card-result-normal">{{ bmtatt }} </span>
+                      <span class="card-result-remark">SuccesRate| </span>
+                      {% if bmtsr >= 99 %}
+                      <span  class="card-result-ok">{{ bmtsr }}%</span>
+                      {% elif bmtsr >= 98   and bmtsr < 99  %}
+                      <span  class="card-result-warning">{{ bmtsr }} %</span>
+                      {% elif bmtsr < 98 %}
+                      <span  class="card-result-danger">{{ bmtsr }} %</span>
+                      {% else %}
+                      <span  class="card-result-normal">{{ bmtsr   }} %</span>
+                      {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">BULK MO <span></span></h5>
+                    <h5>
+                      <span class="card-result-normal">{{ bmoatt }} </span>
+                      <span class="card-result-remark">SuccesRate| </span>
+                      {% if bmosr >= 99 %}
+                      <span  class="card-result-ok">{{ bmosr }}%</span>
+                      {% elif bmosr >= 98   and bmtsr < 99  %}
+                      <span  class="card-result-warning">{{ bmosr }} %</span>
+                      {% elif bmosr < 98 %}
+                      <span  class="card-result-danger">{{ bmosr }} %</span>
+                      {% else %}
+                      <span  class="card-result-normal">{{ bmosr }} %</span>
+                      {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">DIGITAL SERVICE<span></span></h5>
+                    <h5>
+                      <span class="card-result-normal">{{ digatt }} </span>
+                      <span class="card-result-remark">SuccesRate| </span>
+                      {% if digsr >= 99 %}
+                      <span  class="card-result-ok">{{ digsr }}%</span>
+                      {% elif digsr >= 98 and digsr < 99  %}
+                      <span  class="card-result-warning">{{ digsr }} %</span>
+                      {% elif digsr < 98 %}
+                      <span  class="card-result-danger">{{ digsr }} %</span>
+                      {% else %}
+                      <span  class="card-result-normal">{{ digsr }} %</span>
+                      {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">SUBSCRIPTION MO<span></span></h5>
+                    <h5>
+                      <span class="card-result-normal">{{ smoatt }} </span>
+                      <span class="card-result-remark">SuccesRate| </span>
+                      {% if smosr >= 99 %}
+                      <span  class="card-result-ok">{{ smosr }}%</span>
+                      {% elif smosr >= 98   and smosr < 99  %}
+                      <span  class="card-result-warning">{{ smosr }} %</span>
+                      {% elif smosr < 98 %}
+                      <span  class="card-result-danger">{{ smosr }} %</span>
+                      {% else %}
+                      <span  class="card-result-normal">{{ smosr }} %</span>
+                      {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Card -->
+        <div class="col-xxl-4 col-md-2">
+            <div class="card info-card2 sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">SUBSCRIPTION MT <span></span></h5>
+                    <h5>
+                      <span class="card-result-normal">{{ smtatt }} </span>
+                      <span class="card-result-remark">SuccesRate| </span>
+                      {% if smtsr >= 99 %}
+                      <span  class="card-result-ok">{{ smtsr }}%</span>
+                      {% elif smtsr >= 98   and smtsr < 99  %}
+                      <span  class="card-result-warning">{{ smtsr }} %</span>
+                      {% elif smtsr < 98 %}
+                      <span  class="card-result-danger">{{ smtsr }} %</span>
+                      {% else %}
+                      <span  class="card-result-normal">{{ smtsr }} %</span>
+                      {% endif %}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <!-- VOICE Chart1 -->
+        <div class="col-xxl-4 col-md-6">
+            <div class="card info-card-chart sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">CHART1 </h5>
+                    <!-- Line Chart -->
+              <div id="lineChart1"></div>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart1"), {
+                    series: [{
+                      name: "bulk mt",
+                      data: {{ listbmtatt |tojson }}
+                    },
+                    {
+                      name: "bulk mo",
+                      data: {{ listbmoatt |tojson }}
+                    },
+                    {
+                      name: "digital service",
+                      data: {{ listdigatt |tojson }}
+                    },
+                    {
+                      name: "subscription mo",
+                      data: {{ listsmoatt |tojson }}
+                    }],
+                    chart: {
+                      type: 'line',
+                      height: 350
+                    },
+                   dataLabels: {
+                      enabled: false
+                    },
+                    legend: {
+                      show:true,
+                      position: 'top',
+                      floating: false,
+                      verticalAlign: 'bottom',
+                      align:'center',
+                      offsetY: 10,
+                    },
+                    stroke: {
+                    curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ listsdpmin |tojson }},
+                      labels: {
+                        show: true,
+                        rotate: -90,
+                        rotateAlways: true
+                          }
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Bar Chart -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VOICE Chart2 -->
+        <div class="col-xxl-4 col-md-6">
+          <div class="card info-card sales-card">
+              <div class="card-body">
+                  <h5 class="card-title">CHART2 </h5>
+                  <!-- Line Chart -->
+            <div id="lineChart2"></div>
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                new ApexCharts(document.querySelector("#lineChart2"), {
+                  series: [{
+                    name: "voice",
+                    data: {{ listscpatt |tojson }}
+                  },
+                  {
+                    name: "subscription mt",
+                    data: {{ listsmtatt |tojson }}
+                  }],
+                  chart: {
+                    type: 'line',
+                    height: 350
+                  },
+                 dataLabels: {
+                    enabled: false
+                  },
+                  stroke: {
+                  curve: 'smooth'
+                  },
+                  xaxis: {
+                    categories: {{ listsdpmin |tojson }},
+                    labels: {
+                      show: true,
+                      rotate: -90,
+                      rotateAlways: true
+                        }
+                  },
+                  legend: {
+                      show:true,
+                      position: 'top',
+                      floating: false,
+                      verticalAlign: 'bottom',
+                      align:'center',
+                      offsetY: 10,
+                    }
+                }).render();
+              });
+            </script>
+            <!-- End Bar Chart -->
+              </div>
+          </div>
+      </div>
+
+
+    </div>
+</section>
+{% endblock %}
