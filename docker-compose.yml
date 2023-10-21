@@ -1,0 +1,15 @@
+services:
+  dashboard:
+    container_name: dashboard
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    network_mode: bridge
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+        - ./:/opt/app/
+    working_dir : /opt/app
+    entrypoint: [ "python3", "testing_funct.py"]
+    
+     
