@@ -17,7 +17,6 @@ list_sk=[100,200,133,150,300,400]
 
 class ScpData():
 
-
     def __init__(self,pathfile=None):
         try : 
             self.dataraw=pd.read_csv(pathfile)
@@ -29,8 +28,6 @@ class ScpData():
             self.flagdata=1
         except Exception:
             self.flagdata=0
-        #return self.flagdata
-
 
     def SumDataToday(self):
         if self.flagdata > 0 :
@@ -46,7 +43,6 @@ class ScpData():
             scpsr='N/A'
         return scpatt,scpsuc,scpsr
 
-
     def HourlyDataToday(self):
         if self.flagdata > 0 :
             list_hour=self.df_scp_today['HOUR'].drop_duplicates().tolist()
@@ -58,7 +54,40 @@ class ScpData():
             list_hour=[]
         return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
         
+    def Att3Days(self):
+        if self.flagdata > 0 :
+            dfhourlyatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
+        else :
+            list0=[]
+            list1=[]
+            list7=[]
+            listh=[]
+            return list0,list1,list7,listh
 
+    def AttSk3Days(self,servicekey=None):
+        if self.flagdata > 0 :
+            dffilter=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
+            skatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            return skatt['day0'].tolist(),skatt['day1'].tolist(),skatt['day7'].tolist(),skatt['HOUR'].tolist()
+        else :
+            list0=[]
+            list1=[]
+            list7=[]
+            listh=[]
+            return list0,list1,list7,listh
+    
+    def AttDia3Days(self,diameter=None):
+        if self.flagdata > 0 :
+            dffilter=self.dataraw[self.dataraw['DIAMETER']==int(diameter)]
+            diaatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            return diaatt['day0'].tolist(),diaatt['day1'].tolist(),diaatt['day7'].tolist(),diaatt['HOUR'].tolist()
+        else :
+            list0=[]
+            list1=[]
+            list7=[]
+            listh=[]
+            return list0,list1,list7,listh
 
 
 
