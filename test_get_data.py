@@ -13,10 +13,10 @@ import pandas as pd
 
 #d0=ConvertStrtoDate('2023-10-22',format='%Y-%m-%d')
 #GetData3Days(day0=d0,env='sdp')
-#GetDataNow()
-pathdir=os.getcwd()
-rawscp=f'{pathdir}/rawdata/scp_data_3day.csv'
-datascp=ScpData(pathfile=rawscp)
-list1,list2,list3,listh=datascp.AttSk3Days(servicekey=150)
-os.system('clear')
-print(list1,list2,list3,listh)
+GetDataNow(env='sdp')
+#pathdir=os.getcwd()
+#rawscp=f'{pathdir}/rawdata/scp_data_3day.csv'
+#datascp=ScpData(pathfile=rawscp)
+#list1,list2,list3,listh=datascp.AttSk3Days(servicekey=150)
+#os.system('clear')
+#print(list1,list2,list3,listh)
