@@ -22,6 +22,7 @@ class ScpData():
             self.dataraw=pd.read_csv(pathfile)
             self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].fillna(0)
+            self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
@@ -42,6 +43,9 @@ class ScpData():
             scpsuc='N/A'
             scpsr='N/A'
         return scpatt,scpsuc,scpsr
+    
+    #def VerifyData(self):
+    #    return self.df_scp_today
 
     def HourlyDataToday(self):
         if self.flagdata > 0 :
@@ -53,6 +57,19 @@ class ScpData():
             dfhourlysuc=[]
             list_hour=[]
         return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
+    
+    def HourMinScp(self):
+        if self.flagdata > 0 :
+            self.df_scp_today['hourmin']=self.df_scp_today['CDRDATE'].apply(lambda x: str(x)[11:] )
+            dfrawminute=self.df_scp_today[['hourmin','TOTAL']].groupby('hourmin').sum().reset_index()
+            dfminute=dfrawminute.iloc[-25:]
+            list_scpatt=dfminute['TOTAL'].tolist()
+            list_scpmin=dfminute['hourmin'].tolist()
+        else :
+            list_scpatt=[]
+            list_scpmin=[]
+        return list_scpatt,list_scpmin
+
         
     def Att3Days(self):
         if self.flagdata > 0 :
@@ -120,6 +137,8 @@ class SdpData():
             sdpsr='N/A'
         return sdpatt,sdpsuc,sdpsr
     
+    def VerifyData(self):
+        return self.df_sdp_today
 
     def HourlyDataToday(self,accflag=None):
         if self.flagdata > 0:
@@ -133,6 +152,27 @@ class SdpData():
             dfhourlysuc=[]
             list_hour=[]
         return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
+    
+    def HourMinSdp(self):
+        if self.flagdata > 0:
+            self.df_sdp_today['hourmin']=self.df_sdp_today['CDRDATE'].apply(lambda x: str(x)[11:] )
+            dfrawminute=pd.pivot_table(self.df_sdp_today,values='TOTAL', index=['hourmin'],columns=['ACCESSFLAG'], aggfunc="sum", fill_value=0).reset_index()
+            dfminute=dfrawminute.iloc[-25:]
+            list_moatt=dfminute[66].tolist()
+            list_mtatt=dfminute[67].tolist()
+            list_diatt=dfminute[68].tolist()
+            list_soatt=dfminute[72].tolist()
+            list_statt=dfminute[73].tolist()
+            list_min=dfminute['hourmin'].tolist()
+        else :
+            list_moatt=[]
+            list_mtatt=[]
+            list_diatt=[]
+            list_soatt=[]
+            list_statt=[]
+            list_min=[]
+        return list_moatt,list_mtatt,list_diatt,list_soatt,list_statt,list_min
+
         
 
     
