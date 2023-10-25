@@ -5,15 +5,16 @@ from modules.DbQuery import ReadConfig,ReadTrx,GetDataToday,GetListSuccessRate,G
 import time
 from datetime import timedelta
 from modules.connection import OracleCon
-from modules.GetData import GetDataNow,GetData3Days,GetDataNew
+from modules.GetData import GetDataNow,GetDataNew,GetData3DCur
 from modules.DataProcess import ScpData,SdpData
 import pandas as pd
 
 
 
 #d0=ConvertStrtoDate('2023-10-22',format='%Y-%m-%d')
-#GetData3Days(day0=d0,env='sdp')
-GetDataNew(env='sdp')
+today=GetToday()
+GetData3DCur(day0=today,env='scp')
+#GetDataNew(env='sdp')
 #pathdir=os.getcwd()
 #rawscp=f'{pathdir}/rawdata/scp_data_3day.csv'
 #datascp=ScpData(pathfile=rawscp)

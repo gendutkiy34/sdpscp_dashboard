@@ -22,7 +22,6 @@ class ScpData():
             self.dataraw=pd.read_csv(pathfile)
             self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].fillna(0)
-            self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
@@ -44,8 +43,8 @@ class ScpData():
             scpsr='N/A'
         return scpatt,scpsuc,scpsr
     
-    #def VerifyData(self):
-    #    return self.df_scp_today
+    def VerifyData(self):
+        return self.dataraw
 
     def HourlyDataToday(self):
         if self.flagdata > 0 :
@@ -115,7 +114,9 @@ class SdpData():
             self.dataraw=pd.read_csv(pathfile)
             self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
             self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].fillna(0)
+            self.dataraw['CPID']=self.dataraw['CPID'].fillna(0)
             self.dataraw['INTERNALCAUSE ']=self.dataraw['INTERNALCAUSE'].astype(int)
+            self.dataraw['CPID ']=self.dataraw['CPID'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1

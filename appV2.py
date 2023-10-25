@@ -46,6 +46,10 @@ def index():
                            listsmtatt=list_smt)
 
 
+@app.route('/scpcompare')
+def scp3d():
+    return render_template('dashboard_scp_compare_today.html')
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8081')
     #app.run(debug=True,port='8081')
