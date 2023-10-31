@@ -117,7 +117,11 @@ class SdpData():
             self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].fillna(0)
             self.dataraw['CPID']=self.dataraw['CPID'].fillna(0)
             self.dataraw['INTERNALCAUSE ']=self.dataraw['INTERNALCAUSE'].astype(int)
+<<<<<<< HEAD
             self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
+=======
+            self.dataraw['CPID ']=self.dataraw['CPID'].astype(int)
+>>>>>>> d962ddace36749610caa0b4aa3425249a32ba9b9
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1
