@@ -20,9 +20,8 @@ class ScpData():
     def __init__(self,pathfile=None):
         try : 
             self.dataraw=pd.read_csv(pathfile)
-            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
+            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], errors='ignore')
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].fillna(0)
-            self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
@@ -33,7 +32,7 @@ class ScpData():
     def SumDataToday(self):
         if self.flagdata > 0 :
             today=GetToday()
-            self.df_scp_today=self.dataraw[self.dataraw['DATE']== today.date()]
+            self.df_scp_today=self.dataraw[self.dataraw['DATE'] == today.date()]
             self.dfscpsuc=self.df_scp_today[self.df_scp_today['DIAMETER'].isin(list_diameter)]
             scpatt=pd.Series(self.df_scp_today['TOTAL']).sum()
             scpsuc=pd.Series(self.dfscpsuc['TOTAL']).sum()
@@ -44,8 +43,8 @@ class ScpData():
             scpsr='N/A'
         return scpatt,scpsuc,scpsr
     
-    #def VerifyData(self):
-    #    return self.df_scp_today
+    def VerifyData(self):
+        return self.dataraw
 
     def HourlyDataToday(self):
         if self.flagdata > 0 :
@@ -57,6 +56,7 @@ class ScpData():
             dfhourlysuc=[]
             list_hour=[]
         return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
+    
     
     def HourMinScp(self):
         if self.flagdata > 0 :
@@ -115,7 +115,9 @@ class SdpData():
             self.dataraw=pd.read_csv(pathfile)
             self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
             self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].fillna(0)
+            self.dataraw['CPID']=self.dataraw['CPID'].fillna(0)
             self.dataraw['INTERNALCAUSE ']=self.dataraw['INTERNALCAUSE'].astype(int)
+            self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1

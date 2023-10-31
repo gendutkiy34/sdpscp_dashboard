@@ -38,7 +38,6 @@ def index():
     smoatt,smosuc,smosr=datasdp.SumDataToday(accflag=73)
     print(f'sbulkmo attemp : {smoatt} , sbulkmo success : {smosuc} , sbulkmo success rate : {smosr} %')
     list_bmo,list_bmt,list_dig,list_smo,list_smt,list_sdp_min=datasdp.HourMinSdp()
-    print(list_bmo)
     return render_template('dashboard.html',scpatt=scpatt,scpsr=scpsr,bmoatt=bmoatt,bmosr=bmosr,bmtatt=bmtatt,
                            bmtsr=bmtsr,digatt=digatt,digsr=digsr,smoatt=smoatt,smosr=smosr,smtatt=smtatt,
                            smtsr=smtsr,listscpmin=list_scp_min,listscpatt=list_scp_att,listsdpmin=list_sdp_min,
