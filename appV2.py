@@ -14,8 +14,8 @@ app.app_context().push()
 @app.route('/')
 def index():
     #variable
-    rawscp='./rawdata/scp_data_raw.csv'
-    rawsdp='./rawdata/sdp_data_raw.csv'
+    rawscp='./rawdata/data_scp_today.csv'
+    rawsdp='./rawdata/data_sdp_today.csv'
     #data scp 
     datascp=ScpData(pathfile=rawscp)
     #dfscptoday=datascp.VerifyData()

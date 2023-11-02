@@ -20,7 +20,7 @@ class ScpData():
     def __init__(self,pathfile=None):
         try : 
             self.dataraw=pd.read_csv(pathfile)
-            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], errors='ignore')
+            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], format='%Y-%m-%d %H:%M')
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].fillna(0)
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
@@ -28,12 +28,12 @@ class ScpData():
             self.flagdata=1
         except Exception:
             self.flagdata=0
+        self.today=GetToday()
+        self.df_scp_today=self.dataraw[self.dataraw['DATE'] == self.today.date()]
+        self.dfscpsuc=self.df_scp_today[self.df_scp_today['DIAMETER'].isin(list_diameter)]
 
     def SumDataToday(self):
         if self.flagdata > 0 :
-            today=GetToday()
-            self.df_scp_today=self.dataraw[self.dataraw['DATE'] == today.date()]
-            self.dfscpsuc=self.df_scp_today[self.df_scp_today['DIAMETER'].isin(list_diameter)]
             scpatt=pd.Series(self.df_scp_today['TOTAL']).sum()
             scpsuc=pd.Series(self.dfscpsuc['TOTAL']).sum()
             scpsr=round((scpsuc/scpatt)*100,2)
@@ -43,8 +43,11 @@ class ScpData():
             scpsr='N/A'
         return scpatt,scpsuc,scpsr
     
-    def VerifyData(self):
+    def VerifyDataRaw(self):
         return self.dataraw
+    
+    def VerifyDataToday(self):
+        return self.df_scp_today
 
     def HourlyDataToday(self):
         if self.flagdata > 0 :
@@ -113,25 +116,22 @@ class SdpData():
     def __init__(self,pathfile=None):
         try :
             self.dataraw=pd.read_csv(pathfile)
-            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'])
-            self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].fillna(0)
-            self.dataraw['CPID']=self.dataraw['CPID'].fillna(0)
-            self.dataraw['INTERNALCAUSE ']=self.dataraw['INTERNALCAUSE'].astype(int)
-<<<<<<< HEAD
+            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], format='%Y-%m-%d %H:%M')
+            self.dataraw=self.dataraw.fillna(0)
+            self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].astype(int)
+            self.dataraw['BASICCAUSE']=self.dataraw['BASICCAUSE'].astype(int)
+            self.dataraw['ACCESSFLAG']=self.dataraw['ACCESSFLAG'].astype(int)
             self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
-=======
-            self.dataraw['CPID ']=self.dataraw['CPID'].astype(int)
->>>>>>> d962ddace36749610caa0b4aa3425249a32ba9b9
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1
         except Exception :
             self.flagdata=0
+        self.today=GetToday()
+        self.df_sdp_today=self.dataraw[self.dataraw['DATE']== self.today.date()]
     
     def SumDataToday(self,accflag=None):
         if self.flagdata > 0:
-            self.today=GetToday()
-            self.df_sdp_today=self.dataraw[self.dataraw['DATE']== self.today.date()]
             rawatt=self.df_sdp_today[self.df_sdp_today['ACCESSFLAG']==int(accflag)]
             rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
             sdpatt=pd.Series(rawatt['TOTAL']).sum()
@@ -143,7 +143,10 @@ class SdpData():
             sdpsr='N/A'
         return sdpatt,sdpsuc,sdpsr
     
-    def VerifyData(self):
+    def VerifyDataRaw(self):
+        return self.dataraw
+    
+    def VerifyDataToday(self):
         return self.df_sdp_today
 
     def HourlyDataToday(self,accflag=None):
