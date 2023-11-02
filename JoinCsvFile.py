@@ -9,11 +9,15 @@ import pandas as pd
 import os
 import json
 import time
+from datetime import datetime,timedelta
+from modules.general import GetToday
 
 
 
 def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=None):
     listempty=[]
+    today=GetToday()
+    d1=today-timedelta(days=1)
     try :
         dfold=pd.read_csv(oldfile)
     except Exception :
@@ -22,7 +26,7 @@ def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=No
         dfnew=pd.read_csv(newfile)
     except Exception :
         dfnew=pd.DataFrame(listempty,columns=listcolumn)
-    if len(dfold.index) > 0 and len(dfnew.index) > 0 :
+    if len(dfold.index) > 0 :
         for dn in dfnew.iterrows():
             if env.lower() == 'scp' :
                 cond=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['SERVICE_KEY']==dn[1]['SERVICE_KEY']) & (dfold['DIAMETER']==dn[1]['DIAMETER'])
@@ -33,12 +37,13 @@ def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=No
                 dfold.loc[(cond),['TOTAL']]=dn[1]['TOTAL']
         dfnewfilter=dfnew[~dfnew['CDRDATE'].isin(dfold['CDRDATE'].tolist())]
         dfraw=pd.concat([dfold[listcolumn],dfnewfilter[listcolumn]],ignore_index=True).reset_index()
-    elif len(dfold.index) < 1 and len(dfnew.index) > 0 :
-        dfraw=dfnew[listcolumn]
     else :
-        dfraw=pd.DataFrame(listempty,columns=listcolumn)
+        dfraw=dfnew
     dfrawfilter=dfraw[dfraw['CDRDATE'].str.contains('rows selected') == False]
-    dfrawfilter[listcolumn].iloc[-200000:].to_csv(outputfile,index=False)
+    dfrawfilter['CDRDATE2']=pd.to_datetime(dfrawfilter['CDRDATE'], format='%Y-%m-%d %H:%M')
+    dfrawfilter['DATE']=dfrawfilter['CDRDATE2'].dt.date
+    dffilterfinal=dfrawfilter[dfrawfilter['DATE'] >= d1.date() ]
+    dffilterfinal[listcolumn].to_csv(outputfile,index=False)
     print('data  wrap to file done !!!')
     
 
