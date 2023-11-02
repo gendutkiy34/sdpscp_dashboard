@@ -1,0 +1,250 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+   <div class="row">
+
+    <!-- BAR CHART1-->
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bar Chart1</h5>
+            <!-- Bar Chart -->
+            <div id="barChart"></div>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                new ApexCharts(document.querySelector("#barChart"), {
+                  series: [{
+                    data: [400, 430, 448, 470, 540]
+                  }],
+                  chart: {
+                    type: 'bar',
+                    height: 250
+                  },
+                  title: {
+                    text: "Top 5 CP - Traffic Attempt",
+                    align: 'center',
+                    margin: 0,
+                    offsetX: 20,
+                    offsetY: 20,
+                    floating: false,
+                    style: {
+                        fontSize:  '14px',
+                        fontWeight:  'thin',
+                        color:  '#263238'
+                          },
+                  },
+                  plotOptions: {
+                    bar: {
+                      borderRadius: 4,
+                      horizontal: true,
+                    }
+                  },
+                  dataLabels: {
+                    enabled: false
+                  },
+                  xaxis: {
+                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy'],
+                  }
+                }).render();
+              });
+            </script>
+            <!-- End Bar Chart -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bar Chart2</h5>
+            <!-- Bar Chart -->
+            <div id="barChart2"></div>
+
+            <script>
+              document.addEventListener("DOMContentLoaded", () => {
+                new ApexCharts(document.querySelector("#barChart2"), {
+                  series: [{
+                    data: [400, 430, 448, 470, 540]
+                  }],
+                  chart: {
+                    type: 'bar',
+                    height: 250
+                  },
+                  title: {
+                    text: "Top 5 CP - Traffic Attempt",
+                    align: 'center',
+                    margin: 0,
+                    offsetX: 20,
+                    offsetY: 20,
+                    floating: false,
+                    style: {
+                        fontSize:  '14px',
+                        fontWeight:  'thin',
+                        color:  '#263238'
+                          },
+                  },
+                  plotOptions: {
+                    bar: {
+                      borderRadius: 4,
+                      horizontal: true,
+                    }
+                  },
+                  dataLabels: {
+                    enabled: false
+                  },
+                  xaxis: {
+                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy'],
+                  }
+                }).render();
+              });
+            </script>
+            <!-- End Bar Chart -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART 1 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Polar Area Chart</h5>
+           <!-- Line Chart -->
+           <div id="lineChart3"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart3"), {
+                series: [{
+                  name: "Desktops",
+                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
+                },
+      {
+                  name: "laptop",
+                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                grid: {
+                  row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+   </div>
+
+   <div class="row">
+
+    <!-- CHART 1 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Polar Area Chart</h5>
+           <!-- Line Chart -->
+           <div id="lineChart"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart"), {
+                series: [{
+                  name: "Desktops",
+                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
+                },
+      {
+                  name: "laptop",
+                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                grid: {
+                  row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART 2 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Polar Area Chart</h5>
+           <!-- Line Chart -->
+           <div id="lineChart2"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart2"), {
+                series: [{
+                  name: "Desktops",
+                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
+                },
+      {
+                  name: "laptop",
+                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                grid: {
+                  row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+   </div>
+     
+</section>
+{% endblock %}
