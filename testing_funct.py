@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import time
 from datetime import datetime
+from modules.general import GetToday
 from modules.connection import OracleCon
 from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 
@@ -9,31 +10,73 @@ from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 #path=os.path.abspath(os.path.dirname(__file__))
 #print(path)
 pathdir=os.getcwd()
-rawscp=f'{pathdir}/rawdata/sdp_data_d017.csv'
-
-datascp=SdpDataD017(rawscp)
-datatoday=datascp.VerifyDataRaw()
-list0,list1,list7,listh=datascp.Revenue()
-print(datatoday.head())
-print(list0)
-print(list1)
-print(list7)
-print(listh)
-'''dataraw=dataraw.fillna(0)
-dataraw['CDRDATE2']=pd.to_datetime(dataraw['CDRDATE'], format='%Y-%m-%d %H')
+rawscp=f'{pathdir}/rawdata/data_sdp_today.csv'
+list_diameter=[2001,4012,4010,5031,5030]
+toprev={}
+topatt={}
+datascp=SdpData(rawscp)
+list0,list1,listh=datascp.AttHourToday()
+cp,rev=datascp.RevTop5()
+toprev['cp']=cp
+toprev['revenue']=rev
+cp,att=datascp.AttTop5()
+topatt['cp']=cp
+topatt['attempt']=att
+listsum=datascp.Summary()
+#att0,atth=datascp.SucRatHourly(accflag=66)
+listsr=[66,67,68,72,73]
+dic_data={}
+for s in listsr :
+    att_label=f'att{s}'
+    suc_label=f'suc{s}'
+    sr_label=f'sr{s}'
+    att,succ,hour=datascp.AttHourToday(accflag=s)
+    sr,hoursr=datascp.SucRatHourly(s)
+    dic_data[att_label]=att
+    dic_data[suc_label]=hour
+    dic_data[sr_label]=sr
+dic_data['hour']=hour
+print(listsum)
+'''
+list_rev=[941,949,938]
+today=GetToday()
+dataraw=pd.read_csv(rawscp)
+dataraw=dataraw.fillna(0)
+dataraw['CDRDATE2']=pd.to_datetime(dataraw['CDRDATE'], format='%Y-%m-%d %H:%M')
 dataraw['TOTAL']=dataraw['TOTAL'].astype(int)
 dataraw['REVENUE']=dataraw['REVENUE'].astype(int)
+dataraw['INTERNALCAUSE']=dataraw['INTERNALCAUSE'].astype(int)
+dataraw['BASICCAUSE']=dataraw['BASICCAUSE'].astype(int)
+dataraw['ACCESSFLAG']=dataraw['ACCESSFLAG'].astype(int)
 dataraw['CPID']=dataraw['CPID'].astype(int)
 dataraw['DATE']=dataraw['CDRDATE2'].dt.date
 dataraw['HOUR']=dataraw['CDRDATE2'].dt.hour
-dffilter=dataraw[['ACCESSFLAG','INTERNALCAUSE','BASICCAUSE']]
-dffilter['INTERNALCAUSE']=dffilter['INTERNALCAUSE'].astype(int)
-dffilter['ACCESSFLAG']=dffilter['ACCESSFLAG'].astype(int)
-dfsuc=dffilter[dffilter['INTERNALCAUSE']==2001].drop_duplicates()
-list_rev=[941,949,938]
-df_rev=dataraw[(dataraw['INTERNALCAUSE']==2001) & (dataraw['BASICCAUSE'].isin(list_rev))]
-rev_final=pd.pivot_table(df_rev,values='REVENUE', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-print(rev_final)
+df_sdp_today=dataraw[dataraw['DATE'] == today.date()]
+basiccause_suc=[852,963,123,949,938,941]
+dffilter=df_sdp_today[df_sdp_today['INTERNALCAUSE'].isin(list_diameter)]
+#dffilter=df_sdp_today[(df_sdp_today['INTERNALCAUSE']==2001)]
+dffilter=dffilter[['HOUR','ACCESSFLAG','TOTAL']]
+dfsuc=dffilter.groupby(['HOUR','ACCESSFLAG'])['TOTAL'].sum('TOTAL').reset_index()
+dfsuc=dfsuc.rename(columns={'TOTAL':'SUCCESS'})
+dfatt = df_sdp_today.groupby(['HOUR','ACCESSFLAG'])['TOTAL'].sum('TOTAL').reset_index()
+dfatt=dfatt.rename(columns={'TOTAL':'ATTEMPT'})
+dfjoin=pd.merge(dfatt,dfsuc,on=['HOUR','ACCESSFLAG'])
+dfjoin['SR']=dfjoin.apply(lambda x : round(x['SUCCESS']/x['ATTEMPT']*100,2) ,axis=1)
+dfcp=df_sdp_today[['CP_NAME','ACCESSFLAG','TOTAL']]
+dfsum = dfcp.groupby('CP_NAME')['TOTAL'].sum('TOTAL').reset_index()
+dfsort=dfsum.sort_values('TOTAL',ascending=False).head(5)
+dfacc = dfcp.groupby('ACCESSFLAG')['TOTAL'].sum('TOTAL').reset_index()
+dfacc=dfacc.rename(columns={'TOTAL':'ATTEMPT'})
+dfsucacc=dffilter.groupby('ACCESSFLAG')['TOTAL'].sum('TOTAL').reset_index()
+dfsucacc=dfsucacc.rename(columns={'TOTAL':'SUCCESS'})
+rawrev=df_sdp_today[(df_sdp_today['INTERNALCAUSE']==2001) & (df_sdp_today['BASICCAUSE'].isin(list_rev))]
+dfrev=rawrev.groupby('ACCESSFLAG')['REVENUE'].sum('REVENUE').reset_index()
+dfjoin1=pd.merge(dfacc[['ACCESSFLAG','ATTEMPT']],dfsucacc[['ACCESSFLAG','SUCCESS']],on=['ACCESSFLAG']).reset_index()
+dffinaljoin=pd.merge(dfjoin1[['ACCESSFLAG','ATTEMPT','SUCCESS']],dfrev[['ACCESSFLAG','REVENUE']],on=['ACCESSFLAG']).reset_index()
+#list_rev=[941,949,938]
+#df_rev=dataraw[(dataraw['INTERNALCAUSE']==2001) & (dataraw['BASICCAUSE'].isin(list_rev))]
+#rev_final=pd.pivot_table(df_rev,values='REVENUE', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+print(dffinaljoin)
 #list0,list1,list7,listh=datascp.AttRoam(roaming=1)
 #print(datatoday.info())
 #print(list0)

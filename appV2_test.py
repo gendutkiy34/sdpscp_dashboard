@@ -17,7 +17,7 @@ def index():
 
 @app.route('/test2')
 def test2():
-    return render_template('baseappV2.html')
+    return render_template('dashboard_sdp_today .html')
 
 @app.route('/scpd017')
 def scpd017():
@@ -25,11 +25,54 @@ def scpd017():
 
 @app.route('/testvar')
 def testvar():
-    list_test=[11,33,55,88,99,10]
-    dict_test={'name':'akulaku','nominal':123455,'date':'12-12-2012'}
-    dictest2={'env':'scp','data':[21,34,56,78,300,287]}
-    return render_template('dashboard_teslayout2.html',dic=dict_test,lis=list_test,dic2=dictest2)
+    pathdir=os.path.abspath(os.path.dirname(__file__))
+    rawsdp=f'{pathdir}/rawdata/data_sdp_today.csv'
+    datasdp=SdpData(rawsdp)
+    listsr=[66,67,68,72,73]
+    dic_data={}
+    for s in listsr :
+        att_label=f'att{s}'
+        suc_label=f'suc{s}'
+        sr_label=f'sr{s}'
+        att,succ,hour=datasdp.AttHourToday(accflag=s)
+        sr,srhour=datasdp.SucRatHourly(accflag=s)
+        print(sr)
+        dic_data[att_label]=att
+        dic_data[suc_label]=succ    
+        dic_data[sr_label]=sr 
+    dic_data['hour']=hour
+    return render_template('dashboard_teslayout2.html',dic_sdp=dic_data)
+
+@app.route('/sdptoday')
+def sdptoday():
+    topcp={}
+    pathdir=os.path.abspath(os.path.dirname(__file__))
+    rawsdp=f'{pathdir}/rawdata/data_sdp_today.csv'
+    datasdp=SdpData(rawsdp)
+    listsr=[66,67,68,72,73]
+    dic_data={}
+    for s in listsr :
+        att_label=f'att{s}'
+        suc_label=f'suc{s}'
+        sr_label=f'sr{s}'
+        att,succ,hour=datasdp.AttHourToday(accflag=s)
+        sr,srhour=datasdp.SucRatHourly(accflag=s)
+        print(sr)
+        dic_data[att_label]=att
+        dic_data[suc_label]=succ    
+        dic_data[sr_label]=sr 
+    dic_data['hour']=hour
+    cprev,rev=datasdp.RevTop5()
+    topcp['cprev']=cprev
+    topcp['revenue']=rev
+    cpatt,att=datasdp.AttTop5()
+    topcp['cpatt']=cpatt
+    topcp['attempt']=att
+    dfsum=datasdp.Summary()
+    dic_data['summary']=dfsum
+    return render_template('dashboard_sdp_today.html',dic_sdp=dic_data,dic_top=topcp)
+
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port='8081')
-    #app.run(debug=True,port='8081')
+    app.run(debug=True,host='0.0.0.0',port='3034')
+    #app.run(debug=True,port='3034')

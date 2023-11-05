@@ -4,254 +4,672 @@
 
    <div class="row">
 
-    <!-- BAR CHART1-->
-    <div class="col-lg-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Bar Chart1</h5>
-            <!-- Bar Chart -->
-            <div id="barChart"></div>
-
-            <script>
-              document.addEventListener("DOMContentLoaded", () => {
-                new ApexCharts(document.querySelector("#barChart"), {
-                  series: [{
-                    data: [400, 430, 448, 470, 540]
-                  }],
-                  chart: {
-                    type: 'bar',
-                    height: 200
-                  },
-                  title: {
-                    text: "Top 5 CP - Traffic Attempt",
-                    align: 'center',
-                    margin: 0,
-                    offsetX: 20,
-                    offsetY: 20,
-                    floating: false,
-                    style: {
-                        fontSize:  '14px',
-                        fontWeight:  'thin',
-                        color:  '#263238'
+        <!-- CHART 1 -->
+        <div class="col-lg-3">
+          <div class="card">
+            <div class="card-body2">
+               <!-- Line Chart -->
+               <div id="funnelchart1"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#funnelchart1"), {
+                    series: [
+                        {
+                        name: "revenue",
+                        data: {{ dic_top['revenue'] | tojson }},
+                        },
+                      ],
+                    chart: {
+                      type: 'bar',
+                      height: 250,
+                      },
+                    plotOptions: {
+                      bar: {
+                        borderRadius: 10,
+                        distributed: true,
+                        horizontal: true,
+                        barHeight: '70%',
+                        isFunnel: false,
                           },
-                  },
-                  plotOptions: {
-                    bar: {
-                      borderRadius: 4,
-                      horizontal: true,
+                       },
+                      dataLabels: {
+                        enabled: true,
+                        textAnchor: 'start',
+                        distributed: false,
+                        formatter: function (val,opt) {
+                          return  val
+                          },
+                          style: {
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            ontFamily: 'sans-serif',
+                            colors: ['#22225c']
+                          },
+                      dropShadow: {
+                        enabled: false,
+                          },
+                      },
+                colors: ['#58cf19', '#3bdb91', '#36c0eb', '#cf5afa', '#ff9e3d'],
+                 title: {
+                    text: 'Top 5 CP - Revenue ( million IDR )',
+                    align: 'middle',
+                    },
+                 xaxis: {
+                   categories: {{ dic_top['cprev'] | tojson }},
+                   labels: {
+                    show: false,
                     }
                   },
-                  dataLabels: {
-                    enabled: false
-                  },
-                  xaxis: {
-                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy'],
-                  }
-                }).render();
-              });
-            </script>
-            <!-- End Bar Chart -->
-        </div>
-      </div>
-    </div>
-
-    <!-- BAR CHART2-->
-    <div class="col-lg-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Bar Chart2</h5>
-            <!-- Bar Chart -->
-            <div id="barChart2"></div>
-
-            <script>
-              document.addEventListener("DOMContentLoaded", () => {
-                new ApexCharts(document.querySelector("#barChart2"), {
-                  series: [{
-                    data: [ 580, 690, 1100, 1200, 1380]
-                  }],
-                  chart: {
-                    type: 'bar',
-                    height: 200
-                  },
-                  title: {
-                    text: "Top 5 CP - Revenue",
-                    align: 'center',
-                    margin: 0,
-                    offsetX: 20,
-                    offsetY: 20,
-                    floating: false,
-                    style: {
-                        fontSize:  '14px',
-                        fontWeight:  'thin',
-                        color:  '#263238'
-                          },
-                  },
-                  plotOptions: {
-                    bar: {
-                      borderRadius: 4,
-                      horizontal: true,
+                  yxis: {
+                   show: false,
+                   showAlways: false,
+                   labels: {
+                    show: false,
                     }
                   },
-                  dataLabels: {
-                    enabled: false
-                  },
-                  xaxis: {
-                    categories: [ 'Italy', 'France','United States', 'China', 'Germany'],
-                  }
-                }).render();
-              });
-            </script>
-            <!-- End Bar Chart -->
-        </div>
-      </div>
-    </div>
-
-    <!-- BAR CHART3-->
-    <div class="col-lg-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Bar Chart2</h5>
-            <!-- Bar Chart -->
-            <div id="barChart3"></div>
-
-            <script>
-              document.addEventListener("DOMContentLoaded", () => {
-                new ApexCharts(document.querySelector("#barChart3"), {
-                  series: [{
-                    data: [ 700, 448, 470, 540, 580]
-                  }],
-                  chart: {
-                    type: 'bar',
-                    height: 200
-                  },
-                  title: {
-                    text: "Top 5 CP - Bussines Failure",
-                    align: 'center',
-                    margin: 0,
-                    offsetX: 20,
-                    offsetY: 20,
-                    floating: false,
-                    style: {
-                        fontSize:  '14px',
-                        fontWeight:  'thin',
-                        color:  '#263238'
-                          },
-                  },
-                  plotOptions: {
-                    bar: {
-                      borderRadius: 4,
-                      horizontal: true,
-                    }
-                  },
-                  dataLabels: {
-                    enabled: false
-                  },
-                  xaxis: {
-                    categories: ['United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan'],
-                  }
-                }).render();
-              });
-            </script>
-            <!-- End Bar Chart -->
-        </div>
-      </div>
-    </div>
-
-   </div>
-
-   <div class="row">
-
-    <!-- CHART 1 -->
-    <div class="col-lg-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Polar Area Chart</h5>
-           <!-- Line Chart -->
-           <div id="lineChart"></div>
-           <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              new ApexCharts(document.querySelector("#lineChart"), {
-                series: [{
-                  name: "Desktops",
-                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
-                },
-      {
-                  name: "laptop",
-                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
-                }],
-                chart: {
-                  height: 250,
-                  type: 'line',
-                  zoom: {
-                    enabled: false
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                stroke: {
-                  curve: 'smooth'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
-                  },
+                legend: {
+                  show: true,
                 }
-              }).render();
-            });
-          </script>
-          <!-- End Line Chart -->
+             }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
         </div>
+
+        <!-- CHART 2 -->
+        <div class="col-lg-3">
+          <div class="card">
+            <div class="card-body2">
+               <!-- Line Chart -->
+               <div id="Funnelchart2"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#Funnelchart2"), {
+                    series: [
+                        {
+                        name: "Traffic Attempt",
+                        data: {{ dic_top['attempt'] | tojson }},
+                        },
+                      ],
+                    chart: {
+                      type: 'bar',
+                      height: 250,
+                      },
+                    plotOptions: {
+                      bar: {
+                        distributed: true,
+                        borderRadius: 10,
+                        horizontal: true,
+                        barHeight: '70%',
+                        isFunnel: false,
+                          },
+                       },
+                      dataLabels: {
+                        enabled: true,
+                        formatter: function (val, opt) {
+                           return val
+                          },
+                        style: {
+                            fontSize: '13px',
+                            fontWeight: 'bold',
+                            ontFamily: 'sans-serif',
+                            colors: ['#52504c']
+                         },
+                      dropShadow: {
+                        enabled: false,
+                          },
+                      },
+                  title: {
+                    text: 'Top 5 CP - Attempt',
+                    align: 'midle',
+                    },
+                  xaxis: {
+                   categories: {{ dic_top['cpatt'] | tojson }},
+                   labels: {
+                    show: false,
+                    }
+                  },
+                  colors: ['#fab941', '#60f7cd', '#db8cfa', '#eaff4f', '#fa7095'],  
+                 legend: {
+                  show: true,
+                  floating: false,
+                  fontSize: '13px',
+                 }
+             }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 3 -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body2">
+         <!-- Line Chart -->
+         <div id="lineChart1"></div>
+         <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart1"), {
+              series: [{
+                name: "BULK MO",
+                data: {{ dic_sdp['sr66'] | tojson }}
+              },
+              {
+                name: "BULK MT",
+                data: {{ dic_sdp['sr67'] | tojson }}
+              },
+              {
+                name: "DIGITAL SERVICE",
+                data: {{ dic_sdp['sr68'] | tojson }}
+              },
+              {
+                name: "SUBSCRIPTIONBULK MO",
+                data: {{ dic_sdp['sr72'] | tojson }}
+              },
+              {
+                name: "SUBSCRIPTIONBULK MT",
+                data: {{ dic_sdp['sr73'] | tojson }}
+              }],
+              chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              title: {
+                  text: "SUCCESS RATE (%)",
+                  floating: false,
+                  align: 'center',
+              },
+              yaxis :{
+                max: 100,
+                min:0,
+              },
+              stroke: {
+                curve: 'smooth',
+                show: true,
+                width: 3,
+                lineCap: 'butt',
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
       </div>
     </div>
+  </div>  
+       
 
-    <!-- CHART 2 -->
-    <div class="col-lg-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Polar Area Chart</h5>
-           <!-- Line Chart -->
-           <div id="lineChart2"></div>
-           <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              new ApexCharts(document.querySelector("#lineChart2"), {
-                series: [{
-                  name: "Desktops",
-                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
-                },
-      {
-                  name: "laptop",
-                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
-                }],
-                chart: {
-                  height: 250,
-                  type: 'line',
-                  zoom: {
-                    enabled: false
+      </div>
+
+      <div class="row">
+
+         <!-- CHART 5 -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+         <!-- Line Chart -->
+         <div id="combo1"></div>
+         <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#combo1"), {
+              series: [{
+                name: 'Attempt',
+                type: 'column',
+                data: {{ dic_sdp['att67'] | tojson }}
+                  }, {
+                name: 'Success',
+                type: 'line',
+                data: {{ dic_sdp['suc67'] | tojson }}
+                  }],
+            chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
                   }
                 },
-                dataLabels: {
-                  enabled: false
+            dataLabels: {
+                enabled: false
+              },
+            title: {
+                text: "BULK MT",
+                floating: false,
+                align: 'center',
+            },
+            plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  columnWidth: '70%',
+                  colors: {
+                    backgroundBarRadius: 0,
+                  }
                 },
-                stroke: {
-                  curve: 'smooth'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
-                  },
-                }
-              }).render();
-            });
-          </script>
-          <!-- End Line Chart -->
-        </div>
+            },
+            stroke: {
+              curve: 'smooth',
+              show: true,
+              width: 3,
+              lineCap: 'butt',
+            },
+            markers: {
+                size: 4,
+                colors: '#d6d309',
+                strokeWidth: 0,
+            },
+            yaxis: {
+              title: {
+                text: 'traffic attempt',
+                rotate: -90,
+              }
+            },
+            xaxis: {
+              title: {
+                text: 'hour',
+                rotate: 0,
+              }
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            colors:['#0946d6','#d6d309'],
+            grid: {
+              row: {
+                colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+              },
+            }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
       </div>
     </div>
+  </div> 
 
+  <!-- CHART 5 -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+         <!-- Line Chart -->
+         <div id="combo2"></div>
+         <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#combo2"), {
+              series: [{
+                name: 'Attempt',
+                type: 'column',
+                data: {{ dic_sdp['att66'] | tojson }}
+                  }, {
+                name: 'Success',
+                type: 'line',
+                data: {{ dic_sdp['suc66'] | tojson }}
+                  }],
+            chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                  }
+                },
+            dataLabels: {
+                enabled: false
+              },
+            title: {
+                text: "BULK MO",
+                floating: false,
+                align: 'center',
+            },
+            plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  columnWidth: '70%',
+                  colors: {
+                    backgroundBarRadius: 0,
+                  }
+                },
+            },
+            stroke: {
+              curve: 'smooth',
+              show: true,
+              width: 3,
+              lineCap: 'butt',
+            },
+            markers: {
+                size: 4,
+                colors: '#d6d309',
+                strokeWidth: 0,
+            },
+            yaxis: {
+              title: {
+                text: 'traffic attempt',
+                rotate: -90,
+              }
+            },
+            xaxis: {
+              title: {
+                text: 'hour',
+                rotate: 0,
+              }
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            colors:['#0946d6','#d6d309'],
+            grid: {
+              row: {
+                colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+              },
+            }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> 
+
+      </div>
+
+      <div class="row">
+
+        <!-- CHART 6 -->
+ <div class="col-lg-6">
+   <div class="card">
+     <div class="card-body">
+        <!-- Line Chart -->
+        <div id="combo3"></div>
+        <script>
+         document.addEventListener("DOMContentLoaded", () => {
+           new ApexCharts(document.querySelector("#combo3"), {
+            series: [{
+              name: 'Attempt',
+                type: 'column',
+                data: {{ dic_sdp['att68'] | tojson }}
+                  }, {
+                name: 'Success',
+                type: 'line',
+                data: {{ dic_sdp['suc68'] | tojson }}
+                  }],
+            chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                  }
+                },
+            dataLabels: {
+                enabled: false
+              },
+            title: {
+                text: "DIGITAL SERVICE",
+                floating: false,
+                align: 'center',
+            },
+            plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  columnWidth: '70%',
+                  colors: {
+                    backgroundBarRadius: 0,
+                  }
+                },
+            },
+            stroke: {
+              curve: 'smooth',
+              show: true,
+              width: 3,
+              lineCap: 'butt',
+            },
+            markers: {
+                size: 4,
+                colors: '#d6d309',
+                strokeWidth: 0,
+            },
+            yaxis: {
+              title: {
+                text: 'traffic attempt',
+                rotate: -90,
+              }
+            },
+            xaxis: {
+              title: {
+                text: 'hour',
+                rotate: 0,
+              }
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            colors:['#0946d6','#d6d309'],
+            grid: {
+              row: {
+                colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+              },
+            }
+           }).render();
+         });
+       </script>
+       <!-- End Line Chart -->
+     </div>
    </div>
-     
+ </div> 
+
+ <!-- CHART 7 -->
+ <div class="col-lg-6">
+   <div class="card">
+     <div class="card-body">
+        <!-- Line Chart -->
+        <div id="combo4"></div>
+        <script>
+         document.addEventListener("DOMContentLoaded", () => {
+           new ApexCharts(document.querySelector("#combo4"), {
+            series: [{
+              name: 'Attempt',
+                type: 'column',
+                data: {{ dic_sdp['att73'] | tojson }}
+                  }, {
+                name: 'Success',
+                type: 'line',
+                data: {{ dic_sdp['suc73'] | tojson }}
+                  }],
+            chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                  }
+                },
+            dataLabels: {
+                enabled: false
+              },
+            title: {
+                text: "SUBSCRIPTIONBULK MT",
+                floating: false,
+                align: 'center',
+            },
+            plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  columnWidth: '70%',
+                  colors: {
+                    backgroundBarRadius: 0,
+                  }
+                },
+            },
+            stroke: {
+              curve: 'smooth',
+              show: true,
+              width: 3,
+              lineCap: 'butt',
+            },
+            markers: {
+                size: 4,
+                colors: '#d6d309',
+                strokeWidth: 0,
+            },
+            yaxis: {
+              title: {
+                text: 'traffic attempt',
+                rotate: -90,
+              }
+            },
+            xaxis: {
+              title: {
+                text: 'hour',
+                rotate: 0,
+              }
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            colors:['#0946d6','#d6d309'],
+            grid: {
+              row: {
+                colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+              },
+            }
+           }).render();
+         });
+       </script>
+       <!-- End Line Chart -->
+     </div>
+   </div>
+ </div> 
+
+     </div>
+
+     <div class="row">
+        <!-- CHART 8 -->
+ <div class="col-lg-6">
+  <div class="card">
+    <div class="card-body">
+       <!-- Line Chart -->
+       <div id="combo5"></div>
+       <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          new ApexCharts(document.querySelector("#combo5"), {
+            series: [{
+              name: 'Attempt',
+                type: 'column',
+                data: {{ dic_sdp['att72'] | tojson }}
+                  }, {
+                name: 'Success',
+                type: 'line',
+                data: {{ dic_sdp['suc72'] | tojson }}
+                  }],
+            chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                  }
+                },
+            dataLabels: {
+                enabled: false
+              },
+            title: {
+                text: "SUBSCRIPTIONBULK MO",
+                floating: false,
+                align: 'center',
+            },
+            plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  columnWidth: '70%',
+                  colors: {
+                    backgroundBarRadius: 0,
+                  }
+                },
+            },
+            stroke: {
+              curve: 'smooth',
+              show: true,
+              width: 3,
+              lineCap: 'butt',
+            },
+            markers: {
+                size: 4,
+                colors: '#d6d309',
+                strokeWidth: 0,
+            },
+            yaxis: {
+              title: {
+                text: 'traffic attempt',
+                rotate: -90,
+              }
+            },
+            xaxis: {
+              title: {
+                text: 'hour',
+                rotate: 0,
+              }
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            colors:['#0946d6','#d6d309'],
+            grid: {
+              row: {
+                colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+              },
+            }
+          }).render();
+        });
+      </script>
+      <!-- End Line Chart -->
+    </div>
+  </div>
+</div> 
+
+<div class="col-xl-6 col-md-6">
+  <div class="card info-card-chart sales-card">
+      <div class="card-body">
+        <h5><center>SDP SUMMARY</center></h5>
+          <!-- Line Chart -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">Services </th>
+                <th scope="col">Traffic Attempt</th>
+                <th scope="col">Traffic Success</th>
+                <th scope="col">Total Revenue</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dic_sdp['summary'] %}
+              <tr>
+                <td>{{ t[0] }}</td>
+                <td>{{ t[1] }}</td>
+                <td>{{ t[2] }}</td>
+                <td>{{ t[3] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+  </div>
+ </div> 
+
+     </div>
+
 </section>
 {% endblock %}
