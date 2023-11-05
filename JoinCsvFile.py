@@ -29,13 +29,17 @@ def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=No
     if len(dfold.index) > 0 :
         for dn in dfnew.iterrows():
             if env.lower() == 'scp' :
-                cond=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['SERVICE_KEY']==dn[1]['SERVICE_KEY']) & (dfold['DIAMETER']==dn[1]['DIAMETER'])
+                cond=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['SERVICE_KEY']==dn[1]['SERVICE_KEY']) & (dfold['DIAMETER']==dn[1]['DIAMETER']) & (dfold['TOTAL'] == '0' )
                 dfold.loc[(cond),['TOTAL']]=dn[1]['TOTAL']
             else :
-                cond=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['CP_NAME']==dn[1]['CP_NAME'])  & (dfold['ACCESSFLAG']==dn[1]['ACCESSFLAG']) & (dfold['BASICCAUSE']==dn[1]['BASICCAUSE']) & (dfold['INTERNALCAUSE']==dn[1]['INTERNALCAUSE'])
-                dfold.loc[(cond),['REVENUE']]=dn[1]['REVENUE']
-                dfold.loc[(cond),['TOTAL']]=dn[1]['TOTAL']
-        dfnewfilter=dfnew[~dfnew['CDRDATE'].isin(dfold['CDRDATE'].tolist())]
+                cond1=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['CP_NAME']==dn[1]['CP_NAME'])  & (dfold['ACCESSFLAG']==dn[1]['ACCESSFLAG']) & (dfold['BASICCAUSE']==dn[1]['BASICCAUSE']) & (dfold['INTERNALCAUSE']==dn[1]['INTERNALCAUSE']) & (dfold['TOTAL'] == '0' )
+                cond2=(dfold['CDRDATE']==dn[1]['CDRDATE']) & (dfold['CP_NAME']==dn[1]['CP_NAME'])  & (dfold['ACCESSFLAG']==dn[1]['ACCESSFLAG']) & (dfold['BASICCAUSE']==dn[1]['BASICCAUSE']) & (dfold['INTERNALCAUSE']==dn[1]['INTERNALCAUSE']) & (dfold['REVENUE'] == '0' )
+                dfold.loc[(cond1),['TOTAL']]=dn[1]['TOTAL']
+                dfold.loc[(cond2),['REVENUE']]=dn[1]['REVENUE']
+        try :
+            dfnewfilter=dfnew[~dfnew['CDRDATE'].isin(dfold['CDRDATE'].tolist())]
+        except Exception :
+            dfnewfilter=pd.DataFrame(listempty,columns=listcolumn)
         dfraw=pd.concat([dfold[listcolumn],dfnewfilter[listcolumn]],ignore_index=True).reset_index()
     else :
         dfraw=dfnew
@@ -53,6 +57,7 @@ olddatasdp='rawdata/data_sdp_today.csv'
 newdatasdp='rawdata/sdp_data_raw.csv'
 scpcolumn=['CDRDATE','SERVICE_KEY','IS_ROAMING','DIAMETER','TOTAL']
 sdpcolumn=['CDRDATE','CP_NAME','CPID','ACCESSFLAG','BASICCAUSE','INTERNALCAUSE','REVENUE','TOTAL']
+
 
 while True :
     JoinCsvFile(oldfile=olddatascp,newfile=newdatascp,env='SCP',listcolumn=scpcolumn,outputfile=olddatascp)

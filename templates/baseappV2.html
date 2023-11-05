@@ -41,21 +41,33 @@
     <div class="d-flex align-items-center justify-content-between">
       <a href="{{ url_for('index')  }}" class="logo d-flex align-items-center">
         <img src="{{ url_for('static',filename='assets/img/sdpbrain.png') }}" alt="">
-        <span class="d-none d-lg-block">DASHBOARD V1.0</span>
+        <span class="d-none d-lg-block">DASHBOARD V2  .0</span>
       </a>
-      <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link" href="#">main</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">sdp</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">scp</a>
-        </li>
-      </ul>
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          others
+        </button>
+        <ul class="dropdown-menu">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index')  }}">main</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">sdp - today</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">scp - today</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">sdp - d017</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('scpd017')  }}">scp - d017</a>
+          </li>
+        </ul>
+      </div>
       <!--<i class="bi bi-list toggle-sidebar-btn"></i>-->
     </div><!-- End Logo -->
+    
     
     <!-- End Search Bar -->
 
@@ -69,6 +81,7 @@
   
   
   <main id="dashboard" class="dashboard">
+    
     {% block content %}
     
     {% endblock %}

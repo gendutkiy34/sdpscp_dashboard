@@ -21,8 +21,9 @@ class ScpData():
         try : 
             self.dataraw=pd.read_csv(pathfile)
             self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], format='%Y-%m-%d %H:%M')
-            self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].fillna(0)
+            self.dataraw=self.dataraw.fillna(0)
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
+            self.dataraw['TOTAL']=self.dataraw['TOTAL'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1
@@ -73,8 +74,28 @@ class ScpData():
             list_scpmin=[]
         return list_scpatt,list_scpmin
 
-        
-    def Att3Days(self):
+
+
+class ScpDataD017():
+
+    def __init__(self,pathfile=None):
+        try :
+            self.dataraw=pd.read_csv(pathfile)
+            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], format='%Y-%m-%d %H')
+            self.dataraw=self.dataraw.fillna(0)
+            self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
+            self.dataraw['TOTAL']=self.dataraw['TOTAL'].astype(int)
+            self.dataraw['IS_ROAMING']=self.dataraw['IS_ROAMING'].astype(int)
+            self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
+            self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
+            self.flagdata=1
+        except Exception :
+            self.flagdata=0
+
+    def VerifyDataRaw(self):
+        return self.dataraw 
+
+    def Att(self):
         if self.flagdata > 0 :
             dfhourlyatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
             return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
@@ -85,9 +106,12 @@ class ScpData():
             listh=[]
             return list0,list1,list7,listh
 
-    def AttSk3Days(self,servicekey=None):
+    def AttSk(self,servicekey=None,diameter=None):
         if self.flagdata > 0 :
-            dffilter=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
+            if diameter is  None :
+                dffilter=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
+            else :
+                dffilter=self.dataraw[(self.dataraw['SERVICE_KEY']==int(servicekey)) & (self.dataraw['DIAMETER']==int(diameter))]
             skatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
             return skatt['day0'].tolist(),skatt['day1'].tolist(),skatt['day7'].tolist(),skatt['HOUR'].tolist()
         else :
@@ -96,8 +120,31 @@ class ScpData():
             list7=[]
             listh=[]
             return list0,list1,list7,listh
+        
+    def AttRoam(self,servicekey=None,diameter=None,roaming=None):
+        if self.flagdata > 0 :
+            if servicekey is not None :
+                dffilter1=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
+            else :
+                dffilter1=self.dataraw
+            if diameter is not None :
+                dffilter2=dffilter1[dffilter1['DIAMETER']==int(diameter)]
+            else :
+                dffilter2=dffilter1
+            if roaming is not None :
+                dffilter=dffilter2[dffilter2['IS_ROAMING']==int(roaming)]
+            else :
+                dffilter=dffilter2
+            rmatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            return rmatt['day0'].tolist(),rmatt['day1'].tolist(),rmatt['day7'].tolist(),rmatt['HOUR'].tolist()
+        else :
+            list0=[]
+            list1=[]
+            list7=[]
+            listh=[]
+            return list0,list1,list7,listh
     
-    def AttDia3Days(self,diameter=None):
+    def AttDia(self,diameter=None):
         if self.flagdata > 0 :
             dffilter=self.dataraw[self.dataraw['DIAMETER']==int(diameter)]
             diaatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
@@ -121,6 +168,8 @@ class SdpData():
             self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].astype(int)
             self.dataraw['BASICCAUSE']=self.dataraw['BASICCAUSE'].astype(int)
             self.dataraw['ACCESSFLAG']=self.dataraw['ACCESSFLAG'].astype(int)
+            self.dataraw['TOTAL']=self.dataraw['TOTAL'].astype(int)
+            self.dataraw['REVENUE']=self.dataraw['REVENUE'].astype(int)
             self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
@@ -156,11 +205,13 @@ class SdpData():
             rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
             dfhourlyatt=rawatt[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
             dfhourlysuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
         else :
             dfhourlyatt=[]
             dfhourlysuc=[]
             list_hour=[]
-        return dfhourlyatt['TOTAL'].tolist(),dfhourlysuc['TOTAL'].tolist(),list_hour
+            return dfhourlyatt,dfhourlysuc,list_hour
+        
     
     def HourMinSdp(self):
         if self.flagdata > 0:
@@ -183,8 +234,39 @@ class SdpData():
         return list_moatt,list_mtatt,list_diatt,list_soatt,list_statt,list_min
 
         
+class SdpDataD017():
 
+    def __init__(self,pathfile=None):
+        try :
+            self.dataraw=pd.read_csv(pathfile)
+            self.dataraw['CDRDATE2']=pd.to_datetime(self.dataraw['CDRDATE'], format='%Y-%m-%d %H:%M')
+            self.dataraw=self.dataraw.fillna(0)
+            self.dataraw['INTERNALCAUSE']=self.dataraw['INTERNALCAUSE'].astype(int)
+            self.dataraw['BASICCAUSE']=self.dataraw['BASICCAUSE'].astype(int)
+            self.dataraw['ACCESSFLAG']=self.dataraw['ACCESSFLAG'].astype(int)
+            self.dataraw['TOTAL']=self.dataraw['TOTAL'].astype(int)
+            self.dataraw['REVENUE']=self.dataraw['REVENUE'].astype(int)
+            self.dataraw['CPID']=self.dataraw['CPID'].astype(int)
+            self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
+            self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
+            self.flagdata=1
+        except Exception :
+            self.flagdata=0
     
-
+    def VerifyDataRaw(self):
+        return self.dataraw 
     
-
+    def Revenue(self):
+        if self.flagdata > 0 :
+            list_rev=[941,949,938]
+            dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (dataraw['BASICCAUSE'].isin(list_rev)) ]
+            dfhourlyatt=pd.pivot_table(dfsuc,values='REVENUE', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
+        else :
+            dfhourlyatt0=[]
+            dfhourlyatt1=[]
+            dfhourlyatt7=[]
+            list_hour=[]
+            return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
+    
+    

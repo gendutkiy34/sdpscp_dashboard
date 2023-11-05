@@ -11,7 +11,7 @@ def GetDataUpdate(env=None):
     #variable
     pathdir=os.getcwd()
     today=GetToday()
-    dt1=today - timedelta(minutes=6)
+    dt1=today - timedelta(minutes=8)
     dt2=today - timedelta(minutes=1)
     mon=ConvertDatetoStr(tgl=dt1,format='%m')
     day=ConvertDatetoStr(tgl=dt1,format='%d')

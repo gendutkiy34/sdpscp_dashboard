@@ -1,0 +1,253 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+   <div class="row">
+
+        <!-- CHART 1 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body2">
+               <!-- Line Chart -->
+               <div id="lineChart"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ att0 | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ att1 | tojson }}
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ att7 | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "Voice attempt",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ listh |tojson }},
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 2 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body2">
+               <!-- Line Chart -->
+               <div id="lineChart2"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart2"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ suc0 | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ suc1 | tojson }}
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ suc7 | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "Voice Success (2001)",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ listh |tojson }},
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>        
+
+      </div>
+
+      <div class='row'>
+
+        <!-- CHART 3 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart3"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart3"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ rm0 | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ rm1 | tojson }}
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ rm7 | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "Voice Roaming attempt",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ listh |tojson }},
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 4 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart4"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart4"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ sk100 | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ sk101 | tojson }}
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ sk107 | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "Voice Roaming success (2001)",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ listh |tojson }},
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+</section>
+{% endblock %}
