@@ -7,37 +7,49 @@ from modules.connection import OracleCon
 from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 
 
-#path=os.path.abspath(os.path.dirname(__file__))
-#print(path)
-pathdir=os.getcwd()
-rawscp=f'{pathdir}/rawdata/data_sdp_today.csv'
-list_diameter=[2001,4012,4010,5031,5030]
-toprev={}
-topatt={}
-datascp=SdpData(rawscp)
-list0,list1,listh=datascp.AttHourToday()
-cp,rev=datascp.RevTop5()
-toprev['cp']=cp
-toprev['revenue']=rev
-cp,att=datascp.AttTop5()
-topatt['cp']=cp
-topatt['attempt']=att
-listsum=datascp.Summary()
-#att0,atth=datascp.SucRatHourly(accflag=66)
+
+rawminscp='./rawdata/data_scp_today.csv'
+rawminsdp='./rawdata/data_sdp_today.csv'
+rawd3scp='./rawdata/scp_data_d017.csv'
+rawd3sdp='./rawdata/sdp_data_d017.csv'
 listsr=[66,67,68,72,73]
-dic_data={}
-for s in listsr :
-    att_label=f'att{s}'
-    suc_label=f'suc{s}'
-    sr_label=f'sr{s}'
-    att,succ,hour=datascp.AttHourToday(accflag=s)
-    sr,hoursr=datascp.SucRatHourly(s)
-    dic_data[att_label]=att
-    dic_data[suc_label]=hour
-    dic_data[sr_label]=sr
-dic_data['hour']=hour
-print(listsum)
-'''
+datascp=ScpDataD017(rawd3scp)
+a1,a2,a3,a4=datascp.BftToday()
+b1,b2=datascp.AttSkToday(servicekey=150)
+c1,c2=datascp.AttRoamToday(roaming=1)
+print(c1,c2)
+
+
+'''    dic_data={}
+    for s in listsr :
+        att_label=f'att{s}'
+        suc_label=f'suc{s}'
+        sr_label=f'sr{s}'
+        att,succ,hour=datasdp.AttHourToday(accflag=s)
+        sr=datasdp.SrHourToday(accflag=s)
+        print(sr)
+        dic_data[att_label]=att
+        dic_data[suc_label]=succ    
+        dic_data[sr_label]=sr 
+    list_hour=[]
+    for h in hour :
+        if len(str(h)) < 2:
+            list_hour.append(f'0{h}')
+        else :
+            list_hour.append(h)
+    dic_data['hour']=list_hour
+    cprev,rev=datasdp.RevTop5()
+    topcp['cprev']=cprev
+    topcp['revenue']=rev
+    cpatt,att=datasdp.AttTop5()
+    topcp['cpatt']=cpatt
+    topcp['attempt']=att
+    dfsum=datasdp.SummaryToday()
+    dic_data['summary']=dfsum
+    print(dic_data)
+
+
+
 list_rev=[941,949,938]
 today=GetToday()
 dataraw=pd.read_csv(rawscp)
@@ -73,10 +85,11 @@ rawrev=df_sdp_today[(df_sdp_today['INTERNALCAUSE']==2001) & (df_sdp_today['BASIC
 dfrev=rawrev.groupby('ACCESSFLAG')['REVENUE'].sum('REVENUE').reset_index()
 dfjoin1=pd.merge(dfacc[['ACCESSFLAG','ATTEMPT']],dfsucacc[['ACCESSFLAG','SUCCESS']],on=['ACCESSFLAG']).reset_index()
 dffinaljoin=pd.merge(dfjoin1[['ACCESSFLAG','ATTEMPT','SUCCESS']],dfrev[['ACCESSFLAG','REVENUE']],on=['ACCESSFLAG']).reset_index()
+list_hour=dataraw['HOUR'].drop_duplicates().tolist()
 #list_rev=[941,949,938]
 #df_rev=dataraw[(dataraw['INTERNALCAUSE']==2001) & (dataraw['BASICCAUSE'].isin(list_rev))]
 #rev_final=pd.pivot_table(df_rev,values='REVENUE', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-print(dffinaljoin)
+print(list_hour)
 #list0,list1,list7,listh=datascp.AttRoam(roaming=1)
 #print(datatoday.info())
 #print(list0)

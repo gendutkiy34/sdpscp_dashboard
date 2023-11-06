@@ -193,6 +193,13 @@
                 max: 100,
                 min:0,
               },
+              xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
+              title: {
+                text: 'hour',
+                rotate: 0,
+               }
+              },
               stroke: {
                 curve: 'smooth',
                 show: true,
@@ -272,12 +279,14 @@
                 strokeWidth: 0,
             },
             yaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'traffic attempt',
                 rotate: -90,
               }
             },
             xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'hour',
                 rotate: 0,
@@ -355,12 +364,14 @@
                 strokeWidth: 0,
             },
             yaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'traffic attempt',
                 rotate: -90,
               }
             },
             xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'hour',
                 rotate: 0,
@@ -448,6 +459,7 @@
               }
             },
             xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'hour',
                 rotate: 0,
@@ -531,6 +543,7 @@
               }
             },
             xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'hour',
                 rotate: 0,
@@ -617,6 +630,7 @@
               }
             },
             xaxis: {
+              categories: {{ dic_sdp['hour'] | tojson }},
               title: {
                 text: 'hour',
                 rotate: 0,

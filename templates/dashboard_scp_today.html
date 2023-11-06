@@ -4,11 +4,10 @@
 
    <div class="row">
 
-    <!-- BAR CHART1-->
+    <!--CHART1-->
     <div class="col-lg-3">
       <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Bar Chart1</h5>
+        <div class="card-body2">
             <!-- Bar Chart -->
             <div id="barChart"></div>
 
@@ -55,10 +54,10 @@
       </div>
     </div>
 
+    <!--CHART 2-->
     <div class="col-lg-3">
       <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Bar Chart2</h5>
+        <div class="card-body2">
             <!-- Bar Chart -->
             <div id="barChart2"></div>
 
@@ -66,14 +65,14 @@
               document.addEventListener("DOMContentLoaded", () => {
                 new ApexCharts(document.querySelector("#barChart2"), {
                   series: [{
-                    data: [400, 430, 448, 470, 540]
+                    data: {{ dic_scp ['listtotalbft'] | tojson }}
                   }],
                   chart: {
                     type: 'bar',
                     height: 250
                   },
                   title: {
-                    text: "Top 5 CP - Traffic Attempt",
+                    text: "BFT Error Code",
                     align: 'center',
                     margin: 0,
                     offsetX: 20,
@@ -95,7 +94,7 @@
                     enabled: false
                   },
                   xaxis: {
-                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy'],
+                    categories: {{ dic_scp ['listerrbft'] | tojson }},
                   }
                 }).render();
               });
@@ -105,42 +104,64 @@
       </div>
     </div>
 
-    <!-- CHART 1 -->
+    <!-- CHART 3-->
     <div class="col-lg-6">
       <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Polar Area Chart</h5>
+        <div class="card-body2"> 
            <!-- Line Chart -->
            <div id="lineChart3"></div>
            <script>
             document.addEventListener("DOMContentLoaded", () => {
               new ApexCharts(document.querySelector("#lineChart3"), {
                 series: [{
-                  name: "Desktops",
-                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
-                },
-      {
-                  name: "laptop",
-                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
-                }],
+                  name: 'Net Profit',
+                  data: {{ dic_scp ['listbft'] | tojson }}
+                  }],
                 chart: {
-                  height: 250,
-                  type: 'line',
-                  zoom: {
-                    enabled: false
-                  }
-                },
+                  type: 'bar',
+                  height: 250
+                  },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 5,
+                    horizontal: false,
+                    columnWidth: '70%',
+                      },
+                    },
                 dataLabels: {
                   enabled: false
-                },
-                stroke: {
-                  curve: 'smooth'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
                   },
+                stroke: {
+                  show: true,
+                  width: 0,
+                  colors: ['transparent']
+                  },
+                colors: ['#faac2e'],
+                title: {
+                    text: "BFT HOURLY",
+                    floating: false,
+                    align: 'center',
+                  },
+                xaxis: {
+                  title: {
+                      text: 'hour'
+                      },
+                  categories: {{ dic_scp ['list_hour'] | tojson }},
+                  },
+                yaxis: {
+                  title: {
+                      text: ''
+                      }
+                  },
+                fill: {
+                  opacity: 1
+                  },
+                tooltip: {
+                  y: {
+                    formatter: function (val) {
+                      return "$ " + val + " thousands"
+                    }
+                  }
                 }
               }).render();
             });
@@ -158,39 +179,162 @@
     <div class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Polar Area Chart</h5>
            <!-- Line Chart -->
            <div id="lineChart"></div>
            <script>
             document.addEventListener("DOMContentLoaded", () => {
               new ApexCharts(document.querySelector("#lineChart"), {
                 series: [{
-                  name: "Desktops",
-                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
-                },
-      {
-                  name: "laptop",
-                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
-                }],
+                    name: 'Attempt',
+                    type: 'column',
+                    data: {{ dic_scp ['roaming_att'] | tojson }}
+                      }, {
+                    name: 'Success (2001)',
+                    type: 'line',
+                    data: {{ dic_scp ['roaming_suc'] | tojson }}
+                  }],
                 chart: {
-                  height: 250,
-                  type: 'line',
-                  zoom: {
-                    enabled: false
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                stroke: {
-                  curve: 'smooth'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                      }
                   },
-                }
+                dataLabels: {
+                    enabled: false
+                  },
+                title: {
+                    text: "ROAMING ",
+                    floating: false,
+                    align: 'center',
+                  },
+                plotOptions: {
+                    bar: {
+                      borderRadius: 5,
+                      columnWidth: '70%',
+                      colors: {
+                        backgroundBarRadius: 0,
+                      }
+                    },
+                  },
+                stroke: {
+                    curve: 'smooth',
+                    show: true,
+                    width: 3,
+                    lineCap: 'butt',
+                  },
+                markers: {
+                    size: 4,
+                    colors: '#ffffff',
+                    strokeWidth: 0,
+                  },
+                yaxis: {
+                    title: {
+                      text: 'traffic attempt',
+                      rotate: -90,
+                    }
+                  },
+                xaxis: {
+                    categories: {{ dic_scp ['list_hour'] | tojson }},
+                    title: {
+                      text: 'hour',
+                      rotate: 0,
+                    }
+                  },
+                dataLabels: {
+                    enabled: false,
+                  },
+                colors:['#30b9db','#5a457d'],
+                grid: {
+                    row: {
+                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                      opacity: 0.5
+                    },
+                  }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART 5 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart2"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart2"), {
+                series: [{
+                    name: 'Attempt',
+                    type: 'column',
+                    data: {{ dic_scp ['nonroaming_att'] | tojson }}
+                      }, {
+                    name: 'Success (2001)',
+                    type: 'line',
+                    data: {{ dic_scp ['nonroaming_suc'] | tojson }}
+                  }],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                      }
+                  },
+                dataLabels: {
+                    enabled: false
+                  },
+                title: {
+                    text: "NON ROAMING",
+                    floating: false,
+                    align: 'center',
+                  },
+                plotOptions: {
+                    bar: {
+                      borderRadius: 5,
+                      columnWidth: '70%',
+                      colors: {
+                        backgroundBarRadius: 0,
+                      }
+                    },
+                  },
+                stroke: {
+                    curve: 'smooth',
+                    show: true,
+                    width: 3,
+                    lineCap: 'butt',
+                  },
+                markers: {
+                    size: 4,
+                    colors: '#ffffff',
+                    strokeWidth: 0,
+                  },
+                yaxis: {
+                    title: {
+                      text: 'traffic attempt',
+                      rotate: -90,
+                    }
+                  },
+                xaxis: {
+                    categories: {{ dic_scp ['list_hour'] | tojson }},
+                    title: {
+                      text: 'hour',
+                      rotate: 0,
+                    }
+                  },
+                dataLabels: {
+                    enabled: false,
+                  },
+                colors:['#30b9db','#5a457d'],
+                grid: {
+                    row: {
+                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                      opacity: 0.5
+                    },
+                  }
               }).render();
             });
           </script>
@@ -199,43 +343,87 @@
       </div>
     </div>
 
-    <!-- CHART 2 -->
+   </div>
+
+   <div class="row">
+
+    <!-- CHART 6 -->
     <div class="col-lg-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Polar Area Chart</h5>
            <!-- Line Chart -->
-           <div id="lineChart2"></div>
+           <div id="combo3"></div>
            <script>
             document.addEventListener("DOMContentLoaded", () => {
-              new ApexCharts(document.querySelector("#lineChart2"), {
+              new ApexCharts(document.querySelector("#combo3"), {
                 series: [{
-                  name: "Desktops",
-                  data: [ {x:"jan",y:10}, {x:"feb",y:19},{x:"mar",y:30},{x:"apr",y:25},{x:"mei",y:50},{x:"jun",y:15},{x:"jul",y:30},{x:"aug",y:20},{x:"sep",y:30},{x:"okt",y:40}]
-                },
-      {
-                  name: "laptop",
-                  data: [ {x:"jan",y:0}, {x:"feb",y:10},{x:"mar",y:25},{x:"apr",y:40},{x:"mei",y:10},{x:"jun",y:17},{x:"jul",y:28},{x:"aug",y:22},{x:"sep",y:16},{x:"okt",y:24}]
-                }],
+                    name: 'Attempt',
+                    type: 'column',
+                    data: [67,89,343,189,200]
+                      }, {
+                    name: 'Success',
+                    type: 'line',
+                    data: [50,40,300,175,180]
+                  }],
                 chart: {
-                  height: 250,
-                  type: 'line',
-                  zoom: {
-                    enabled: false
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                stroke: {
-                  curve: 'smooth'
-                },
-                grid: {
-                  row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                      }
                   },
-                }
+                dataLabels: {
+                    enabled: false
+                  },
+                title: {
+                    text: "COMBO 3",
+                    floating: false,
+                    align: 'center',
+                  },
+                plotOptions: {
+                    bar: {
+                      borderRadius: 5,
+                      columnWidth: '70%',
+                      colors: {
+                        backgroundBarRadius: 0,
+                      }
+                    },
+                  },
+                stroke: {
+                    curve: 'smooth',
+                    show: true,
+                    width: 3,
+                    lineCap: 'butt',
+                  },
+                markers: {
+                    size: 4,
+                    colors: '#d6d309',
+                    strokeWidth: 0,
+                  },
+                yaxis: {
+                    categories: [00,01,02,03,04],
+                    title: {
+                      text: 'traffic attempt',
+                      rotate: -90,
+                    }
+                  },
+                xaxis: {
+                    categories: [00,01,02,03,04],
+                    title: {
+                      text: 'hour',
+                      rotate: 0,
+                    }
+                  },
+                dataLabels: {
+                    enabled: false,
+                  },
+                colors:['#0946d6','#d6d309'],
+                grid: {
+                    row: {
+                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                      opacity: 0.5
+                    },
+                  }
               }).render();
             });
           </script>
@@ -243,6 +431,91 @@
         </div>
       </div>
     </div>
+
+    <!-- CHART 7 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="combo4"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#combo4"), {
+                series: [{
+                    name: 'Attempt',
+                    type: 'column',
+                    data: [67,89,343,189,200]
+                      }, {
+                    name: 'Success',
+                    type: 'line',
+                    data: [50,40,300,175,180]
+                  }],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                      }
+                  },
+                dataLabels: {
+                    enabled: false
+                  },
+                title: {
+                    text: "COMBO 4",
+                    floating: false,
+                    align: 'center',
+                  },
+                plotOptions: {
+                    bar: {
+                      borderRadius: 5,
+                      columnWidth: '70%',
+                      colors: {
+                        backgroundBarRadius: 0,
+                      }
+                    },
+                  },
+                stroke: {
+                    curve: 'smooth',
+                    show: true,
+                    width: 3,
+                    lineCap: 'butt',
+                  },
+                markers: {
+                    size: 4,
+                    colors: '#d6d309',
+                    strokeWidth: 0,
+                  },
+                yaxis: {
+                    categories: [00,01,02,03,04],
+                    title: {
+                      text: 'traffic attempt',
+                      rotate: -90,
+                    }
+                  },
+                xaxis: {
+                    categories: [00,01,02,03,04],
+                    title: {
+                      text: 'hour',
+                      rotate: 0,
+                    }
+                  },
+                dataLabels: {
+                    enabled: false,
+                  },
+                colors:['#0946d6','#d6d309'],
+                grid: {
+                    row: {
+                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                      opacity: 0.5
+                    },
+                  }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>    
 
    </div>
      

@@ -67,7 +67,7 @@ class ScpData():
         if self.flagdata > 0 :
             self.df_scp_today['hourmin']=self.df_scp_today['CDRDATE'].apply(lambda x: str(x)[11:] )
             dfrawminute=self.df_scp_today[['hourmin','TOTAL']].groupby('hourmin').sum().reset_index()
-            dfminute=dfrawminute.iloc[-25:]
+            dfminute=dfrawminute.iloc[-20:]
             list_scpatt=dfminute['TOTAL'].tolist()
             list_scpmin=dfminute['hourmin'].tolist()
         else :
@@ -87,11 +87,16 @@ class ScpDataD017():
             self.dataraw['DIAMETER']=self.dataraw['DIAMETER'].astype(int)
             self.dataraw['TOTAL']=self.dataraw['TOTAL'].astype(int)
             self.dataraw['IS_ROAMING']=self.dataraw['IS_ROAMING'].astype(int)
+            self.dataraw['ISBFT']=self.dataraw['ISBFT'].astype(int)
+            self.dataraw['SERVICE_KEY']=self.dataraw['SERVICE_KEY'].astype(int)
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1
         except Exception :
             self.flagdata=0
+        self.datatoday=self.dataraw[self.dataraw['REMARK']=='day0']
+        self.dfsuctoday=self.datatoday[self.datatoday['DIAMETER'].isin(list_diameter)]
+        
 
     def VerifyDataRaw(self):
         return self.dataraw 
@@ -156,7 +161,96 @@ class ScpDataD017():
             list7=[]
             listh=[]
             return list0,list1,list7,listh
+        
+    def VerifyDataToday(self):
+        return self.datatoday
+        
+    def SumDataToday(self):
+        if self.flagdata > 0 :
+            self.dfscpsuc=self.datatoday[self.datatoday['DIAMETER'].isin(list_diameter)]
+            scpatt=pd.Series(self.datatoday['TOTAL']).sum()
+            scpsuc=pd.Series(self.dfscpsuc['TOTAL']).sum()
+            scpsr=round((scpsuc/scpatt)*100,2)
+        else :
+            scpatt='N/A'
+            scpsuc='N/A'
+            scpsr='N/A'
+        return scpatt,scpsuc,scpsr
+    
+    def HourlyDataToday(self):
+        listatthour=[]
+        listsuchour=[]
+        list_hour=[]
+        listsrhour=[]
+        if self.flagdata > 0 :
 
+            list_hour=self.datatoday['HOUR'].drop_duplicates().tolist()
+            dfhourlyatt=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            dfhourlysuc=self.dfsuctoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            listatthour=dfhourlyatt['TOTAL'].tolist()
+            listsuchour=dfhourlysuc['TOTAL'].tolist()     
+            for a,s in zip(listatthour,listsuchour):
+                sr=round((s/a)*100,2) 
+                listsrhour.append(sr)
+        return listatthour,listsuchour,listsrhour,list_hour
+    
+    def BftToday(self):
+        listhour=[]
+        listbft=[]
+        listerr=[]
+        listtotal=[]
+        if self.flagdata > 0 :
+            list_hour=self.datatoday['HOUR'].drop_duplicates().tolist()
+            rawbft=self.datatoday[self.datatoday['ISBFT']==1]
+            dfhour=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            dfbft=rawbft[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            dfjoin=pd.merge(dfhour[['HOUR']],dfbft[['HOUR','TOTAL']],on='HOUR',how='left')
+            dfjoin=dfjoin.fillna(0)
+            dfjoin['TOTAL']=dfjoin['TOTAL'].astype(int)
+            errbft=rawbft[['DIAMETER','TOTAL']].groupby('DIAMETER').sum().reset_index()
+            listhour=dfjoin['HOUR'].to_list()
+            listbft=dfjoin['TOTAL'].to_list()
+            listerr=errbft['DIAMETER'].to_list()
+            listtotal=errbft['TOTAL'].to_list()
+        return listhour,listbft,listerr,listtotal
+    
+    def AttSkToday(self,servicekey=None,diameter=None):
+        lisskatt=[]
+        sksumatt=''
+        if self.flagdata > 0 :
+            if diameter is  None :
+                dffilter1=self.datatoday
+            else :
+                dffilter1=self.dataraw[self.dataraw['DIAMETER']==int(diameter)]
+            if servicekey is None :
+                dffilter2=dffilter1
+            else :
+                dffilter2=dffilter1[dffilter1['SERVICE_KEY']==int(servicekey)]
+            skatthour=dffilter2[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            sksumatt=skatthour['TOTAL'].sum()
+            lisskatt=skatthour['TOTAL'].to_list()
+        return lisskatt,sksumatt
+    
+    def AttRoamToday(self,servicekey=None,diameter=None,roaming=None):
+        listroam=[]
+        sumroam=''
+        if self.flagdata > 0 :
+            if servicekey is not None :
+                dffilter1=self.datatoday[self.datatoday['SERVICE_KEY']==int(servicekey)]
+            else :
+                dffilter1=self.datatoday
+            if diameter is not None :
+                dffilter2=dffilter1[dffilter1['DIAMETER']==int(diameter)]
+            else :
+                dffilter2=dffilter1
+            if roaming is not None :
+                dffilter=dffilter2[dffilter2['IS_ROAMING']==int(roaming)]
+            else :
+                dffilter=dffilter2
+        dfroam=dffilter[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+        summ=dffilter['TOTAL'].sum()
+        listroam=dfroam['TOTAL'].to_list()
+        return listroam,summ
 
 
 class SdpData():
@@ -175,15 +269,19 @@ class SdpData():
             self.dataraw['DATE']=self.dataraw['CDRDATE2'].dt.date
             self.dataraw['HOUR']=self.dataraw['CDRDATE2'].dt.hour
             self.flagdata=1
+            self.today=GetToday()
+            self.df_sdp_today=self.dataraw[self.dataraw['DATE']== self.today.date()]
         except Exception :
             self.flagdata=0
-        self.today=GetToday()
-        self.df_sdp_today=self.dataraw[self.dataraw['DATE']== self.today.date()]
     
     def SumDataToday(self,accflag=None):
         if self.flagdata > 0:
-            rawatt=self.df_sdp_today[self.df_sdp_today['ACCESSFLAG']==int(accflag)]
-            rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+            if accflag is None :
+                rawatt=self.df_sdp_today
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+            else :
+                rawatt=self.df_sdp_today[self.df_sdp_today['ACCESSFLAG']==int(accflag)]
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
             sdpatt=pd.Series(rawatt['TOTAL']).sum()
             sdpsuc=pd.Series(rawsuc['TOTAL']).sum()
             sdpsr=round((sdpsuc/sdpatt)*100,2)
@@ -203,7 +301,7 @@ class SdpData():
         if self.flagdata > 0:
             list_hour=self.df_sdp_today['HOUR'].drop_duplicates().tolist()
             if accflag is None :
-                dfhourlyatt=self.df_sdp_today[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlyatt=self.df_sdp_today[['HOUR','TOTAL']].groupby('HOUR').sum('TOTAL').reset_index()
                 rawsuc=self.df_sdp_today[self.df_sdp_today['INTERNALCAUSE'].isin(list_diameter)]
                 dfhourlysuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
             else :
@@ -248,7 +346,7 @@ class SdpData():
         if self.flagdata > 0:
             self.df_sdp_today['hourmin']=self.df_sdp_today['CDRDATE'].apply(lambda x: str(x)[11:] )
             dfrawminute=pd.pivot_table(self.df_sdp_today,values='TOTAL', index=['hourmin'],columns=['ACCESSFLAG'], aggfunc="sum", fill_value=0).reset_index()
-            dfminute=dfrawminute.iloc[-25:]
+            dfminute=dfrawminute.iloc[-20:]
             list_moatt=dfminute[66].tolist()
             list_mtatt=dfminute[67].tolist()
             list_diatt=dfminute[68].tolist()
@@ -352,6 +450,7 @@ class SdpDataD017():
             self.flagdata=1
         except Exception :
             self.flagdata=0
+        self.datatoday=self.dataraw[self.dataraw['REMARK']=='day0']
     
     def VerifyDataRaw(self):
         return self.dataraw 
@@ -372,12 +471,12 @@ class SdpDataD017():
             list_hour=[]
             return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
         
-    def Att(self,accessflag=None):
+    def Att(self,accflag=None):
         if self.flagdata > 0 :
-            if accessflag is None :
+            if accflag is None :
                 dfsuc=self.dataraw[['HOUR','ACCESSFLAG','TOTAL']]
             else :
-                dfsuc=self.dataraw[self.dataraw['ACCESSFLAG']==int(accessflag)]
+                dfsuc=self.dataraw[self.dataraw['ACCESSFLAG']==int(accflag)]
             dfhourlyatt=pd.pivot_table(dfsuc,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
             return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
         else :
@@ -387,13 +486,13 @@ class SdpDataD017():
             list_hour=[]
             return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
         
-    def Succ(self,accessflag=None):
+    def Succ(self,accflag=None):
         if self.flagdata > 0 :
             list_rev=[941,949,938]
-            if accessflag is None :
+            if accflag is None :
                 dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) ]
             else :
-                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) & (self.dataraw['ACCESSFLAG']==int(accessflag))]
+                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) & (self.dataraw['ACCESSFLAG']==int(accflag))]
             dfhourlyatt=pd.pivot_table(dfsuc,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
             return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
         else :
@@ -403,8 +502,140 @@ class SdpDataD017():
             list_hour=[]
             return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
         
+    def DataToday(self):
+        return self.datatoday
+    
+    def SrHourToday(self,accflag=None) :
+        if self.flagdata > 0:
+            if accflag is None :
+                dfhourlyatt=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlyatt=dfhourlyatt.rename(columns={'TOTAL':'ATTEMPT'})
+                rawsuc=self.datatoday[self.datatoday['INTERNALCAUSE'].isin(list_diameter)]
+                dfhourlysuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlysuc=dfhourlysuc.rename(columns={'TOTAL':'SUCCESS'})
+                dfjoin=pd.merge(dfhourlyatt,dfhourlysuc,on=['HOUR'])
+                dfjoin['SUCCESS_RATE']=dfjoin.apply(lambda x : round(x['SUCCESS']/x['ATTEMPT']*100,2) ,axis=1)
+            else :
+                rawatt=self.datatoday[self.datatoday['ACCESSFLAG']==int(accflag)]
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+                dfhourlyatt=rawatt[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlyatt=dfhourlyatt.rename(columns={'TOTAL':'ATTEMPT'})
+                dfhourlysuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlysuc=dfhourlysuc.rename(columns={'TOTAL':'SUCCESS'})
+                dfjoin=pd.merge(dfhourlyatt,dfhourlysuc,on=['HOUR'])
+                dfjoin['SUCCESS_RATE']=dfjoin.apply(lambda x : round(x['SUCCESS']/x['ATTEMPT']*100,2) ,axis=1)
+            return dfjoin['SUCCESS_RATE'].tolist(),dfjoin['HOUR'].tolist()
+        else :
+            dfhourlyatt=[]
+            dfhourlysuc=[]
+            list_hour=[]
+            return dfhourlyatt,dfhourlysuc,list_hour
+    
+    def AttHourToday(self,accflag=None):
+        if self.flagdata > 0:
+            self.list_hour=self.datatoday['HOUR'].drop_duplicates().tolist()
+            if accflag is None :
+                houratt=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum('TOTAL').reset_index()
+                rawsuc=self.datatoday[self.datatoday['INTERNALCAUSE'].isin(list_diameter)]
+                hoursuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            else :
+                rawatt=self.datatoday[self.datatoday['ACCESSFLAG']==int(accflag)]
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+                houratt=rawatt[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                hoursuc=rawsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+            return houratt['TOTAL'].tolist(),hoursuc['TOTAL'].tolist(),self.list_hour
+        else :
+            houratt=[]
+            hoursuc=[]      
+            list_hour=[]
+            return  houratt,hoursuc,list_hour   
 
+    def RevToday(self,accflag=None):
+        if self.flagdata > 0:
+            if accflag is None :
+                dfsuc=self.datatoday[(self.datatoday['INTERNALCAUSE']==2001) & (self.datatoday['BASICCAUSE'].isin(list_rev))]
+            else :
+                dfsuc=self.datatoday[(self.datatoday['INTERNALCAUSE']==2001)& (self.datatoday['BASICCAUSE'].isin(list_rev)) & (self.datatoday['ACCESSFLAG']==int(accflag)) ]
+            dfhourlyatt=dfsuc.groupby('HOUR')['REVENUE'].sum('REVENUE').reset_index()   
+            return dfhourlyatt['REVENUE'].tolist(),dfhourlyatt['HOUR'].tolist()
+        else :
+            dfhourlyatt=[]
+            list_hour=[]
+            return dfhourlyatt 
+    
+    def SumAccToday(self,accflag=None):
+        if self.flagdata > 0:
+            if accflag is None :
+                rawatt=self.datatoday
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+            else :
+                rawatt=self.datatoday[self.datatoday['ACCESSFLAG']==int(accflag)]
+                rawsuc=rawatt[rawatt['INTERNALCAUSE'].isin(list_diameter)]
+            sdpatt=pd.Series(rawatt['TOTAL']).sum()
+            sdpsuc=pd.Series(rawsuc['TOTAL']).sum()
+            sdpsr=round((sdpsuc/sdpatt)*100,2)
+        else :
+            sdpatt='N/A'
+            sdpsuc='N/A'
+            sdpsr='N/A'
+        return sdpatt,sdpsuc,sdpsr
+    
+    def RevTop5(self,accflag=None):
+        if self.flagdata > 0:
+            if accflag is None :
+                dfsuc=self.datatoday[(self.datatoday['INTERNALCAUSE']==2001) & (self.datatoday['BASICCAUSE'].isin(list_rev))]
+            else :
+                dfsuc=self.datatoday[(self.datatoday['INTERNALCAUSE']==2001)& (self.datatoday['BASICCAUSE'].isin(list_rev)) & (self.datatoday['ACCESSFLAG']==int(accflag)) ]
+            dfhourlyatt=dfsuc.groupby('CP_NAME')['REVENUE'].sum('REVENUE').reset_index()
+            dftop=dfhourlyatt.sort_values('REVENUE',ascending=False).head(5)
+            lisrevenue=[ f'{d:,}' for d in dftop['REVENUE'].tolist()]
+            return dftop['CP_NAME'].tolist(),lisrevenue
+        else :
+            listcp=[]
+            listrev=[]
+            return listcp,listrev
         
+    def AttTop5(self,accflag=None):
+        if self.flagdata > 0:
+            if accflag is None :
+                dfsuc=self.datatoday
+            else :
+                dfsuc=self.datatoday[ (self.datatoday['ACCESSFLAG']==int(accflag)) ]
+            dfhourlyatt=dfsuc.groupby('CP_NAME')['TOTAL'].sum('TOTAL').reset_index()
+            dftop=dfhourlyatt.sort_values('TOTAL',ascending=False).head(5)
+            listotal=[ f'{d:}' for d in dftop['TOTAL'].tolist()]
+            return dftop['CP_NAME'].tolist(),listotal
+        else :
+            listcp=[]
+            listrev=[]
+            return listcp,listrev
     
-    
+    def SummaryToday(self):
+        if self.flagdata > 0:
+            dfatt=self.datatoday.groupby('ACCESSFLAG')['TOTAL'].sum('TOTAL').reset_index()
+            dfatt=dfatt.rename(columns={'TOTAL':'ATTEMPT'})
+            rawsuc=self.datatoday[self.datatoday['INTERNALCAUSE'].isin(list_diameter)]
+            dfsuc=rawsuc.groupby('ACCESSFLAG')['TOTAL'].sum('TOTAL').reset_index()
+            dfsuc=dfsuc.rename(columns={'TOTAL':'SUCCESS'})
+            rawrev=self.datatoday[(self.datatoday['INTERNALCAUSE']==2001) & (self.datatoday['BASICCAUSE'].isin(list_rev))]
+            dfrev=rawrev.groupby('ACCESSFLAG')['REVENUE'].sum('REVENUE').reset_index()
+            dfjoin1=pd.merge(dfatt[['ACCESSFLAG','ATTEMPT']],dfsuc[['ACCESSFLAG','SUCCESS']],on=['ACCESSFLAG'], how='left').reset_index()
+            dffinaljoin=pd.merge(dfjoin1[['ACCESSFLAG','ATTEMPT','SUCCESS']],dfrev[['ACCESSFLAG','REVENUE']],on=['ACCESSFLAG'], how='left').reset_index()
+            dffinaljoin=dffinaljoin.fillna(0)
+            dffinaljoin['ATTEMPT']=dffinaljoin['ATTEMPT'].astype(int)
+            dffinaljoin['SUCCESS']=dffinaljoin['SUCCESS'].astype(int)
+            dffinaljoin['REVENUE']=dffinaljoin['REVENUE'].astype(int)
+            dffinaljoin['ATTEMPT']=dffinaljoin.ATTEMPT.apply(lambda x : "{:,}".format(x))
+            dffinaljoin['SUCCESS']=dffinaljoin.SUCCESS.apply(lambda x : "{:,}".format(x))
+            dffinaljoin['REVENUE']=dffinaljoin.REVENUE.apply(lambda x : "{:,}".format(x))
+            dffinaljoin['ACCESSFLAG']=dffinaljoin.ACCESSFLAG.apply(lambda x : services.get(x))
+            listsum=dffinaljoin[['ACCESSFLAG','ATTEMPT','SUCCESS','REVENUE']].values.tolist()
+            return listsum
+        else :
+            listsum=[]
+            return listsum
+
+     
+
+
     

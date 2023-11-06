@@ -18,12 +18,12 @@
                       height: 250,
                       offsetY: -10
                     },
-                    series: [ {{ list_sr[0] | tojson }} ],
+                    series: [ {{  dict_scp['sr']  }} ],
                     labels: ['succes rate'],
                     plotOptions: {
         
                     },
-                    colors: [ {{ list_col[0] |tojson }} ],
+                    colors: [ '{{ dict_scp["colscp"]  }}'],
                     stroke: {
                       dashArray: 4
                     },
@@ -56,12 +56,12 @@
                     height: 250,
                     offsetY: -10
                   },
-                  series:[ {{ list_sr[1] | tojson }} ],
+                  series:[ {{ dict_sdp['sr67']  }} ],
                   labels: ['succes rate'],
                   plotOptions: {
       
                   },
-                  colors:[ {{ list_col[1] |tojson }} ] ,
+                  colors:[ '{{ dict_sdp["col67"]  }}' ] ,
                   stroke: {
                     dashArray: 4
                   },
@@ -95,12 +95,12 @@
                     height: 250,
                     offsetY: -10
                   },
-                  series:[ {{ list_sr[2] | tojson }} ],
+                  series:[ {{ dict_sdp['sr66']  }} ],
                   labels: ['succes rate'],
                   plotOptions: {
       
                   },
-                  colors:[ {{ list_col[2] |tojson }} ],
+                  colors:[ '{{ dict_sdp["col66"]  }}' ],
                   stroke: {
                     dashArray: 4
                   },
@@ -132,12 +132,12 @@
                     height: 250,
                     offsetY: -10
                   },
-                  series:[ {{ list_sr[3] | tojson }} ],
+                  series:[ {{ dict_sdp["sr68"]  }} ],
                   labels: ['succes rate'],
                   plotOptions: {
       
                   },
-                  colors: [ {{ list_col[3] |tojson }} ],
+                  colors: [ '{{ dict_sdp["col68"] }}' ],
                   stroke: {
                     dashArray: 4
                   },
@@ -169,12 +169,12 @@
                     height: 250,
                     offsetY: -10
                   },
-                  series: [ {{ list_sr[4] | tojson }} ],
+                  series: [ {{ dict_sdp["sr73"]  }} ],
                   labels: ['succes rate'],
                   plotOptions: {
       
                   },
-                  colors:[ {{ list_col[4] |tojson }} ],
+                  colors:[ '{{ dict_sdp["col73"]  }}' ],
                   stroke: {
                     dashArray: 4
                   },
@@ -206,12 +206,12 @@
                     height: 250,
                     offsetY: -10
                   },
-                  series: [ {{ list_sr[5] | tojson }} ],
+                  series: [ {{ dict_sdp["sr72"]  }} ],
                   labels: ['succes rate'],
                   plotOptions: {
       
                   },
-                  colors: [ {{ list_col[5] |tojson }} ] ,
+                  colors: [ '{{ dict_sdp["col72"]  }}' ] ,
                   stroke: {
                     dashArray: 4
                   },
@@ -249,27 +249,27 @@
                 <tbody>
                   <tr>
                     <td>Voice</td>
-                    <td>{{ scpatt }}</td>
+                    <td>{{ dict_scp['att'] }}</td>
                   </tr>
                   <tr>
                     <td>Bulk MT</td>
-                    <td>{{ bmtatt }}</td>
+                    <td>{{ dict_sdp['att67'] }}</td>
                   </tr>
                   <tr>
                     <td>Bulk MO</td>
-                    <td>{{ bmoatt }}</td>
+                    <td>{{ dict_sdp['att66'] }}</td>
                   </tr>
                   <tr>
                     <td>Digital Service</td>
-                    <td>{{ digatt }}</td>
+                    <td>{{ dict_sdp['att68'] }}</td>
                   </tr>
                   <tr>
                     <td>Subscription MT</td>
-                    <td>{{ smtatt }}</td>
+                    <td>{{ dict_sdp['att73'] }}</td>
                   </tr>
                   <tr>
                     <td>Subscription MO</td>
-                    <td>{{ smoatt }}</td>
+                    <td>{{ dict_sdp['att72'] }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -288,19 +288,19 @@
             new ApexCharts(document.querySelector("#lineChart2"), {
               series: [{
                 name: "BULK MT",
-                data: {{ listbmtatt | tojson }}
+                data: {{ dict_sdp['min67'] | tojson }}
               },
                 {
                 name: "BULK MO",
-                data: {{ listbmoatt | tojson }}
+                data: {{ dict_sdp['min66'] | tojson }}
               },
                 {
                 name: "DIGITAL SERVICE",
-                data: {{ listdigatt | tojson }}
+                data: {{ dict_sdp['min68'] | tojson }}
               },
                 {
                 name: "SUBS_MO",
-                data: {{ listsmoatt | tojson }}
+                data: {{ dict_sdp['min72'] | tojson }}
               }],
               chart: {
                 height: 250,
@@ -321,7 +321,7 @@
                 curve: 'smooth'
               },
               xaxis: {
-                    categories: {{ listsdpmin |tojson }},
+                    categories: {{ dict_sdp['listmin'] |tojson }},
                     labels: {
                       show: true,
                       rotate: -90,
@@ -353,11 +353,11 @@
             new ApexCharts(document.querySelector("#lineChart3"), {
               series: [{
                 name: "VOICE",
-                data: {{ listscpatt | tojson }}
+                data: {{ dict_scp['attmin'] | tojson }}
               },
     {
                 name: "SUBS_MT",
-                data: {{ listsmtatt | tojson }}
+                data: {{ dict_sdp['min73'] | tojson }}
               }],
               chart: {
                 height: 250,
@@ -370,7 +370,7 @@
                 enabled: false
               },
               xaxis: {
-                    categories: {{ listscpmin |tojson }},
+                    categories: {{ dict_scp['listmin'] |tojson }},
                     labels: {
                       show: true,
                       rotate: -90,

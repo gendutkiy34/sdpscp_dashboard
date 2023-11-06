@@ -26,8 +26,8 @@ def GetDataD017(env=None):
         sqltxt=ReadTxtFile(f'{pathdir}/sql/scptraffic3day.sql')
         tempoutput=f'{pathdir}/rawdata/scp_data_temp.csv'
         output=f'{pathdir}/rawdata/scp_data_d017.csv'
-        list_column=['CDRDATE','SERVICE_KEY','IS_ROAMING','DIAMETER','TOTAL','REMARK']
-        tmpcolumn=['CDRDATE','SERVICE_KEY','IS_ROAMING','DIAMETER','TOTAL']
+        list_column=['CDRDATE','SERVICE_KEY','IS_ROAMING','ISBFT','DIAMETER','TOTAL','REMARK']
+        tmpcolumn=['CDRDATE','SERVICE_KEY','IS_ROAMING','ISBFT','DIAMETER','TOTAL']
     else :
         print('get data sdp starting ...') 
         conpath=(f'{pathdir}/connections/sdpprodtrx.json')

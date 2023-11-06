@@ -1,7 +1,7 @@
 import os
 from flask import Flask,render_template,url_for,redirect,request
 from modules.general import ReadJsonFile,ReadTxtFile,ConvertListToDict,GetToday,ConvertDatetoStr,Sum2list
-from modules.DataProcess import ScpData,SdpData,ScpDataD017
+from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 import pandas as pd
 
 
@@ -10,89 +10,91 @@ app.config["SECRET_KEY"] = 'tO$and!|0wkamvVia0?n$NqIRVWOG'
 
 app.app_context().push()
 
+#variable
+listaccflag=[66,67,68,72,73]
 
 @app.route('/')
 def index():
     #variable
-    rawscp='./rawdata/data_scp_today.csv'
-    rawsdp='./rawdata/data_sdp_today.csv'
-    list_col=[]
-    list_sr=[]
-    list_att=[]
+    data_scp={}
+    data_sdp={}
+    minscp='./rawdata/data_scp_today.csv'
+    minsdp='./rawdata/data_sdp_today.csv'
+    d3scp='./rawdata/scp_data_d017.csv'
+    d3sdp='./rawdata/sdp_data_d017.csv'
     #data scp 
-    datascp=ScpData(pathfile=rawscp)
+    datascp=ScpDataD017(pathfile=d3scp)
+    dataminscp=ScpData(pathfile=minscp)
     scpatt,scpsuc,scpsr=datascp.SumDataToday()
-    list_sr.append(scpsr)
-    list_att.append(str(scpatt))
-    print(f'voice attemp : {scpatt} , voice success : {scpsuc} , voice success rate : {scpsr} %')
-    list_scp_att,list_scp_min=datascp.HourMinScp()
-    if scpsr >= 99 :
-        list_col.append('#9aed13')
-    elif scpsr > 98 and scpsr < 98:
-        list_col.append('#edd713')
+    list_scp_att,list_scp_min=dataminscp.HourMinScp()
+    data_scp['att']=f'{scpatt:,}'
+    data_scp['suc']=scpsuc
+    data_scp['sr']=scpsr
+    data_scp['attmin']=list_scp_att
+    data_scp['listmin']=list_scp_min
+    print(f"voice attemp : {data_scp['att']} , voice success : {data_scp['suc']} , voice success rate : {data_scp['sr']} %")
+    if data_scp['sr'] >= 99 :
+        data_scp['colscp']='#9aed13'
+    elif data_scp['sr'] > 98 and data_scp['sr'] < 98:
+        data_scp['colscp']='#edd713'
     else :
-        list_col.append('#ed1372')
+        data_scp['colscp']='#ed1372'
+    print(f'data scp : {data_scp}')
     #data sdp
-    datasdp=SdpData(pathfile=rawsdp)
-    bmtatt,bmtsuc,bmtsr=datasdp.SumDataToday(accflag=67)
-    list_sr.append(bmtsr)
-    list_att.append(str(bmtatt))
-    if bmtsr >= 99 :
-        list_col.append('#9aed13')
-    elif bmtsr > 98 and bmtsr < 99:
-        list_col.append('#edd713')
+    datasdp=SdpDataD017(pathfile=d3sdp)
+    for af in listaccflag:
+        sumatt=f'att{af}'
+        sumsuc=f'suc{af}'
+        sumsr=f'sr{af}'
+        att,suc,sr=datasdp.SumAccToday(accflag=af)
+        data_sdp[sumatt]=f'{att:,}'
+        data_sdp[sumsuc]=suc
+        data_sdp[sumsr]=sr
+    if data_sdp['sr66'] >= 99 :
+        data_sdp['col66']='#9aed13'
+    elif data_sdp['sr66'] > 98 and data_sdp['sr66'] < 99:
+        data_sdp['col66']='#edd713'
     else :
-        list_col.append('#ed1372')
-    print(f'bulkmt attemp : {bmtatt} , bulkmt success : {bmtsuc} , bulkmt success rate : {bmtsr} %')
-    bmoatt,bmosuc,bmosr=datasdp.SumDataToday(accflag=66)
-    list_sr.append(bmosr)
-    list_att.append(str(bmoatt))
-    if bmosr >= 99 :
-        list_col.append('#9aed13')
-    elif bmosr > 98 and bmosr < 99:
-        list_col.append('#edd713')
+        data_sdp['col66']='#ed1372'
+    print(f"bulkmo attemp : {data_sdp['att66']} , bulkmo success : {data_sdp['suc66']} , bulkmo success rate : {data_sdp['sr66']} %")
+    if data_sdp['sr67'] >= 99 :
+        data_sdp['col67']='#9aed13'
+    elif data_sdp['sr67'] > 98 and data_sdp['sr67'] < 99:
+        data_sdp['col67']='#edd713'
     else :
-        list_col.append('#ed1372')
-    print(f'bulkmo attemp : {bmoatt} , bulkmo success : {bmosuc} , bulkmo success rate : {bmosr} %')
-    digatt,digsuc,digsr=datasdp.SumDataToday(accflag=68)
-    list_sr.append(digsr)
-    list_att.append(str(digatt))
-    if digsr >= 99 :
-        list_col.append('#9aed13')
-    elif digsr > 98 and digsr < 99:
-        list_col.append('#edd713')
+        data_sdp['col67']='#ed1372'
+    print(f"bulkmt attemp : {data_sdp['att67']} , bulkmt success : {data_sdp['suc67']} , bulkmt success rate : {data_sdp['sr67']} %")
+    if data_sdp['sr68'] >= 99 :
+        data_sdp['col68']='#9aed13'
+    elif data_sdp['sr68'] > 98 and data_sdp['sr68'] < 99:
+        data_sdp['col68']='#edd713'
     else :
-        list_col.append('#ed1372')
-    print(f'digital attemp : {digatt} , digital success : {digsuc} , digital success rate : {digsr} %')
-    smtatt,smtsuc,smtsr=datasdp.SumDataToday(accflag=73)
-    list_sr.append(smtsr)
-    list_att.append(str(smtatt))
-    if smtsr >= 99 :
-        list_col.append('#9aed13')
-    elif smtsr > 98 and smtsr < 99:
-        list_col.append('#edd713')
+        data_sdp['col68']='#ed1372'
+    print(f"digital attemp : {data_sdp['att68']} , digital success : {data_sdp['suc68']} , digital success rate : {data_sdp['sr68']} %")
+    if data_sdp['sr72'] >= 99 :
+        data_sdp['col72']='#9aed13'
+    elif data_sdp['sr72'] > 98 and data_sdp['sr72'] < 99:
+        data_sdp['col72']='#edd713'
     else :
-        list_col.append('#ed1372')
-    print(f'sbulkmt attemp : {smtatt} , sbulkmt success : {smtsuc} , sbulkmt success rate : {smtsr} %')
-    smoatt,smosuc,smosr=datasdp.SumDataToday(accflag=72)
-    list_sr.append(smosr)
-    list_att.append(str(smoatt))
-    if smosr >= 99 :
-        list_col.append('#9aed13')
-    elif smosr > 98 and smosr < 99:
-        list_col.append('#edd713')
+        data_sdp['col72']='#ed1372'
+    print(f"sbulkmt attemp : {data_sdp['att72']} , sbulkmt success : {data_sdp['suc72']} , sbulkmt success rate : {data_sdp['sr72']} %")
+    if data_sdp['sr73'] >= 99 :
+        data_sdp['col73']='#9aed13'
+    elif data_sdp['sr73'] > 98 and data_sdp['sr73'] < 99:
+        data_sdp['col73']='#edd713'
     else :
-        list_col.append('#ed1372')
-    print(f'sbulkmo attemp : {smoatt} , sbulkmo success : {smosuc} , sbulkmo success rate : {smosr} %')
-    list_bmo,list_bmt,list_dig,list_smo,list_smt,list_sdp_min=datasdp.HourMinSdp()
-    print(list_sr)
-    print(list_col)
-    print(list_att)
-    return render_template('dashboardV2.html',scpatt=f"{scpatt:,d}",scpsr=scpsr,bmoatt=f"{bmoatt:,d}",bmosr=bmosr,bmtatt=f"{bmtatt:,d}",
-                           bmtsr=bmtsr,digatt=f"{digatt:,d}",digsr=digsr,smoatt=f"{smoatt:,d}",smosr=smosr,smtatt=f"{smtatt:,d}",
-                           smtsr=smtsr,listscpmin=list_scp_min,listscpatt=list_scp_att,listsdpmin=list_sdp_min,
-                           listbmoatt=list_bmo,listbmtatt=list_bmt,listdigatt=list_dig,listsmoatt=list_smo,
-                           listsmtatt=list_smt,list_col=list_col,list_sr=list_sr,lissumatt=list_att)
+        data_sdp['col73']='#ed1372'
+    print(f"sbulkmo attemp : {data_sdp['att73']} , sbulkmo success : {data_sdp['suc73']} , sbulkmo success rate : {data_sdp['sr73']} %")
+    dataminsdp=SdpData(pathfile=minsdp)
+    list_bmo,list_bmt,list_dig,list_smo,list_smt,list_sdp_min=dataminsdp.HourMinSdp()
+    data_sdp['min66']=list_bmo
+    data_sdp['min67']=list_bmt
+    data_sdp['min68']=list_dig
+    data_sdp['min72']=list_smo
+    data_sdp['min73']=list_smt
+    data_sdp['listmin']=list_sdp_min
+    print(f'data sdp : {data_sdp}')
+    return render_template('dashboardV2.html',dict_scp=data_scp,dict_sdp=data_sdp)
 
 
 @app.route('/scpd017')
@@ -113,8 +115,8 @@ def scpd017():
 def sdptoday():
     topcp={}
     pathdir=os.path.abspath(os.path.dirname(__file__))
-    rawsdp=f'{pathdir}/rawdata/data_sdp_today.csv'
-    datasdp=SdpData(rawsdp)
+    rawsdp=f'{pathdir}/rawdata/sdp_data_d017.csv'
+    datasdp=SdpDataD017(rawsdp)
     listsr=[66,67,68,72,73]
     dic_data={}
     for s in listsr :
@@ -122,20 +124,26 @@ def sdptoday():
         suc_label=f'suc{s}'
         sr_label=f'sr{s}'
         att,succ,hour=datasdp.AttHourToday(accflag=s)
-        sr,srhour=datasdp.SucRatHourly(accflag=s)
-        print(sr)
+        sr,srhour=datasdp.SrHourToday(accflag=s)
         dic_data[att_label]=att
         dic_data[suc_label]=succ    
         dic_data[sr_label]=sr 
-    dic_data['hour']=hour
+    list_hour=[]
+    for h in hour :
+        if len(str(h)) < 2:
+            list_hour.append(f'0{h}')
+        else :
+            list_hour.append(h)
+    dic_data['hour']=list_hour
     cprev,rev=datasdp.RevTop5()
     topcp['cprev']=cprev
     topcp['revenue']=rev
     cpatt,att=datasdp.AttTop5()
     topcp['cpatt']=cpatt
     topcp['attempt']=att
-    dfsum=datasdp.Summary()
+    dfsum=datasdp.SummaryToday()
     dic_data['summary']=dfsum
+    print(dic_data)
     return render_template('dashboard_sdp_today.html',dic_sdp=dic_data,dic_top=topcp)
 
 
