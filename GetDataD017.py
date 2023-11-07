@@ -78,4 +78,4 @@ EOF"""
 while True :
     GetDataD017(env='scp')    
     GetDataD017(env='sdp')
-    time.sleep(500)
+    time.sleep(300)

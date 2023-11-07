@@ -166,32 +166,92 @@ class ScpDataD017():
         return self.datatoday
         
     def SumDataToday(self):
+        scpatt='N/A'
+        scpsuc='N/A'
+        scpsr='N/A'
+        list_dia=[]
+        listsum=[]
+        item={}
         if self.flagdata > 0 :
-            self.dfscpsuc=self.datatoday[self.datatoday['DIAMETER'].isin(list_diameter)]
+            self.dfscpsuc=self.datatoday[self.datatoday['DIAMETER'].isin(list_diameter)].reset_index()
+            #sumarry today
             scpatt=pd.Series(self.datatoday['TOTAL']).sum()
             scpsuc=pd.Series(self.dfscpsuc['TOTAL']).sum()
             scpsr=round((scpsuc/scpatt)*100,2)
-        else :
-            scpatt='N/A'
-            scpsuc='N/A'
-            scpsr='N/A'
-        return scpatt,scpsuc,scpsr
+            item['flag']='ALL VOICE'
+            item['attempt']=f'{scpatt:,}'
+            item['success']=f'{scpsuc:,}'
+            item['sr']=scpsr
+            listsum.append(item)
+            #diameter summary non 2001
+            dfnonsuc=self.datatoday[~self.datatoday['DIAMETER'].isin([2001,0])]
+            sumdiameter=dfnonsuc[['DIAMETER','TOTAL']].groupby('DIAMETER').sum().reset_index()
+            sumdiameter=sumdiameter.sort_values('TOTAL',ascending=False)
+            for d in sumdiameter.iterrows() :
+                item={}
+                item['errcode']=d[1][0]
+                item['total']=f'{d[1][1]:,}'
+                list_dia.append(item)
+            #roaming summary
+            roamsuc=self.dfscpsuc[['IS_ROAMING','TOTAL']].groupby('IS_ROAMING').sum().reset_index()
+            roamsuc=roamsuc.rename(columns={'TOTAL':'SUCCESS'})
+            roamatt=self.datatoday[['IS_ROAMING','TOTAL']].groupby('IS_ROAMING').sum().reset_index()
+            roamatt=roamatt.rename(columns={'TOTAL':'ATTEMPT'})
+            dfroamjoin=pd.merge(roamatt,roamsuc,on=['IS_ROAMING'],how='left').reset_index()
+            dfroamjoin=dfroamjoin.assign(SUCCES_RATE=lambda x : round((x['SUCCESS']/x['ATTEMPT'])*100,2))
+            print(dfroamjoin)
+            for d in dfroamjoin[['IS_ROAMING','ATTEMPT','SUCCESS','SUCCES_RATE']].iterrows() :
+                item={}
+                item['flag']= 'NON ROAMING' if d[1][0] == 0 else  'ROAMING'
+                item['attempt']=f'{d[1][1]:,}'
+                item['success']=f'{d[1][2]:,}'
+                item['sr']=d[1][3]
+                listsum.append(item)
+            #sksummary
+            skyatt=self.datatoday[['SERVICE_KEY','TOTAL']].groupby('SERVICE_KEY').sum().reset_index()
+            skyatt=skyatt.rename(columns={'TOTAL':'ATTEMPT'})
+            skysuc=self.dfscpsuc[['SERVICE_KEY','TOTAL']].groupby('SERVICE_KEY').sum().reset_index()
+            skysuc=skysuc.rename(columns={'TOTAL':'SUCCESS'})
+            skyjoin=pd.merge(skyatt,skysuc,on=['SERVICE_KEY'],how='left').reset_index()
+            skyjoin=skyjoin.fillna(0)
+            skyjoin['SUCCESS']=skyjoin['SUCCESS'].astype(int)
+            skyjoin['ATTEMPT']=skyjoin['ATTEMPT'].astype(int)
+            skyjoin=skyjoin.assign(SUCCES_RATE=lambda x : round((x['SUCCESS']/x['ATTEMPT'])*100,2))
+            skyjoin['SERVICE_KEY']=skyjoin['SERVICE_KEY'].astype(int)
+            for d in skyjoin[['SERVICE_KEY','ATTEMPT','SUCCESS','SUCCES_RATE']].iterrows() :
+                item={}
+                item['flag']= f'sk - {d[1][0]}'
+                item['attempt']=f'{d[1][1]:,}'
+                item['success']=f'{d[1][2]:,}'
+                item['sr']=d[1][3]
+                listsum.append(item)
+        return scpatt,scpsuc,scpsr,list_dia,listsum
     
-    def HourlyDataToday(self):
+    def HourlyDataToday(self,roaming=None):
         listatthour=[]
         listsuchour=[]
         list_hour=[]
         listsrhour=[]
         if self.flagdata > 0 :
-
             list_hour=self.datatoday['HOUR'].drop_duplicates().tolist()
-            dfhourlyatt=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
-            dfhourlysuc=self.dfsuctoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
-            listatthour=dfhourlyatt['TOTAL'].tolist()
-            listsuchour=dfhourlysuc['TOTAL'].tolist()     
-            for a,s in zip(listatthour,listsuchour):
-                sr=round((s/a)*100,2) 
-                listsrhour.append(sr)
+            if roaming is None :
+                dfhourlyatt=self.datatoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlysuc=self.dfsuctoday[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                listatthour=dfhourlyatt['TOTAL'].tolist()
+                listsuchour=dfhourlysuc['TOTAL'].tolist()     
+                for a,s in zip(listatthour,listsuchour):
+                    sr=round((s/a)*100,2) 
+                    listsrhour.append(sr)
+            else :
+                dfroam=self.datatoday[self.datatoday['IS_ROAMING']==int(roaming)]
+                dfroamsuc=dfroam[dfroam['DIAMETER'].isin(list_diameter)]
+                dfhourlyatt=dfroam[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                dfhourlysuc=dfroamsuc[['HOUR','TOTAL']].groupby('HOUR').sum().reset_index()
+                listatthour=dfhourlyatt['TOTAL'].tolist()
+                listsuchour=dfhourlysuc['TOTAL'].tolist()     
+                for a,s in zip(listatthour,listsuchour):
+                    sr=round((s/a)*100,2) 
+                    listsrhour.append(sr)
         return listatthour,listsuchour,listsrhour,list_hour
     
     def BftToday(self):

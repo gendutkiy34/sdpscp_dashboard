@@ -12,6 +12,7 @@ app.app_context().push()
 
 #variable
 listaccflag=[66,67,68,72,73]
+list_sk=[100,200,133,150,300,400]
 
 @app.route('/')
 def index():
@@ -25,7 +26,7 @@ def index():
     #data scp 
     datascp=ScpDataD017(pathfile=d3scp)
     dataminscp=ScpData(pathfile=minscp)
-    scpatt,scpsuc,scpsr=datascp.SumDataToday()
+    scpatt,scpsuc,scpsr,listdia,listsum=datascp.SumDataToday()
     list_scp_att,list_scp_min=dataminscp.HourMinScp()
     data_scp['att']=f'{scpatt:,}'
     data_scp['suc']=scpsuc
@@ -146,6 +147,60 @@ def sdptoday():
     print(dic_data)
     return render_template('dashboard_sdp_today.html',dic_sdp=dic_data,dic_top=topcp)
 
+
+@app.route('/scptoday')
+def scptoday():
+    data_scp={}
+    listhour=[]
+    pathdir=os.path.abspath(os.path.dirname(__file__))
+    rawsdp=f'{pathdir}/rawdata/scp_data_d017.csv'
+    datascp=ScpDataD017(rawsdp)
+    att,suc,sr,hou=datascp.HourlyDataToday()
+    data_scp['listatt']=att
+    data_scp['listsuc']=suc
+    data_scp['listsr']=sr
+    scpatt,scpsuc,scpsr,listdia,listsum=datascp.SumDataToday()
+    data_scp['lissum']=listsum
+    data_scp['lisdiameter']=listdia
+    roamatt,roamsuc,roamsr,hou=datascp.HourlyDataToday(roaming=1)
+    data_scp['listroamsr']=roamsr
+    noroamatt,noroamsuc,noroamsr,hou=datascp.HourlyDataToday(roaming=1)
+    data_scp['listnoroamsr']=noroamsr
+    for h in hou:
+        if h < 10 :
+            listhour.append(f'0{h}')
+        else :
+            listhour.append(h)
+    data_scp['list_hour']=listhour
+    listhour,listbft,errbft,totalerrbft=datascp.BftToday()
+    data_scp['listbft']=listbft
+    data_scp['listerrbft']=errbft
+    data_scp['listtotalbft']=totalerrbft
+    for sk in list_sk:
+        listatt=f'listatt{sk}'
+        listsuc=f'listsuc{sk}'
+        sumatt=f'sumatt{sk}'
+        sumsuc=f'sumsuc{sk}'
+        lisatt,sumt=datascp.AttSkToday(servicekey=sk)
+        lissuc,sums=datascp.AttSkToday(servicekey=sk,diameter=2001)
+        data_scp[listatt]=lisatt
+        data_scp[sumatt]=sumt
+        data_scp[listsuc]=lissuc
+        data_scp[sumsuc]=sums
+    attroam,sumroam=datascp.AttRoamToday(roaming=1)
+    data_scp['roaming_att']=attroam
+    data_scp['roaming_attsum']=sumroam
+    sucroam,sumsroam=datascp.AttRoamToday(roaming=1,diameter=2001)
+    data_scp['roaming_suc']=sucroam
+    data_scp['roaming_sucsum']=sumsroam
+    attnonroam,sumnonroam=datascp.AttRoamToday(roaming=0)
+    data_scp['nonroaming_att']=attnonroam
+    data_scp['nonroaming_attsum']=sumnonroam
+    sucnonroam,sumsnonroam=datascp.AttRoamToday(roaming=0,diameter=2001)
+    data_scp['nonroaming_suc']=sucnonroam
+    data_scp['nonroaming_sucsum']=sumsnonroam
+    print(data_scp)
+    return render_template('dashboard_scp_today.html',dic_scp=data_scp)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8081')

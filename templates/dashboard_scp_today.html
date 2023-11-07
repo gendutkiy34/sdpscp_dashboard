@@ -8,48 +8,24 @@
     <div class="col-lg-3">
       <div class="card">
         <div class="card-body2">
-            <!-- Bar Chart -->
-            <div id="barChart"></div>
-
-            <script>
-              document.addEventListener("DOMContentLoaded", () => {
-                new ApexCharts(document.querySelector("#barChart"), {
-                  series: [{
-                    data: [400, 430, 448, 470, 540]
-                  }],
-                  chart: {
-                    type: 'bar',
-                    height: 250
-                  },
-                  title: {
-                    text: "Top 5 CP - Traffic Attempt",
-                    align: 'center',
-                    margin: 0,
-                    offsetX: 20,
-                    offsetY: 20,
-                    floating: false,
-                    style: {
-                        fontSize:  '14px',
-                        fontWeight:  'thin',
-                        color:  '#263238'
-                          },
-                  },
-                  plotOptions: {
-                    bar: {
-                      borderRadius: 4,
-                      horizontal: true,
-                    }
-                  },
-                  dataLabels: {
-                    enabled: false
-                  },
-                  xaxis: {
-                    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy'],
-                  }
-                }).render();
-              });
-            </script>
-            <!-- End Bar Chart -->
+          <h7></h7><center>DIAMETER non 2001</center></h7><br>
+          <!-- Line Chart -->
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th scope="col">diameter code</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dic_scp['lisdiameter'] %}
+              <tr>
+                <td>{{ t['errcode'] }}</td>
+                <td>{{ t['total'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -86,6 +62,7 @@
                   },
                   plotOptions: {
                     bar: {
+                      distributed: true,
                       borderRadius: 4,
                       horizontal: true,
                     }
@@ -114,7 +91,7 @@
             document.addEventListener("DOMContentLoaded", () => {
               new ApexCharts(document.querySelector("#lineChart3"), {
                 series: [{
-                  name: 'Net Profit',
+                  name: 'BFT',
                   data: {{ dic_scp ['listbft'] | tojson }}
                   }],
                 chart: {
@@ -159,7 +136,7 @@
                 tooltip: {
                   y: {
                     formatter: function (val) {
-                      return "$ " + val + " thousands"
+                      return  val 
                     }
                   }
                 }
@@ -170,94 +147,167 @@
         </div>
       </div>
     </div>
+    
+
+   </div>
+
+
+   <div class="row">
+
+     <!-- CHART 3 -->
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+         <!-- Line Chart -->
+         <div id="lineChart1"></div>
+         <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart1"), {
+              series: [{
+                name: "ALL ",
+                data: {{ dic_scp['listsr'] | tojson }}
+              },{
+                name: "ROAMING ",
+                data: {{ dic_scp['listroamsr'] | tojson }}
+              },{
+                name: "NON ROAMING ",
+                data: {{ dic_scp['listnoroamsr'] | tojson }}
+              }],
+              chart: {
+                height: 250,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              title: {
+                  text: "SCP SUCCESS RATE (%)",
+                  floating: false,
+                  align: 'center',
+              },
+              yaxis :{
+                max: 100,
+                min:0,
+              },
+              xaxis: {
+              categories: {{ dic_scp['list_hour'] | tojson }},
+              title: {
+                text: 'hour',
+                rotate: 0,
+               }
+              },
+              stroke: {
+                curve: 'smooth',
+                show: true,
+                width: 3,
+                lineCap: 'butt',
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div>  
+
+   <!-- CHART 1 -->
+   <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+         <!-- Line Chart -->
+         <div id="lineChart"></div>
+         <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart"), {
+              series: [{
+                  name: 'Attempt',
+                  type: 'column',
+                  data: {{ dic_scp ['roaming_att'] | tojson }}
+                    }, {
+                  name: 'Success (2001)',
+                  type: 'line',
+                  data: {{ dic_scp ['roaming_suc'] | tojson }}
+                }],
+              chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                      enabled: false
+                    }
+                },
+              dataLabels: {
+                  enabled: false
+                },
+              title: {
+                  text: "ROAMING ",
+                  floating: false,
+                  align: 'center',
+                },
+              plotOptions: {
+                  bar: {
+                    borderRadius: 5,
+                    columnWidth: '70%',
+                    colors: {
+                      backgroundBarRadius: 0,
+                    }
+                  },
+                },
+              stroke: {
+                  curve: 'smooth',
+                  show: true,
+                  width: 3,
+                  lineCap: 'butt',
+                },
+              markers: {
+                  size: 4,
+                  colors: '#ffffff',
+                  strokeWidth: 0,
+                },
+              yaxis: {
+                  title: {
+                    text: 'traffic attempt',
+                    rotate: -90,
+                  }
+                },
+              xaxis: {
+                  categories: {{ dic_scp ['list_hour'] | tojson }},
+                  title: {
+                    text: 'hour',
+                    rotate: 0,
+                  }
+                },
+              dataLabels: {
+                  enabled: false,
+                },
+              colors:['#30b9db','#5a457d'],
+              grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+          }).render();
+        });
+      </script>
+      <!-- End Line Chart -->
+      </div>
+    </div>
+  </div>
 
    </div>
 
    <div class="row">
 
-    <!-- CHART 1 -->
-    <div class="col-lg-6">
-      <div class="card">
-        <div class="card-body">
-           <!-- Line Chart -->
-           <div id="lineChart"></div>
-           <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              new ApexCharts(document.querySelector("#lineChart"), {
-                series: [{
-                    name: 'Attempt',
-                    type: 'column',
-                    data: {{ dic_scp ['roaming_att'] | tojson }}
-                      }, {
-                    name: 'Success (2001)',
-                    type: 'line',
-                    data: {{ dic_scp ['roaming_suc'] | tojson }}
-                  }],
-                chart: {
-                    height: 250,
-                    type: 'line',
-                    zoom: {
-                        enabled: false
-                      }
-                  },
-                dataLabels: {
-                    enabled: false
-                  },
-                title: {
-                    text: "ROAMING ",
-                    floating: false,
-                    align: 'center',
-                  },
-                plotOptions: {
-                    bar: {
-                      borderRadius: 5,
-                      columnWidth: '70%',
-                      colors: {
-                        backgroundBarRadius: 0,
-                      }
-                    },
-                  },
-                stroke: {
-                    curve: 'smooth',
-                    show: true,
-                    width: 3,
-                    lineCap: 'butt',
-                  },
-                markers: {
-                    size: 4,
-                    colors: '#ffffff',
-                    strokeWidth: 0,
-                  },
-                yaxis: {
-                    title: {
-                      text: 'traffic attempt',
-                      rotate: -90,
-                    }
-                  },
-                xaxis: {
-                    categories: {{ dic_scp ['list_hour'] | tojson }},
-                    title: {
-                      text: 'hour',
-                      rotate: 0,
-                    }
-                  },
-                dataLabels: {
-                    enabled: false,
-                  },
-                colors:['#30b9db','#5a457d'],
-                grid: {
-                    row: {
-                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
-                      opacity: 0.5
-                    },
-                  }
-            }).render();
-          });
-        </script>
-        <!-- End Line Chart -->
-        </div>
-      </div>
-    </div>
+    
 
     <!-- CHART 5 -->
     <div class="col-lg-6">
@@ -343,10 +393,6 @@
       </div>
     </div>
 
-   </div>
-
-   <div class="row">
-
     <!-- CHART 6 -->
     <div class="col-lg-6">
       <div class="card">
@@ -359,11 +405,11 @@
                 series: [{
                     name: 'Attempt',
                     type: 'column',
-                    data: [67,89,343,189,200]
+                    data: {{ dic_scp ['listsuc100'] | tojson }}
                       }, {
-                    name: 'Success',
+                    name: 'Success (2001)',
                     type: 'line',
-                    data: [50,40,300,175,180]
+                    data: {{ dic_scp ['listatt100'] | tojson }}
                   }],
                 chart: {
                     height: 250,
@@ -376,7 +422,7 @@
                     enabled: false
                   },
                 title: {
-                    text: "COMBO 3",
+                    text: "SK 100",
                     floating: false,
                     align: 'center',
                   },
@@ -397,18 +443,17 @@
                   },
                 markers: {
                     size: 4,
-                    colors: '#d6d309',
+                    colors: ['#ffffff'],
                     strokeWidth: 0,
                   },
                 yaxis: {
-                    categories: [00,01,02,03,04],
                     title: {
                       text: 'traffic attempt',
                       rotate: -90,
                     }
                   },
                 xaxis: {
-                    categories: [00,01,02,03,04],
+                    categories: {{ dic_scp ['list_hour'] | tojson }},
                     title: {
                       text: 'hour',
                       rotate: 0,
@@ -417,7 +462,7 @@
                 dataLabels: {
                     enabled: false,
                   },
-                colors:['#0946d6','#d6d309'],
+                colors:['#30b9db','#5a457d'],
                 grid: {
                     row: {
                       colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
@@ -432,11 +477,17 @@
       </div>
     </div>
 
+   </div>
+
+   <div class="row">
+
+    
+
     <!-- CHART 7 -->
     <div class="col-lg-6">
       <div class="card">
         <div class="card-body">
-           <!-- Line Chart -->
+         <!-- Line Chart -->
            <div id="combo4"></div>
            <script>
             document.addEventListener("DOMContentLoaded", () => {
@@ -444,11 +495,11 @@
                 series: [{
                     name: 'Attempt',
                     type: 'column',
-                    data: [67,89,343,189,200]
+                    data: {{ dic_scp ['listsuc200'] | tojson }}
                       }, {
-                    name: 'Success',
+                    name: 'Success (2001)',
                     type: 'line',
-                    data: [50,40,300,175,180]
+                    data: {{ dic_scp ['listatt200'] | tojson }}
                   }],
                 chart: {
                     height: 250,
@@ -461,7 +512,7 @@
                     enabled: false
                   },
                 title: {
-                    text: "COMBO 4",
+                    text: "SK 200",
                     floating: false,
                     align: 'center',
                   },
@@ -482,18 +533,17 @@
                   },
                 markers: {
                     size: 4,
-                    colors: '#d6d309',
+                    colors: '#ffffff',
                     strokeWidth: 0,
                   },
                 yaxis: {
-                    categories: [00,01,02,03,04],
                     title: {
                       text: 'traffic attempt',
                       rotate: -90,
                     }
                   },
                 xaxis: {
-                    categories: [00,01,02,03,04],
+                    categories: {{ dic_scp ['list_hour'] | tojson }},
                     title: {
                       text: 'hour',
                       rotate: 0,
@@ -502,7 +552,7 @@
                 dataLabels: {
                     enabled: false,
                   },
-                colors:['#0946d6','#d6d309'],
+                colors:['#30b9db','#5a457d'],
                 grid: {
                     row: {
                       colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
@@ -515,9 +565,125 @@
           <!-- End Line Chart -->
         </div>
       </div>
-    </div>    
-
+    </div>  
+    
+     <!-- CHART 8 -->
+     <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <!-- Line Chart -->
+          <div id="combo5"></div>
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#combo5"), {
+                series: [{
+                    name: 'Attempt',
+                    type: 'column',
+                    data: {{ dic_scp ['listatt300'] | tojson }}
+                      }, {
+                    name: 'Success (2001)',
+                    type: 'line',
+                    data: {{ dic_scp ['listsuc300'] | tojson }}
+                  }],
+                chart: {
+                    height: 250,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                      }
+                  },
+                dataLabels: {
+                    enabled: false
+                  },
+                title: {
+                    text: "SK 300",
+                    floating: false,
+                    align: 'center',
+                  },
+                plotOptions: {
+                    bar: {
+                      borderRadius: 5,
+                      columnWidth: '70%',
+                      colors: {
+                        backgroundBarRadius: 0,
+                      }
+                    },
+                  },
+                stroke: {
+                    curve: 'smooth',
+                    show: true,
+                    width: 3,
+                    lineCap: 'butt',
+                  },
+                markers: {
+                    size: 4,
+                    colors: '#ffffff',
+                    strokeWidth: 0,
+                  },
+                yaxis: {
+                    title: {
+                      text: 'traffic attempt',
+                      rotate: -90,
+                    }
+                  },
+                xaxis: {
+                    categories: {{ dic_scp ['list_hour'] | tojson }},
+                    title: {
+                      text: 'hour',
+                      rotate: 0,
+                    }
+                  },
+                dataLabels: {
+                    enabled: false,
+                  },
+                colors:['#30b9db','#5a457d'],
+                grid: {
+                    row: {
+                      colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                      opacity: 0.5
+                    },
+                  }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
    </div>
-     
+
+  </div>
+
+  <div class="row">
+
+    <!-- TABLE-->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body2">
+          <table class="table table-striped">
+            <thead>
+              <tr class="table-success">
+                <th scope="col">Item </th>
+                <th scope="col">Traffic Attempt</th>
+                <th scope="col">Traffic Success</th>
+                <th scope="col">Success Rate (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dic_scp['lissum'] %}
+              <tr >
+                <td>{{ t['flag'] }}</td>
+                <td>{{ t['attempt'] }}</td>
+                <td>{{ t['success'] }}</td>
+                <td>{{ t['sr'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!--row-->
+
 </section>
 {% endblock %}

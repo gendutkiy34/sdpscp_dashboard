@@ -13,8 +13,14 @@ app.app_context().push()
 #variable
 list_sk=[100,200,133,150,300,400]
 
+
 @app.route('/')
 def index():
+    return render_template('baseappV2.html')
+
+
+@app.route('/scptoday')
+def scptoday():
     data_scp={}
     listhour=[]
     pathdir=os.path.abspath(os.path.dirname(__file__))
@@ -24,6 +30,13 @@ def index():
     data_scp['listatt']=att
     data_scp['listsuc']=suc
     data_scp['listsr']=sr
+    scpatt,scpsuc,scpsr,listdia,listsum=datascp.SumDataToday()
+    data_scp['lissum']=listsum
+    data_scp['lisdiameter']=listdia
+    roamatt,roamsuc,roamsr,hou=datascp.HourlyDataToday(roaming=1)
+    data_scp['listroamsr']=roamsr
+    noroamatt,noroamsuc,noroamsr,hou=datascp.HourlyDataToday(roaming=1)
+    data_scp['listnoroamsr']=noroamsr
     for h in hou:
         if h < 10 :
             listhour.append(f'0{h}')

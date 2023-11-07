@@ -14,10 +14,8 @@ rawd3scp='./rawdata/scp_data_d017.csv'
 rawd3sdp='./rawdata/sdp_data_d017.csv'
 listsr=[66,67,68,72,73]
 datascp=ScpDataD017(rawd3scp)
-a1,a2,a3,a4=datascp.BftToday()
-b1,b2=datascp.AttSkToday(servicekey=150)
-c1,c2=datascp.AttRoamToday(roaming=1)
-print(c1,c2)
+scpatt,scpsuc,scpsr,listdia,lisum=datascp.SumDataToday()
+print(lisum)
 
 
 '''    dic_data={}
