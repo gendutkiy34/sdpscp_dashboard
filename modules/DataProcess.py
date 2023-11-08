@@ -511,32 +511,35 @@ class SdpDataD017():
         except Exception :
             self.flagdata=0
         self.datatoday=self.dataraw[self.dataraw['REMARK']=='day0']
+        self.dfsuc=self.dataraw[self.dataraw['INTERNALCAUSE'].isin(list_diameter) ]
     
     def VerifyDataRaw(self):
         return self.dataraw 
     
-    def Revenue(self,accessflag=None):
-        if self.flagdata > 0 :
-            list_rev=[941,949,938]
-            if accessflag is None :
-                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) ]
+    def Revenue(self,accflag=None):
+        listrev0=[]
+        listrev1=[]
+        listrev2=[]
+        listrevhour=[]
+        if self.flagdata > 0 :            
+            if accflag is None :
+                dfsuc=self.dfsuc[(self.dfsuc['BASICCAUSE'].isin(list_rev)) & (self.dfsuc['INTERNALCAUSE']==2001) ]
             else :
-                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) & (self.dataraw['ACCESSFLAG']==int(accessflag))]
+                dfsuc=self.dfsuc[(self.dfsuc['BASICCAUSE'].isin(list_rev))& (self.dfsuc['INTERNALCAUSE']==2001)&(self.dfsuc['ACCESSFLAG']==int(accflag))]
             dfhourlyatt=pd.pivot_table(dfsuc,values='REVENUE', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
-        else :
-            dfhourlyatt0=[]
-            dfhourlyatt1=[]
-            dfhourlyatt7=[]
-            list_hour=[]
-            return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
+            listrev0=dfhourlyatt['day0'].tolist()
+            listrev1=dfhourlyatt['day1'].tolist()
+            listrev7=dfhourlyatt['day7'].tolist()
+            listrevhour=dfhourlyatt['HOUR'].tolist()
+            return listrev0,listrev1,listrev7,listrevhour
+
         
     def Att(self,accflag=None):
         if self.flagdata > 0 :
             if accflag is None :
-                dfsuc=self.dataraw[['HOUR','ACCESSFLAG','TOTAL']]
+                dfsuc=self.dfsuc[['HOUR','ACCESSFLAG','TOTAL']]
             else :
-                dfsuc=self.dataraw[self.dataraw['ACCESSFLAG']==int(accflag)]
+                dfsuc=self.dfsuc[self.dfsuc['ACCESSFLAG']==int(accflag)]
             dfhourlyatt=pd.pivot_table(dfsuc,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
             return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
         else :
@@ -547,20 +550,38 @@ class SdpDataD017():
             return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
         
     def Succ(self,accflag=None):
+        dfhourlyatt0=[]
+        dfhourlyatt1=[]
+        dfhourlyatt7=[]
+        list_hour=[]
         if self.flagdata > 0 :
             list_rev=[941,949,938]
             if accflag is None :
-                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) ]
+                dfsuc=self.dfsuc[['HOUR','ACCESSFLAG','TOTAL']]
             else :
-                dfsuc=self.dataraw[(self.dataraw['INTERNALCAUSE']==2001) & (self.dataraw['BASICCAUSE'].isin(list_rev)) & (self.dataraw['ACCESSFLAG']==int(accflag))]
+                dfsuc=self.dfsuc[(self.dfsuc['ACCESSFLAG']==int(accflag))]
             dfhourlyatt=pd.pivot_table(dfsuc,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
-        else :
-            dfhourlyatt0=[]
-            dfhourlyatt1=[]
-            dfhourlyatt7=[]
-            list_hour=[]
-            return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
+            dfhourlyatt0=dfhourlyatt['day0'].tolist()
+            dfhourlyatt1=dfhourlyatt['day1'].tolist()
+            dfhourlyatt7=dfhourlyatt['day7'].tolist()
+            list_hour=dfhourlyatt['HOUR'].tolist()
+        return dfhourlyatt0,dfhourlyatt1,dfhourlyatt7,list_hour
+        
+    def Summary(self):
+        if self.flagdata > 0 :
+            dfatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['ACCESSFLAG'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            dfatt=dfatt.rename(columns={'day0':'att0','day1':'att1','day7':'att7'})
+            dfsuc=pd.pivot_table(self.dfsuc,values='TOTAL', index=['ACCESSFLAG'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            dfsuc=dfsuc.rename(columns={'day0':'suc0','day1':'suc1','day7':'suc7'})
+            rawrev=self.dfsuc[(self.dfsuc['BASICCAUSE'].isin(list_rev)) & ( self.dfsuc['INTERNALCAUSE']==2001)]
+            dfrev=pd.pivot_table(self.dfsuc,values='REVENUE', index=['ACCESSFLAG'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            dfjoin=pd.merge(dfatt,dfsuc,on=['ACCESSFLAG'])
+            listd=[0,1,7]
+            dfjoin=dfjoin.assign(sr0=lambda x :round((x.suc0/x.att0)*100,2))
+            dfjoin=dfjoin.assign(sr1=lambda x :round((x.suc1/x.att1)*100,2))
+            dfjoin=dfjoin.assign(sr7=lambda x :round((x.suc7/x.att7)*100,2))
+            dfsr=dfjoin[['ACCESSFLAG','sr0','sr1','sr7']]
+            return dfatt,dfsuc,dfsr,dfrev
         
     def DataToday(self):
         return self.datatoday

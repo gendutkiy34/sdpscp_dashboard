@@ -3,7 +3,7 @@ import pandas as pd
 import time
 from datetime import datetime
 from modules.general import GetToday
-from modules.connection import OracleCon
+#from modules.connection import OracleCon
 from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 
 
@@ -13,9 +13,14 @@ rawminsdp='./rawdata/data_sdp_today.csv'
 rawd3scp='./rawdata/scp_data_d017.csv'
 rawd3sdp='./rawdata/sdp_data_d017.csv'
 listsr=[66,67,68,72,73]
-datascp=ScpDataD017(rawd3scp)
-scpatt,scpsuc,scpsr,listdia,lisum=datascp.SumDataToday()
-print(lisum)
+datasdp=SdpDataD017(rawd3sdp)
+df1,df2,df3,df4=datasdp.Summary()
+print(df1)
+print(df2)
+print(df3)
+print(df4)
+
+
 
 
 '''    dic_data={}
