@@ -12,7 +12,7 @@ app.app_context().push()
 
 #variable
 list_sk=[100,200,133,150,300,400]
-
+listsr=[66,67,68,72,73]
 
 @app.route('/')
 def index():
@@ -77,9 +77,24 @@ def scptoday():
 def sdptoday():
     return render_template('baseappV2.html')
 
-@app.route('/scpd017')
-def scpd017():
-    return render_template('baseappV2.html')
+@app.route('/sdpd017')
+def sdpd017():
+    data_sdp={}
+    rawd3sdp='./rawdata/sdp_data_d017.csv'
+    datasdp=SdpDataD017(rawd3sdp)
+    dicsumall=datasdp.Summary()
+    data_sdp['summaryall']=dicsumall
+    for ac in listsr:
+        attm=f'attempt{ac}'
+        succs=f'success{ac}'
+        reven=f'revenue{ac}'
+        dicatt=datasdp.Att(accflag=ac)
+        dicsuc=datasdp.Succ(accflag=ac)
+        dicrev=datasdp.Revenue(accflag=ac)
+        data_sdp[attm]=dicatt
+        data_sdp[succs]=dicsuc
+        data_sdp[reven]=dicrev
+    return render_template('dashboard_sdpd017.html',dict_sdp=data_sdp)
 
 @app.route('/testvar')
 def testvar():

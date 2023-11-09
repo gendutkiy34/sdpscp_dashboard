@@ -50,3 +50,20 @@ def Sum2list(list1=None,list2=None):
         c=a+b
         list_sum.append(c)
     return list_sum
+
+def TableColour(val0,val1,val7):
+    gap1=val0-val1
+    gap2=val0-val7
+    if gap1 >=(0.02*val1) and gap2 >= (0.02*val7) :
+        bgcolor="data-increase"
+    elif gap1 >= (0.02*val1) and gap2 < 0 :
+        bgcolor="data-decrease"
+    elif gap1 < 0 and gap2 < 0 :
+        bgcolor="data-decrease"
+    elif gap1 < 0 and gap2 >= (0.02*val7)  :
+        bgcolor="data-increase"
+    elif gap1 < (0.02*val1) and gap2 < 0  :
+        bgcolor="data-decrease"
+    else :
+        bgcolor=None
+    return bgcolor

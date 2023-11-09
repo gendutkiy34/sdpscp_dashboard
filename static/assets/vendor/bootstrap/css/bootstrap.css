@@ -1944,6 +1944,7 @@ progress {
   --bs-table-hover-color: #000;
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
+  border-style: 1px;
 }
 
 .table-secondary {
@@ -12067,4 +12068,6 @@ textarea.form-control-lg {
   }
 }
 
+
+/* customize */
 /*# sourceMappingURL=bootstrap.css.map */

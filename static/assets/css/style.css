@@ -1363,6 +1363,88 @@ padding: 80px 20px 10px 20px;
   margin: 0px 0px 0px 0px;
   color: #14899ee8;
 }
+
+.table-data{
+  --bs-table-color: #000000;
+  --bs-table-bg: #7af749;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header1{
+  --bs-table-color: #fffcfc;
+  --bs-table-bg: #5684c0;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header2{
+  --bs-table-color: #fcfbfb;
+  --bs-table-bg: rgb(18, 172, 31);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header3{
+  --bs-table-color: #fcfbfb;
+  --bs-table-bg: rgb(172, 144, 18);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header4{
+  --bs-table-color: #fcfbfb;
+  --bs-table-bg: rgb(167, 18, 172);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header5{
+  --bs-table-color: #fcfbfb;
+  --bs-table-bg: rgb(18, 172, 69);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+}
+
+.table-header6{
+  --bs-table-color: #474444;
+  --bs-table-bg: rgb(200, 204, 201);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+  text-justify: auto;
+}
+
+.data-increase{
+  --bs-table-color: #000000;
+  --bs-table-bg: rgb(140, 240, 10);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
+.data-decrease{
+  --bs-table-color: #000000;
+  --bs-table-bg: rgb(253, 136, 208);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
+.table-custom1{
+  --bs-table-border-color: #050505;
+  border-color: var(--bs-table-border-color);
+  border-width: 3px;
+}
+
+
+
 /*
 table td,
 table th {

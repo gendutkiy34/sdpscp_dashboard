@@ -14,15 +14,17 @@ app.app_context().push()
 listaccflag=[66,67,68,72,73]
 list_sk=[100,200,133,150,300,400]
 
+#sourceinput
+minscp='./rawdata/data_scp_today.csv'
+minsdp='./rawdata/data_sdp_today.csv'
+d3scp='./rawdata/scp_data_d017.csv'
+d3sdp='./rawdata/sdp_data_d017.csv'
+
 @app.route('/')
 def index():
     #variable
     data_scp={}
     data_sdp={}
-    minscp='./rawdata/data_scp_today.csv'
-    minsdp='./rawdata/data_sdp_today.csv'
-    d3scp='./rawdata/scp_data_d017.csv'
-    d3sdp='./rawdata/sdp_data_d017.csv'
     #data scp 
     datascp=ScpDataD017(pathfile=d3scp)
     dataminscp=ScpData(pathfile=minscp)
@@ -101,8 +103,7 @@ def index():
 @app.route('/scpd017')
 def scpd017():
     pathdir=os.getcwd()
-    rawscp=f'{pathdir}/rawdata/scp_data_d017.csv'
-    datascp=ScpDataD017(rawscp)
+    datascp=ScpDataD017(d3scp)
     att0,att1,att7,atth=datascp.Att()
     suc0,suc1,suc7,such=datascp.AttDia(diameter=2001)
     sk100,sk101,sk107,sk10h=datascp.AttRoam(diameter=2001,servicekey=100,roaming=1)
@@ -112,12 +113,12 @@ def scpd017():
                            sk107=sk107,rm0=rm0,rm1=rm1,rm7=rm7)
 
 
+
 @app.route('/sdptoday')
 def sdptoday():
     topcp={}
     pathdir=os.path.abspath(os.path.dirname(__file__))
-    rawsdp=f'{pathdir}/rawdata/sdp_data_d017.csv'
-    datasdp=SdpDataD017(rawsdp)
+    datasdp=SdpDataD017(d3sdp)
     listsr=[66,67,68,72,73]
     dic_data={}
     for s in listsr :
@@ -153,8 +154,7 @@ def scptoday():
     data_scp={}
     listhour=[]
     pathdir=os.path.abspath(os.path.dirname(__file__))
-    rawsdp=f'{pathdir}/rawdata/scp_data_d017.csv'
-    datascp=ScpDataD017(rawsdp)
+    datascp=ScpDataD017(d3scp)
     att,suc,sr,hou=datascp.HourlyDataToday()
     data_scp['listatt']=att
     data_scp['listsuc']=suc
@@ -201,6 +201,24 @@ def scptoday():
     data_scp['nonroaming_sucsum']=sumsnonroam
     print(data_scp)
     return render_template('dashboard_scp_today.html',dic_scp=data_scp)
+
+@app.route('/sdpd017')
+def sdpd017():
+    data_sdp={}
+    datasdp=SdpDataD017(d3sdp)
+    dicsumall=datasdp.Summary()
+    data_sdp['summaryall']=dicsumall
+    for ac in listaccflag:
+        attm=f'attempt{ac}'
+        succs=f'success{ac}'
+        reven=f'revenue{ac}'
+        dicatt=datasdp.Att(accflag=ac)
+        dicsuc=datasdp.Succ(accflag=ac)
+        dicrev=datasdp.Revenue(accflag=ac)
+        data_sdp[attm]=dicatt
+        data_sdp[succs]=dicsuc
+        data_sdp[reven]=dicrev
+    return render_template('dashboard_sdpd017.html',dict_sdp=data_sdp)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8081')

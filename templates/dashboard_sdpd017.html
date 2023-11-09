@@ -4,27 +4,55 @@
 
   <div class="row">
 
-    <div class="col-lg-6">
+    <div class="col-lg-12">
       <div class="card">
         <div class="card-body2">
 
-          <table class="table table-striped">
-            <thead>
-              <tr class="table-success">
-                <th scope="col">Item </th>
+          <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="13" class="table-secondary table-header6">SUMMARY</th>
               </tr>
-              <tr class="table-success">
-                <th scope="col">Item2 </th>
+              <tr>
+                <th scope="col" rowspan="2"  class="table-header1 ">OPERATION TYPE</th>
+                <th scope="col" colspan="3" class="table-header2 ">SUCCESS RATE ( % )</th>
+                <th scope="col" colspan="3" class="table-header3 ">TRAFFIC ATTEMPT</th>
+                <th scope="col" colspan="3" class="table-header4 ">TRAFFIC SUCCESS</th>
+                <th scope="col" colspan="3" class="table-header5 ">REVENUE ( IDR )</th>
+              </tr>
+              <tr >
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
               </tr>
             </thead>
             <tbody>
+              {% for t in dict_sdp['summaryall'] %}
               <tr >
-                <td> 111</td>
-                <td>222</td>
-                <td>333</td>
-                <td>444</td>
+                <td>{{ t['ACCESSFLAG'] }}</td>
+                <td class="{{ t['sr_color']}}">{{ t['sr0'] }}</td>
+                <td>{{ t['sr1'] }}</td>
+                <td >{{ t['sr7'] }}</td>
+                <td class="{{ t['att_color']}}">{{ t['att0'] }}</td>
+                <td> {{ t['att1'] }}</td>
+                <td>{{ t['att7'] }}</td>
+                <td class="{{ t['suc_color']}}">{{ t['suc0'] }}</td>
+                <td>{{ t['suc1'] }}</td>
+                <td>{{ t['suc7'] }}</td>
+                <td class="{{ t['rev_color']}}">{{ t['rev0'] }}</td>
+                <td>{{ t['rev1'] }}</td>
+                <td>{{ t['rev7'] }}</td>
               </tr>
-
+              {% endfor %}
             </tbody>
           </table>
 
@@ -39,7 +67,7 @@
         <!-- CHART 1 -->
         <div class="col-lg-6">
           <div class="card">
-            <div class="card-body2">
+            <div class="card-body">
                <!-- Line Chart -->
                <div id="lineChart1"></div>
                <script>
@@ -47,15 +75,15 @@
                   new ApexCharts(document.querySelector("#lineChart1"), {
                     series: [{
                       name: "today",
-                      data:  {{ att0 | tojson }} 
+                      data:  {{ dict_sdp['attempt66']['day0'] | tojson }} 
                             },
 					                {
                       name: "d-1",
-                      data: {{ att1 | tojson }}
+                      data: {{ dict_sdp['attempt66']['day1'] | tojson }} 
                           },
                           {
                       name: "d-7",
-                      data: {{ att7 | tojson }} 
+                      data: {{ dict_sdp['attempt66']['day7'] | tojson }} 
                     }],
                     chart: {
                       height: 250,
@@ -65,7 +93,7 @@
                       }
                     },
                     title: {
-                        text: "BULK MT",
+                        text: "BULK MT ATTEMPT",
                         floating: false,
                         align: 'center',
                     },
@@ -76,7 +104,7 @@
                       curve: 'smooth'
                     },
                     xaxis: {
-                      categories: {{ listh |tojson }},
+                      categories: {{ dict_sdp['attempt66']['HOUR'] | tojson }} ,
                       labels: {
                         show: true,
                         rotateAlways: false
@@ -99,7 +127,7 @@
         <!-- CHART 2 -->
         <div class="col-lg-6">
           <div class="card">
-            <div class="card-body2">
+            <div class="card-body">
                <!-- Line Chart -->
                <div id="lineChart2"></div>
                <script>
@@ -107,15 +135,15 @@
                   new ApexCharts(document.querySelector("#lineChart2"), {
                     series: [{
                       name: "today",
-                      data:  {{ suc0 | tojson }} 
+                      data:  {{ dict_sdp['success66']['day0'] | tojson }} 
                             },
 					                {
                       name: "d-1",
-                      data: {{ suc1 | tojson }}
+                      data: {{ dict_sdp['success66']['day1'] | tojson }} 
                           },
                           {
                       name: "d-7",
-                      data: {{ suc7 | tojson }} 
+                      data: {{ dict_sdp['success66']['day7'] | tojson }} 
                     }],
                     chart: {
                       height: 250,
@@ -125,7 +153,7 @@
                       }
                     },
                     title: {
-                        text: "BULK MO",
+                        text: "BULK MT SUCCESS",
                         floating: false,
                         align: 'center',
                     },
@@ -136,7 +164,7 @@
                       curve: 'smooth'
                     },
                     xaxis: {
-                      categories: {{ listh |tojson }},
+                      categories: {{ dict_sdp['attempt66']['HOUR']| tojson }},
                       labels: {
                         show: true,
                         rotateAlways: false
@@ -171,15 +199,15 @@
                   new ApexCharts(document.querySelector("#lineChart3"), {
                     series: [{
                       name: "today",
-                      data:  {{ rm0 | tojson }} 
+                      data:  {{ dict_sdp['attempt67']['day0'] | tojson }} 
                             },
 					                {
                       name: "d-1",
-                      data: {{ rm1 | tojson }}
+                      data: {{ dict_sdp['attempt67']['day1'] | tojson }} 
                           },
                           {
                       name: "d-7",
-                      data: {{ rm7 | tojson }} 
+                      data: {{ dict_sdp['attempt67']['day7'] | tojson }} 
                     }],
                     chart: {
                       height: 250,
@@ -189,7 +217,7 @@
                       }
                     },
                     title: {
-                        text: "DIGITAL SERVICE",
+                        text: "BULK MO ATTEMPT",
                         floating: false,
                         align: 'center',
                     },
@@ -200,7 +228,7 @@
                       curve: 'smooth'
                     },
                     xaxis: {
-                      categories: {{ listh |tojson }},
+                      categories: {{ dict_sdp['attempt67']['HOUR'] | tojson }} ,
                       labels: {
                         show: true,
                         rotateAlways: false
@@ -231,15 +259,15 @@
                   new ApexCharts(document.querySelector("#lineChart4"), {
                     series: [{
                       name: "today",
-                      data:  {{ sk100 | tojson }} 
+                      data:  {{ dict_sdp['success67']['day0'] | tojson }} 
                             },
 					                {
                       name: "d-1",
-                      data: {{ sk101 | tojson }}
+                      data: {{ dict_sdp['success67']['day1'] | tojson }} 
                           },
                           {
                       name: "d-7",
-                      data: {{ sk107 | tojson }} 
+                      data: {{ dict_sdp['success67']['day7'] | tojson }} 
                     }],
                     chart: {
                       height: 250,
@@ -249,7 +277,7 @@
                       }
                     },
                     title: {
-                        text: "SUBSCRIPTIONBULK MT",
+                        text: "BULK MO SUCCESS",
                         floating: false,
                         align: 'center',
                     },
@@ -260,7 +288,7 @@
                       curve: 'smooth'
                     },
                     xaxis: {
-                      categories: {{ listh |tojson }},
+                      categories: {{ dict_sdp['success67']['HOUR'] | tojson }} ,
                       labels: {
                         show: true,
                         rotateAlways: false
@@ -295,15 +323,15 @@
                   new ApexCharts(document.querySelector("#lineChart5"), {
                     series: [{
                       name: "today",
-                      data:  {{ sk100 | tojson }} 
+                      data:  {{ dict_sdp['attempt68']['day0'] | tojson }} 
                             },
 					                {
                       name: "d-1",
-                      data: {{ sk101 | tojson }}
+                      data: {{ dict_sdp['attempt68']['day1'] | tojson }} 
                           },
                           {
                       name: "d-7",
-                      data: {{ sk107 | tojson }} 
+                      data: {{ dict_sdp['attempt68']['day7'] | tojson }} 
                     }],
                     chart: {
                       height: 250,
@@ -313,7 +341,7 @@
                       }
                     },
                     title: {
-                        text: "SUBSCRIPTIONBULK MO",
+                        text: "DIGITAL SERVICE ATTEMPT",
                         floating: false,
                         align: 'center',
                     },
@@ -324,7 +352,316 @@
                       curve: 'smooth'
                     },
                     xaxis: {
-                      categories: {{ listh |tojson }},
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 6 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart6"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart6"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ dict_sdp['success68']['day0'] | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ dict_sdp['success68']['day1'] | tojson }} 
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ dict_sdp['success68']['day7'] | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "DIGITAL SERVICE SUCCESS",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="row">
+
+        <!-- CHART 7 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart7"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart7"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ dict_sdp['attempt72']['day0'] | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ dict_sdp['attempt72']['day1'] | tojson }} 
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ dict_sdp['attempt72']['day7'] | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "SUBSCRIPTIONBULK MO ATTEMPT",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 8 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart8"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart8"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ dict_sdp['success72']['day0'] | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ dict_sdp['success72']['day1'] | tojson }} 
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ dict_sdp['success72']['day7'] | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "SUBSCRIPTIONBULK MO SUCCESS",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <!-- CHART 9 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart9"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart9"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ dict_sdp['attempt73']['day0'] | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ dict_sdp['attempt73']['day1'] | tojson }} 
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ dict_sdp['attempt73']['day7'] | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "SUBSCRIPTIONBULK MT ATTEMPT",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
+                      labels: {
+                        show: true,
+                        rotateAlways: false
+                          },
+                    },
+                    grid: {
+                      row: {
+                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                      },
+                    }
+                  }).render();
+                });
+              </script>
+              <!-- End Line Chart -->
+            </div>
+          </div>
+        </div>
+
+        <!-- CHART 8 -->
+        <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+               <!-- Line Chart -->
+               <div id="lineChart10"></div>
+               <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#lineChart10"), {
+                    series: [{
+                      name: "today",
+                      data:  {{ dict_sdp['success73']['day0'] | tojson }} 
+                            },
+					                {
+                      name: "d-1",
+                      data: {{ dict_sdp['success73']['day1'] | tojson }} 
+                          },
+                          {
+                      name: "d-7",
+                      data: {{ dict_sdp['success73']['day7'] | tojson }} 
+                    }],
+                    chart: {
+                      height: 250,
+                      type: 'line',
+                      zoom: {
+                        enabled: false
+                      }
+                    },
+                    title: {
+                        text: "SUBSCRIPTIONBULK MT SUCCESS",
+                        floating: false,
+                        align: 'center',
+                    },
+                    dataLabels: {
+                      enabled: false
+                    },
+                    stroke: {
+                      curve: 'smooth'
+                    },
+                    xaxis: {
+                      categories: {{ dict_sdp['attempt68']['HOUR'] | tojson }} ,
                       labels: {
                         show: true,
                         rotateAlways: false
