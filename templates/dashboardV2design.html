@@ -51,6 +51,50 @@
               <td>{{ t['rev7'] }}</td>
             </tr>
             {% endfor %}
+            <thead >
+              <tr>
+                <th scope="col"  colspan="13" class="table-secondary table-header6">SUMMARY</th>
+              </tr>
+              <tr>
+                <th scope="col" rowspan="2"  class="table-header1 ">ACCESS FLAG </th>
+                <th scope="col" colspan="3" class="table-header2 ">SUCCESS RATE ( % )</th>
+                <th scope="col" colspan="3" class="table-header3 ">ATTEMPT</th>
+                <th scope="col" colspan="3" class="table-header4 ">SUCCESS</th>
+                <th scope="col" colspan="3" class="table-header5 ">REVENUE ( IDR )</th>
+              </tr>
+              <tr >
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dict_sdp['summaryall'] %}
+              <tr >
+                <td>{{ t['ACCESSFLAG'] }}</td>
+                <td class="{{ t['sr_color']}}">{{ t['sr0'] }}</td>
+                <td>{{ t['sr1'] }}</td>
+                <td >{{ t['sr7'] }}</td>
+                <td class="{{ t['att_color']}}">{{ t['att0'] }}</td>
+                <td> {{ t['att1'] }}</td>
+                <td>{{ t['att7'] }}</td>
+                <td class="{{ t['suc_color']}}">{{ t['suc0'] }}</td>
+                <td>{{ t['suc1'] }}</td>
+                <td>{{ t['suc7'] }}</td>
+                <td class="{{ t['rev_color']}}">{{ t['rev0'] }}</td>
+                <td>{{ t['rev1'] }}</td>
+                <td>{{ t['rev7'] }}</td>
+              </tr>
+              {% endfor %}
           </tbody>
         </table>
       </div>

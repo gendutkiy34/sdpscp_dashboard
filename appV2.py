@@ -102,15 +102,24 @@ def index():
 
 @app.route('/scpd017')
 def scpd017():
-    pathdir=os.getcwd()
+    data_scp={}
     datascp=ScpDataD017(d3scp)
-    att0,att1,att7,atth=datascp.Att()
-    suc0,suc1,suc7,such=datascp.AttDia(diameter=2001)
-    sk100,sk101,sk107,sk10h=datascp.AttRoam(diameter=2001,servicekey=100,roaming=1)
-    rm0,rm1,rm7,rmh=datascp.AttRoam(roaming=1)
-    return render_template('dashboard_scpd017.html',att0=att0,att1=att1,att7=att7,
-                           listh=atth,suc0=suc0,suc1=suc1,suc7=suc7,sk100=sk100,sk101=sk101,
-                           sk107=sk107,rm0=rm0,rm1=rm1,rm7=rm7)
+    sumall=datascp.Summary()
+    data_scp['summaryall']=sumall
+    attall=datascp.Att()
+    attsuc2001=datascp.Att(diameter=2001)
+    data_scp['attall']=attall
+    data_scp['attsuc2001']=attsuc2001
+    rmatt=datascp.Att(roaming=1)
+    rmsuc2001=datascp.Att(roaming=1,diameter=2001)
+    data_scp['rmatt']=rmatt
+    data_scp['rmsuc2001']=rmsuc2001
+    nrmatt=datascp.Att(roaming=0)
+    nrmsuc2001=datascp.Att(roaming=0,diameter=2001)
+    data_scp['nrmatt']=nrmatt
+    data_scp['nrmsuc2001']=nrmsuc2001
+    return render_template('dashboard_scpd017.html',dict_scp=data_scp)
+
 
 
 

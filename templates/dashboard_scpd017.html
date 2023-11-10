@@ -2,252 +2,467 @@
 {% block content %}
 <section class="section dashboard">
 
-   <div class="row">
-
-        <!-- CHART 1 -->
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body2">
-               <!-- Line Chart -->
-               <div id="lineChart"></div>
-               <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#lineChart"), {
-                    series: [{
-                      name: "today",
-                      data:  {{ att0 | tojson }} 
-                            },
-					                {
-                      name: "d-1",
-                      data: {{ att1 | tojson }}
-                          },
-                          {
-                      name: "d-7",
-                      data: {{ att7 | tojson }} 
-                    }],
-                    chart: {
-                      height: 250,
-                      type: 'line',
-                      zoom: {
-                        enabled: false
-                      }
-                    },
-                    title: {
-                        text: "Voice attempt",
-                        floating: false,
-                        align: 'center',
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'smooth'
-                    },
-                    xaxis: {
-                      categories: {{ listh |tojson }},
-                      labels: {
-                        show: true,
-                        rotateAlways: false
-                          },
-                    },
-                    grid: {
-                      row: {
-                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
-                        opacity: 0.5
-                      },
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Line Chart -->
-            </div>
-          </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body2">
+          <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="10" class="table-secondary table-header6">ROAMING - NON ROAMING SUMMARY</th>
+              </tr>
+              <tr>
+                <th scope="col" rowspan="2" class="table-header1">ITEM</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header2">SUCCESS RATE</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header3">TRAFFIC ATTEMPT</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header4">TRAFFIC SUCCESS</th>
+              </tr>
+              <tr>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dict_scp['summaryall']['rmsumatt'] %}
+              <tr >
+                <td>{{ t['IS_ROAMING'] }}</td>
+                <td class="{{ t['sr_color']}}">{{ t['sr0'] }}</td>
+                <td>{{ t['sr1'] }}</td>
+                <td>{{ t['sr7'] }}</td>
+                <td class="{{ t['rmatt_color']}}">{{ t['att0'] }}</td>
+                <td>{{ t['att1'] }}</td>
+                <td>{{ t['att7'] }}</td>
+                <td class="{{ t['rmsuc_color']}}">{{ t['suc0'] }}</td>
+                <td>{{ t['suc1'] }}</td>
+                <td>{{ t['suc7'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <thead >
+              <tr>
+                <th scope="col"  colspan="10" class="table-secondary table-header6">SERVICE KEY SUMMARY</th>
+              </tr>
+              <tr>
+                <th scope="col" rowspan="2" class="table-header1">SERVICE KEY</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header2">SUCCESS RATE</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header3">TRAFFIC ATTEMPT</th>
+                <th scope="col"  colspan="3" class="table-secondary table-header4">TRAFFIC SUCCESS</th>
+              </tr>
+              <tr>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in dict_scp['summaryall']['sksumatt'] %}
+              <tr >
+                <td>{{ t['SERVICE_KEY'] }}</td>
+                <td class="{{ t['sr_color']}}">{{ t['sr0'] }}</td>
+                <td>{{ t['sr1'] }}</td>
+                <td>{{ t['sr7'] }}</td>
+                <td class="{{ t['skatt_color']}}">{{ t['att0'] }}</td>
+                <td>{{ t['att1'] }}</td>
+                <td>{{ t['att7'] }}</td>
+                <td class="{{ t['sksuc_color']}}">{{ t['suc0'] }}</td>
+                <td>{{ t['suc1'] }}</td>
+                <td>{{ t['suc7'] }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-
-        <!-- CHART 2 -->
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body2">
-               <!-- Line Chart -->
-               <div id="lineChart2"></div>
-               <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#lineChart2"), {
-                    series: [{
-                      name: "today",
-                      data:  {{ suc0 | tojson }} 
-                            },
-					                {
-                      name: "d-1",
-                      data: {{ suc1 | tojson }}
-                          },
-                          {
-                      name: "d-7",
-                      data: {{ suc7 | tojson }} 
-                    }],
-                    chart: {
-                      height: 250,
-                      type: 'line',
-                      zoom: {
-                        enabled: false
-                      }
-                    },
-                    title: {
-                        text: "Voice Success (2001)",
-                        floating: false,
-                        align: 'center',
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'smooth'
-                    },
-                    xaxis: {
-                      categories: {{ listh |tojson }},
-                      labels: {
-                        show: true,
-                        rotateAlways: false
-                          },
-                    },
-                    grid: {
-                      row: {
-                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
-                        opacity: 0.5
-                      },
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Line Chart -->
-            </div>
-          </div>
-        </div>        
-
       </div>
+    </div>
 
-      <div class='row'>
+  </div>
 
-        <!-- CHART 3 -->
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-               <!-- Line Chart -->
-               <div id="lineChart3"></div>
-               <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#lineChart3"), {
-                    series: [{
-                      name: "today",
-                      data:  {{ rm0 | tojson }} 
-                            },
-					                {
-                      name: "d-1",
-                      data: {{ rm1 | tojson }}
-                          },
-                          {
-                      name: "d-7",
-                      data: {{ rm7 | tojson }} 
-                    }],
-                    chart: {
-                      height: 250,
-                      type: 'line',
-                      zoom: {
-                        enabled: false
-                      }
-                    },
-                    title: {
-                        text: "Voice Roaming attempt",
-                        floating: false,
-                        align: 'center',
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'smooth'
-                    },
-                    xaxis: {
-                      categories: {{ listh |tojson }},
-                      labels: {
-                        show: true,
-                        rotateAlways: false
-                          },
-                    },
-                    grid: {
-                      row: {
-                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
-                        opacity: 0.5
+  <div class="row">
+
+    <!-- CHART 1 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['attall']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['attall']['day1'] | tojson }}
                       },
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Line Chart -->
-            </div>
-          </div>
-        </div>
-
-        <!-- CHART 4 -->
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-               <!-- Line Chart -->
-               <div id="lineChart4"></div>
-               <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#lineChart4"), {
-                    series: [{
-                      name: "today",
-                      data:  {{ sk100 | tojson }} 
-                            },
-					                {
-                      name: "d-1",
-                      data: {{ sk101 | tojson }}
-                          },
-                          {
-                      name: "d-7",
-                      data: {{ sk107 | tojson }} 
-                    }],
-                    chart: {
-                      height: 250,
-                      type: 'line',
-                      zoom: {
-                        enabled: false
-                      }
-                    },
-                    title: {
-                        text: "Voice Roaming success (2001)",
-                        floating: false,
-                        align: 'center',
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'smooth'
-                    },
-                    xaxis: {
-                      categories: {{ listh |tojson }},
-                      labels: {
-                        show: true,
-                        rotateAlways: false
-                          },
-                    },
-                    grid: {
-                      row: {
-                        colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
-                        opacity: 0.5
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['attall']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Overall attempt",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['attall']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
                       },
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Line Chart -->
-            </div>
-          </div>
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
         </div>
-
       </div>
+    </div>
+  
+    <!-- CHART 2 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart2"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart2"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['attsuc2001']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['attsuc2001']['day1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['attsuc2001']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Overall Success (2001)",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['attsuc2001']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>        
+  
+  </div>
+
+  <div class="row">
+
+    <!-- CHART 3 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart3"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart3"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['rmatt']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['rmatt']['day1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['rmatt']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Roaming Attempt",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['rmatt']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div> 
+
+    <!-- CHART 4 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart4"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart4"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['rmsuc2001']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['rmsuc2001']['day1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['rmsuc2001']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Roaming Success (2001)",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['rmatt']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- CHART 5 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart5"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart5"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['nrmatt']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['nrmatt']['day1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['nrmatt']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Non Roaming Attempt",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['nrmatt']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+    <!-- CHART 4 -->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body">
+           <!-- Line Chart -->
+           <div id="lineChart6"></div>
+           <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart6"), {
+                series: [{
+                  name: "today",
+                  data:  {{ dict_scp['nrmsuc2001']['day0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ dict_scp['nrmsuc2001']['day1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ dict_scp['nrmsuc2001']['day7'] | tojson }} 
+                }],
+                chart: {
+                  height: 250,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                title: {
+                    text: "Voice Non Roaming Succes (2001)",
+                    floating: false,
+                    align: 'center',
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ dict_scp['nrmsuc2001']['HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+   
 </section>
 {% endblock %}

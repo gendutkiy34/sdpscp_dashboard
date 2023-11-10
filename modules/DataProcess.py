@@ -14,7 +14,7 @@ list_errcode={"66":[940,938],
 list_sk=[100,200,133,150,300,400]
 list_rev=[941,949,938]
 services={66:'BULK MT',67:'BULK MO',68:'DIGITAL SERVICES',72:'SUBSCRIPTION MO',73:'SUBSCRIPTION MT'}
-
+roaming_map={0:'NON ROAMING',1:'ROAMING'}
 
 
 class ScpData():
@@ -96,73 +96,69 @@ class ScpDataD017():
             self.flagdata=0
         self.datatoday=self.dataraw[self.dataraw['REMARK']=='day0']
         self.dfsuctoday=self.datatoday[self.datatoday['DIAMETER'].isin(list_diameter)]
-        
-
+      
     def VerifyDataRaw(self):
         return self.dataraw 
 
-    def Att(self):
-        if self.flagdata > 0 :
-            dfhourlyatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            return dfhourlyatt['day0'].tolist(),dfhourlyatt['day1'].tolist(),dfhourlyatt['day7'].tolist(),dfhourlyatt['HOUR'].tolist()
-        else :
-            list0=[]
-            list1=[]
-            list7=[]
-            listh=[]
-            return list0,list1,list7,listh
-
-    def AttSk(self,servicekey=None,diameter=None):
-        if self.flagdata > 0 :
-            if diameter is  None :
-                dffilter=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
-            else :
-                dffilter=self.dataraw[(self.dataraw['SERVICE_KEY']==int(servicekey)) & (self.dataraw['DIAMETER']==int(diameter))]
-            skatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            return skatt['day0'].tolist(),skatt['day1'].tolist(),skatt['day7'].tolist(),skatt['HOUR'].tolist()
-        else :
-            list0=[]
-            list1=[]
-            list7=[]
-            listh=[]
-            return list0,list1,list7,listh
-        
-    def AttRoam(self,servicekey=None,diameter=None,roaming=None):
+    def Att(self,servicekey=None,roaming=None,diameter=None):
+        dictatt={}
         if self.flagdata > 0 :
             if servicekey is not None :
                 dffilter1=self.dataraw[self.dataraw['SERVICE_KEY']==int(servicekey)]
             else :
                 dffilter1=self.dataraw
-            if diameter is not None :
-                dffilter2=dffilter1[dffilter1['DIAMETER']==int(diameter)]
+            if roaming is not None :
+                dffilter2=dffilter1[dffilter1['IS_ROAMING']==int(roaming)]
             else :
                 dffilter2=dffilter1
-            if roaming is not None :
-                dffilter=dffilter2[dffilter2['IS_ROAMING']==int(roaming)]
+            if diameter is not None :
+                dffilter3=dffilter2[dffilter2['DIAMETER']==int(diameter)]
             else :
-                dffilter=dffilter2
-            rmatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            return rmatt['day0'].tolist(),rmatt['day1'].tolist(),rmatt['day7'].tolist(),rmatt['HOUR'].tolist()
-        else :
-            list0=[]
-            list1=[]
-            list7=[]
-            listh=[]
-            return list0,list1,list7,listh
+                dffilter3=dffilter2
+            pivotatt=pd.pivot_table(dffilter3,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+            dictatt=pivotatt.to_dict('list')
+        return dictatt
     
-    def AttDia(self,diameter=None):
-        list0=[]
-        list1=[]
-        list7=[]
-        listh=[]
-        if self.flagdata > 0 :
-            dffilter=self.dataraw[self.dataraw['DIAMETER']==int(diameter)]
-            diaatt=pd.pivot_table(dffilter,values='TOTAL', index=['HOUR'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
-            list0=diaatt['day0'].tolist()
-            list1=diaatt['day1'].tolist()
-            list7=diaatt['day7'].tolist()
-            listh=diaatt['HOUR'].tolist()
-        return list0,list1,list7,listh
+    def Summary(self):
+        dictscp={}
+        #attempt
+        pivotskatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['SERVICE_KEY'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+        pivotskatt['skatt_color'] = pivotskatt.apply(lambda x: TableColour(x.day0, x.day1, x.day7), axis=1)
+        pivotrmatt=pd.pivot_table(self.dataraw,values='TOTAL', index=['IS_ROAMING'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+        pivotrmatt['IS_ROAMING']=pivotrmatt.IS_ROAMING.apply(lambda x : roaming_map.get(x))
+        pivotrmatt['rmatt_color'] = pivotrmatt.apply(lambda x: TableColour(x.day0, x.day1, x.day7), axis=1)
+        rawdiameter=self.dataraw[self.dataraw['DIAMETER']!=0]
+        pivotdmt=pd.pivot_table(rawdiameter,values='TOTAL', index=['DIAMETER'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()        
+        dictdmt=pivotdmt.to_dict('records')
+        dictscp['dmtsumatt']=dictdmt
+        #success
+        rawsuc=self.dataraw[self.dataraw['DIAMETER'].isin(list_diameter)]
+        pivotsksuc=pd.pivot_table(rawsuc,values='TOTAL', index=['SERVICE_KEY'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+        pivotsksuc['sksuc_color'] = pivotsksuc.apply(lambda x: TableColour(x.day0, x.day1, x.day7), axis=1)
+        pivotrmsuc=pd.pivot_table(rawsuc,values='TOTAL', index=['IS_ROAMING'],columns=['REMARK'], aggfunc="sum", fill_value=0).reset_index()
+        pivotrmsuc['IS_ROAMING']=pivotrmsuc.IS_ROAMING.apply(lambda x : roaming_map.get(x))
+        pivotrmsuc['rmsuc_color'] = pivotrmsuc.apply(lambda x: TableColour(x.day0, x.day1, x.day7), axis=1)
+        #succesrate
+        pivotskatt=pivotskatt.rename(columns={'day0':'att0','day1':'att1','day7':'att7'})
+        pivotsksuc=pivotsksuc.rename(columns={'day0':'suc0','day1':'suc1','day7':'suc7'})
+        skjoin=pd.merge(pivotskatt,pivotsksuc,on='SERVICE_KEY')        
+        skjoin=skjoin.assign(sr0=lambda x : round((x['suc0']/x['att0'])*100,2))
+        skjoin=skjoin.assign(sr1=lambda x : round((x['suc1']/x['att1'])*100,2))
+        skjoin=skjoin.assign(sr7=lambda x : round((x['suc7']/x['att7'])*100,2))
+        skjoin['sr_color'] = skjoin.apply(lambda x: TableColour(x.sr0, x.sr1, x.sr7), axis=1)
+        sksumall=skjoin.to_dict('records')
+        dictscp['sksumatt']=sksumall
+        pivotrmatt=pivotrmatt.rename(columns={'day0':'att0','day1':'att1','day7':'att7'})
+        pivotrmsuc=pivotrmsuc.rename(columns={'day0':'suc0','day1':'suc1','day7':'suc7'})
+        rmjoin=pd.merge(pivotrmatt,pivotrmsuc,on='IS_ROAMING')
+        rmjoin=rmjoin.assign(sr0=lambda x : round((x['suc0']/x['att0'])*100,2))
+        rmjoin=rmjoin.assign(sr1=lambda x : round((x['suc1']/x['att1'])*100,2))
+        rmjoin=rmjoin.assign(sr7=lambda x : round((x['suc7']/x['att7'])*100,2))
+        rmjoin['sr_color'] = rmjoin.apply(lambda x: TableColour(x.sr0, x.sr1, x.sr7), axis=1)
+        rmsumall=rmjoin.to_dict('records')
+        dictscp['rmsumatt']=rmsumall
+        return dictscp
+        
         
     def VerifyDataToday(self):
         return self.datatoday

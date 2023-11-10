@@ -14,64 +14,16 @@ app.app_context().push()
 list_sk=[100,200,133,150,300,400]
 listsr=[66,67,68,72,73]
 
+rawd3scp='./rawdata/scp_data_d017.csv'
+
 @app.route('/')
 def index():
-    return render_template('baseappV2.html')
+    return render_template('dashboard_teslayout2.html')
 
 
 @app.route('/scptoday')
 def scptoday():
-    data_scp={}
-    listhour=[]
-    pathdir=os.path.abspath(os.path.dirname(__file__))
-    rawsdp=f'{pathdir}/rawdata/scp_data_d017.csv'
-    datascp=ScpDataD017(rawsdp)
-    att,suc,sr,hou=datascp.HourlyDataToday()
-    data_scp['listatt']=att
-    data_scp['listsuc']=suc
-    data_scp['listsr']=sr
-    scpatt,scpsuc,scpsr,listdia,listsum=datascp.SumDataToday()
-    data_scp['lissum']=listsum
-    data_scp['lisdiameter']=listdia
-    roamatt,roamsuc,roamsr,hou=datascp.HourlyDataToday(roaming=1)
-    data_scp['listroamsr']=roamsr
-    noroamatt,noroamsuc,noroamsr,hou=datascp.HourlyDataToday(roaming=1)
-    data_scp['listnoroamsr']=noroamsr
-    for h in hou:
-        if h < 10 :
-            listhour.append(f'0{h}')
-        else :
-            listhour.append(h)
-    data_scp['list_hour']=listhour
-    listhour,listbft,errbft,totalerrbft=datascp.BftToday()
-    data_scp['listbft']=listbft
-    data_scp['listerrbft']=errbft
-    data_scp['listtotalbft']=totalerrbft
-    for sk in list_sk:
-        listatt=f'listatt{sk}'
-        listsuc=f'listsuc{sk}'
-        sumatt=f'sumatt{sk}'
-        sumsuc=f'sumsuc{sk}'
-        lisatt,sumt=datascp.AttSkToday(servicekey=sk)
-        lissuc,sums=datascp.AttSkToday(servicekey=sk,diameter=2001)
-        data_scp[listatt]=lisatt
-        data_scp[sumatt]=sumt
-        data_scp[listsuc]=lissuc
-        data_scp[sumsuc]=sums
-    attroam,sumroam=datascp.AttRoamToday(roaming=1)
-    data_scp['roaming_att']=attroam
-    data_scp['roaming_attsum']=sumroam
-    sucroam,sumsroam=datascp.AttRoamToday(roaming=1,diameter=2001)
-    data_scp['roaming_suc']=sucroam
-    data_scp['roaming_sucsum']=sumsroam
-    attnonroam,sumnonroam=datascp.AttRoamToday(roaming=0)
-    data_scp['nonroaming_att']=attnonroam
-    data_scp['nonroaming_attsum']=sumnonroam
-    sucnonroam,sumsnonroam=datascp.AttRoamToday(roaming=0,diameter=2001)
-    data_scp['nonroaming_suc']=sucnonroam
-    data_scp['nonroaming_sucsum']=sumsnonroam
-    print(data_scp)
-    return render_template('dashboard_scp_today.html',dic_scp=data_scp)
+    return render_template('baseappV2.html')
 
 @app.route('/sdptoday')
 def sdptoday():
@@ -79,22 +31,28 @@ def sdptoday():
 
 @app.route('/sdpd017')
 def sdpd017():
-    data_sdp={}
-    rawd3sdp='./rawdata/sdp_data_d017.csv'
-    datasdp=SdpDataD017(rawd3sdp)
-    dicsumall=datasdp.Summary()
-    data_sdp['summaryall']=dicsumall
-    for ac in listsr:
-        attm=f'attempt{ac}'
-        succs=f'success{ac}'
-        reven=f'revenue{ac}'
-        dicatt=datasdp.Att(accflag=ac)
-        dicsuc=datasdp.Succ(accflag=ac)
-        dicrev=datasdp.Revenue(accflag=ac)
-        data_sdp[attm]=dicatt
-        data_sdp[succs]=dicsuc
-        data_sdp[reven]=dicrev
-    return render_template('dashboard_sdpd017.html',dict_sdp=data_sdp)
+    return render_template('baseappV2.html')
+
+@app.route('/scpd017')
+def scpd017():
+    data_scp={}
+    datascp=ScpDataD017(rawd3scp)
+    sumall=datascp.Summary()
+    data_scp['summaryall']=sumall
+    attall=datascp.Att()
+    attsuc2001=datascp.Att(diameter=2001)
+    data_scp['attall']=attall
+    data_scp['attsuc2001']=attsuc2001
+    rmatt=datascp.Att(roaming=1)
+    rmsuc2001=datascp.Att(roaming=1,diameter=2001)
+    data_scp['rmatt']=rmatt
+    data_scp['rmsuc2001']=rmsuc2001
+    nrmatt=datascp.Att(roaming=0)
+    nrmsuc2001=datascp.Att(roaming=0,diameter=2001)
+    data_scp['nrmatt']=nrmatt
+    data_scp['nrmsuc2001']=nrmsuc2001
+    return render_template('dashboard_scpd017.html',dict_scp=data_scp)
+
 
 @app.route('/testvar')
 def testvar():

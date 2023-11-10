@@ -2,6 +2,65 @@
 {% block content %}
 <section class="section dashboard">
 
+  <div class="row">
+
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body2">
+          <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="13" class="table-secondary table-header6">SUMMARY</th>
+              </tr>
+              <tr>
+                <th scope="col" rowspan="2"  class="table-header1 ">ACCESS FLAG </th>
+                <th scope="col" colspan="3" class="table-header2 ">SUCCESS RATE ( % )</th>
+                <th scope="col" colspan="3" class="table-header3 ">ATTEMPT</th>
+              </tr>
+              <tr >
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr >
+                <td>aaaa</td>
+                <td>1111</td>
+                <td>2222</td>
+                <td>33333</td>
+              </tr>
+            </tbody>
+            <thead >
+              <tr>
+                <th scope="col"  colspan="13" class="table-secondary table-header6">SUMMARY</th>
+              </tr>
+              <tr>
+                <th scope="col" rowspan="2"  class="table-header1 ">ACCESS FLAG </th>
+                <th scope="col" colspan="3" class="table-header2 ">SUCCESS RATE ( % )</th>
+                <th scope="col" colspan="3" class="table-header3 ">ATTEMPT</th>
+              </tr>
+              <tr >
+                <th scope="col" class="table-header1">Day -0</th>
+                <th scope="col" class="table-header1">Day -1</th>
+                <th scope="col" class="table-header1">Day -7</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr >
+                <td>aaaa</td>
+                <td>1111</td>
+                <td>2222</td>
+                <td>33333</td>
+              </tr>
+            </tbody>
+          </table>
+        </div> 
+      </div>
+    </div>
+
+  </div>
+
    <div class="row">
 
         <!-- CHART 1 -->
@@ -127,18 +186,7 @@
         </div>
        
 
-        <!-- CHART 1 -->
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body2">
-               <h7>
-                 66 : {{ dic_sdp['att66'] | tojson }} <br>
-                 66 : {{ dic_sdp['suc66'] | tojson }} <br>
-                 66 : {{ dic_sdp['sr66'] | tojson }} <br>
-               </h7>
-            </div>
-          </div>
-        </div>
+  
 
       </div>
 </section>

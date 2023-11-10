@@ -14,21 +14,9 @@ rawd3scp='./rawdata/scp_data_d017.csv'
 rawd3sdp='./rawdata/sdp_data_d017.csv'
 listsr=[66,67,68,72,73]
 data_sdp={}
-datasdp=SdpDataD017(rawd3sdp)
-df1=datasdp.Succ(accflag=66)
-for ac in listsr:
-        print(f'\naccess flag {ac}:\n')
-        attm=f'attempt{ac}'
-        succs=f'success{ac}'
-        reven=f'revenue{ac}'
-        dicatt=datasdp.Succ(accflag=ac)
-        dicatt=datasdp.Att(accflag=ac)
-        dicsuc=datasdp.Succ(accflag=ac)
-        dicrev=datasdp.Revenue(accflag=ac)
-        data_sdp[attm]=dicatt
-        data_sdp[succs]=dicsuc
-        data_sdp[reven]=dicrev
-        print(data_sdp)
+datascp=ScpDataD017(rawd3scp)
+att=datascp.Att()
+print(att)
 
 
 
