@@ -146,8 +146,6 @@ class ScpDataD017():
         skjoin=skjoin.assign(sr1=lambda x : round((x['suc1']/x['att1'])*100,2))
         skjoin=skjoin.assign(sr7=lambda x : round((x['suc7']/x['att7'])*100,2))
         skjoin['sr_color'] = skjoin.apply(lambda x: TableColour(x.sr0, x.sr1, x.sr7), axis=1)
-        sksumall=skjoin.to_dict('records')
-        dictscp['sksumatt']=sksumall
         pivotrmatt=pivotrmatt.rename(columns={'day0':'att0','day1':'att1','day7':'att7'})
         pivotrmsuc=pivotrmsuc.rename(columns={'day0':'suc0','day1':'suc1','day7':'suc7'})
         rmjoin=pd.merge(pivotrmatt,pivotrmsuc,on='IS_ROAMING')
@@ -155,6 +153,12 @@ class ScpDataD017():
         rmjoin=rmjoin.assign(sr1=lambda x : round((x['suc1']/x['att1'])*100,2))
         rmjoin=rmjoin.assign(sr7=lambda x : round((x['suc7']/x['att7'])*100,2))
         rmjoin['sr_color'] = rmjoin.apply(lambda x: TableColour(x.sr0, x.sr1, x.sr7), axis=1)
+        list_tousan=['att0', 'att1', 'att7', 'suc0', 'suc1', 'suc7']
+        for t in list_tousan:
+            rmjoin[t] = rmjoin[t].apply(lambda x: f"{x:,}")
+            skjoin[t] = skjoin[t].apply(lambda x: f"{x:,}")
+        sksumall=skjoin.to_dict('records')
+        dictscp['sksumatt']=sksumall
         rmsumall=rmjoin.to_dict('records')
         dictscp['rmsumatt']=rmsumall
         return dictscp
