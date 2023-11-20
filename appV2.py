@@ -3,6 +3,7 @@ from flask import Flask,render_template,url_for,redirect,request
 from modules.general import ReadJsonFile,ReadTxtFile,ConvertListToDict,GetToday,ConvertDatetoStr,Sum2list
 from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
 import pandas as pd
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 app = Flask(__name__)
@@ -121,8 +122,6 @@ def scpd017():
     return render_template('dashboard_scpd017.html',dict_scp=data_scp)
 
 
-
-
 @app.route('/sdptoday')
 def sdptoday():
     topcp={}
@@ -211,6 +210,7 @@ def scptoday():
     print(data_scp)
     return render_template('dashboard_scp_today.html',dic_scp=data_scp)
 
+
 @app.route('/sdpd017')
 def sdpd017():
     data_sdp={}
@@ -230,5 +230,11 @@ def sdpd017():
     return render_template('dashboard_sdpd017.html',dict_sdp=data_sdp)
 
 if __name__ == '__main__':
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(index, "interval", seconds=200)
+    scheduler.add_job(scpd017, "interval", seconds=200)
+    scheduler.add_job(scptoday, "interval", seconds=200)
+    scheduler.add_job(sdptoday, "interval", seconds=200)
+    scheduler.add_job(sdpd017, "interval", seconds=200)
+    scheduler.start()
     app.run(debug=True,host='0.0.0.0',port='8081')
-    #app.run(debug=True,port='8081')

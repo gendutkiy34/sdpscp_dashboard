@@ -1,0 +1,17 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+   <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body2">
+        <h5 class="card-body2">{{ nwtime }}</h5>
+        <p hidden hx-get="/joke" hx-target="#output_api" hx-trigger="every 30s">Chuck Joke</p>
+    </div>
+  </div>
+</div> 
+    </div><!--row-->
+
+</section>
+{% endblock %}

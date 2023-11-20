@@ -12,7 +12,7 @@ import time
 from datetime import datetime,timedelta
 from modules.general import GetToday
 
-
+pd.options.mode.chained_assignment = None
 
 def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=None):
     listempty=[]
@@ -46,7 +46,7 @@ def JoinCsvFile(oldfile=None,newfile=None,listcolumn=None,env=None,outputfile=No
     dfrawfilter=dfraw[dfraw['CDRDATE'].str.contains('rows selected') == False]
     dfrawfilter['CDRDATE2']=pd.to_datetime(dfrawfilter['CDRDATE'], format='%Y-%m-%d %H:%M')
     dfrawfilter['DATE']=dfrawfilter['CDRDATE2'].dt.date
-    dffilterfinal=dfrawfilter[dfrawfilter['DATE'] >= d1.date() ]
+    dffilterfinal=dfrawfilter.iloc[-75000:]
     dffilterfinal[listcolumn].to_csv(outputfile,index=False)
     print('data  wrap to file done !!!')
     
@@ -62,4 +62,4 @@ sdpcolumn=['CDRDATE','CP_NAME','CPID','ACCESSFLAG','BASICCAUSE','INTERNALCAUSE',
 while True :
     JoinCsvFile(oldfile=olddatascp,newfile=newdatascp,env='SCP',listcolumn=scpcolumn,outputfile=olddatascp)
     JoinCsvFile(oldfile=olddatasdp,newfile=newdatasdp,env='sdp',listcolumn=sdpcolumn,outputfile=olddatasdp)
-    time.sleep(240)
+    time.sleep(120)
