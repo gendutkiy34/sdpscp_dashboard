@@ -1,14 +1,4 @@
 import pandas as pd
-import os
-import json
-import time
-from datetime import datetime,timedelta
-from modules.general import GetToday
-
-
-pd.options.mode.chained_assignment = None
-
-import pandas as pd
 import time
 import os
 import schedule
@@ -16,7 +6,8 @@ from datetime import datetime, timedelta
 from modules.general import GetToday
 from modules.connection import OracleCon
 from modules.general import ReadJsonFile,ReadTxtFile,ConvertListToDict,GetToday,ConvertDatetoStr,Sum2list
-from GrepDataNew import GetDataMinute
+from GrepDataNew import GetDataHour
+
 
 scp_colum=['CDR_HOUR', 'ATT_0', 'ATT_1', 'ATT_7', 'SUC_0', 'SUC_1',
        'SUC_7', 'ROAMATT_0', 'ROAMATT_1', 'ROAMATT_7', 'ROAMSUC_0', 'ROAMSUC',
@@ -28,28 +19,30 @@ scp_colum=['CDR_HOUR', 'ATT_0', 'ATT_1', 'ATT_7', 'SUC_0', 'SUC_1',
        '100SUC_0','100SUC_1','100SUC_7','150ATT_0','150ATT_1','150ATT_7',
        '150SUC_0','150SUC_1','150SUC_7','200ATT_0','200ATT_1','200ATT_7',
        '200SUC_0','200SUC_1','200SUC_7','300ATT_0','300ATT_1','300ATT_7',
-       '300SUC_0','300SUC_1','300SUC_7']
+       '300SUC_0','300SUC_1','300SUC_7','MMATT_0','MMATT_1','MMATT_7',
+       'MMSUC_0','MMSUC_1','MMSUC_7', 'PKATT_0','PKATT_1','PKATT_7',
+       'PKSUC_0','PKSUC_1','PKSUC_7']
 
 sdp_colum=['CDR_HOUR', 'ATT_0', 'ATT_1', 'ATT_7', 'SUC_0', 'SUC_1', 'SUC_7',
        'BMOATT_0', 'BMOATT_1', 'BMOATT_7', 'BMOSUC_0', 'BMOSUC_1', 'BMOSUC_7',
        'BMTATT_0', 'BMTATT_1', 'BMTATT_7', 'BMTSUC_0', 'BMTSUC_1', 'BMTSUC_7',
-       'DIGATT_0_x', 'DIGATT_1_x', 'DIGATT_7_x', 'DIGATT_0_y', 'DIGATT_1_y',
-       'DIGATT_7_y', 'SMOATT_0', 'SMOATT_1', 'SMOATT_7', 'SMOSUC_0',
+       'DIGATT_0', 'DIGATT_1', 'DIGATT_7', 'DIGSUC_0', 'DIGSUC_1',
+       'DIGSUC_7', 'SMOATT_0', 'SMOATT_1', 'SMOATT_7', 'SMOSUC_0',
        'SMOSUC_1', 'SMOSUC_7', 'SMTATT_0', 'SMTATT_1', 'SMTATT_7', 'SMTSUC_0',
-       'SMTSUC_1', 'SMTSUC_7', ]
+       'SMTSUC_1', 'SMTSUC_7']
 #'RNWATT_0', 'RNWATT_1', 'RNWATT_7', 'RNWSUC_0','RNWSUC_1', 'RNWSUC_7'
 
-def ScpMinute():
+def ScpHour():
     pathdir=os.getcwd()
-    outputfile=f'{pathdir}/rawdata/scp_newdata_minute.csv'
+    outputfile=f'{pathdir}/rawdata/scp_newdata_hour.csv'
     conpath=(f'{pathdir}/connections/scpprodtrx.json')
-    sqltxt=ReadTxtFile(f'{pathdir}/sql/scpminute2.sql')
+    sqltxt=ReadTxtFile(f'{pathdir}/sql/scphour2.sql')
     today=GetToday()
     list_day=[0,1,7]
     list_newdata=[]
     for dy in list_day:
         dt=today - timedelta(days=dy)
-        data=GetDataMinute(pathsql=sqltxt,pathconnection=conpath,dat=dt)
+        data=GetDataHour(pathsql=sqltxt,pathconnection=conpath,dat=dt)
         df=pd.DataFrame(data)
         df['REMARK']=f'day{dy}'
         datanew=df.to_dict('records')
@@ -72,8 +65,9 @@ def ScpMinute():
     dfraw100=dfraw[dfraw['SERVICE_KEY']== 100 ]
     dfraw150=dfraw[dfraw['SERVICE_KEY']== 150 ]
     dfraw200=dfraw[dfraw['SERVICE_KEY']== 200 ]
-    print(dfraw200.info())
     dfraw300=dfraw[dfraw['SERVICE_KEY']== 300 ]
+    dfrawmm=dfraw[dfraw['INSTANCE_ID'] == 'MM' ]
+    dfrawpk=dfraw[dfraw['INSTANCE_ID'] == 'PK' ]
     rawsuc=dfraw[dfraw['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
     rawmocsuc=dfrawmoc[dfrawmoc['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
     rawmtcsuc=dfrawmtc[dfrawmtc['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
@@ -84,7 +78,8 @@ def ScpMinute():
     raw150suc=dfraw150[dfraw150['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
     raw200suc=dfraw200[dfraw200['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
     raw300suc=dfraw300[dfraw300['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
-    print(raw200suc.info())
+    rawmmsuc=dfrawmm[dfrawmm['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
+    rawpksuc=dfrawpk[dfrawpk['DIAMETER_RESULT_CODES'].isin(['2001','4010','4012','5030','5031'])]
 
     #pivot table
     dfatt=pd.pivot_table(dfraw,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
@@ -121,15 +116,21 @@ def ScpMinute():
     df150suc=df150suc.rename(columns={'day0':'150SUC_0','day1':'150SUC_1','day7':'150SUC_7'})
     df200att=pd.pivot_table(dfraw200,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
     df200att=df200att.rename(columns={'day0':'200ATT_0','day1':'200ATT_1','day7':'200ATT_7'})
-    print(df200att)
     df200suc=pd.pivot_table(raw200suc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
     df200suc=df200suc.rename(columns={'day0':'200SUC_0','day1':'200SUC_1','day7':'200SUC_7'})
-    print(df200suc)
     df300att=pd.pivot_table(dfraw300,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
     df300att=df300att.rename(columns={'day0':'300ATT_0','day1':'300ATT_1','day7':'300ATT_7'})
     df300suc=pd.pivot_table(raw300suc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
     df300suc=df300suc.rename(columns={'day0':'300SUC_0','day1':'300SUC_1','day7':'300SUC_7'})
-
+    dfmmatt=pd.pivot_table(dfrawmm,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfmmatt=dfmmatt.rename(columns={'day0':'MMATT_0','day1':'MMATT_1','day7':'MMATT_7'})
+    dfmmsuc=pd.pivot_table(rawmmsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfmmsuc=dfmmsuc.rename(columns={'day0':'MMSUC_0','day1':'MMSUC_1','day7':'MMSUC_7'})
+    dfpkatt=pd.pivot_table(dfrawpk,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfpkatt=dfpkatt.rename(columns={'day0':'PKATT_0','day1':'PKATT_1','day7':'PKATT_7'})
+    dfpksuc=pd.pivot_table(rawpksuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfpksuc=dfpksuc.rename(columns={'day0':'PKSUC_0','day1':'PKSUC_1','day7':'PKSUC_7'})
+  
     #join table
     dfjoin1=pd.merge(pd.merge(dfatt,dfsuc,on=['CDR_HOUR']),dfroamatt,on=['CDR_HOUR'],how='left')
     dfjoin2=pd.merge(pd.merge(dfjoin1,dfroamsuc,on=['CDR_HOUR'],how='left'),dfnonroamatt,on=['CDR_HOUR'],how='left')
@@ -140,16 +141,108 @@ def ScpMinute():
     dfjoin7=pd.merge(pd.merge(dfjoin6,df100suc,on=['CDR_HOUR'],how='left'),df150att,on=['CDR_HOUR'],how='left')
     dfjoin8=pd.merge(pd.merge(dfjoin7,df150suc,on=['CDR_HOUR'],how='left'),df200att,on=['CDR_HOUR'],how='left')
     dfjoin9=pd.merge(pd.merge(dfjoin8,df200suc,on=['CDR_HOUR'],how='left'),df300att,on=['CDR_HOUR'],how='left')
-    print(dfjoin9[['CDR_HOUR','200ATT_0','200ATT_1','200ATT_7','200SUC_0','200SUC_1','200SUC_7']])
-    joinfinal=pd.merge(dfjoin9,df300suc,on=['CDR_HOUR'],how='left').reset_index()
-    print(joinfinal.columns)
-    print(joinfinal[['CDR_HOUR','200ATT_0','200ATT_1','200ATT_7','200SUC_0','200SUC_1','200SUC_7']])
+    dfjoin10=pd.merge(pd.merge(dfjoin9,df300suc,on=['CDR_HOUR'],how='left'),dfmmatt,on=['CDR_HOUR'],how='left')
+    dfjoin11=pd.merge(pd.merge(dfjoin10,dfmmsuc,on=['CDR_HOUR'],how='left'),dfpkatt,on=['CDR_HOUR'],how='left')
+    joinfinal=pd.merge(dfjoin11,dfpksuc,on=['CDR_HOUR'],how='left').reset_index()
     join_column=joinfinal.columns
     for c in scp_colum:
         if c not in join_column:
             joinfinal[c]=0
     dffinal=joinfinal[scp_colum]
-    print(dffinal[['CDR_HOUR','200ATT_0','200ATT_1','200ATT_7','200SUC_0','200SUC_1','200SUC_7']])
+    dffinal.fillna(0, inplace=True)
+    dffinal.to_csv(outputfile,index=False)
 
 
-ScpMinute()
+def SdpHour():
+    pathdir=os.getcwd()
+    outputfile=f'{pathdir}/rawdata/sdp_newdata_hour.csv'
+    conpath=(f'{pathdir}/connections/sdpprodtrx.json')
+    sqltxt=ReadTxtFile(f'{pathdir}/sql/sdphour2.sql')
+    today=GetToday()
+    list_day=[0,1,7]
+    list_newdata=[]
+    list_day=[0,1,7]
+    list_newdata=[]
+    for dy in list_day:
+        dt=today - timedelta(days=dy)
+        data=GetDataHour(pathsql=sqltxt,pathconnection=conpath,dat=dt)
+        df=pd.DataFrame(data)
+        df['REMARK']=f'day{dy}'
+        datanew=df.to_dict('records')
+        for dn in datanew:
+            list_newdata.append(dn)
+    #new data raw
+    dfraw=pd.DataFrame(list_newdata)
+    dfraw.fillna(0, inplace=True)
+    dfraw['ACCESSFLAG']=dfraw['ACCESSFLAG'].astype('int')
+    #dfraw['INTERNALCAUSE']=dfraw['INTERNALCAUSE'].astype('int')
+    dfraw['TOTAL']=dfraw['TOTAL'].astype('int')
+
+    #filter data raw
+    dfrawbmo=dfraw[dfraw['ACCESSFLAG']== 66 ]
+    dfrawbmt=dfraw[dfraw['ACCESSFLAG']== 67 ]
+    dfrawdig=dfraw[dfraw['ACCESSFLAG']== 68 ]
+    dfrawsmo=dfraw[dfraw['ACCESSFLAG']== 72 ]
+    dfrawsmt=dfraw[dfraw['ACCESSFLAG']== 73 ]
+    #dfrawrnw=dfraw[dfraw['ACCESSFLAG']== 8 ]
+    rawsuc=dfraw[dfraw['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawbmosuc=dfrawbmo[dfrawbmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawbmtsuc=dfrawbmt[dfrawbmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawdigsuc=dfrawdig[dfrawdig['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawsmosuc=dfrawsmo[dfrawsmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawsmtsuc=dfrawsmt[dfrawsmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    #rawrnwsuc=dfrawrnw[dfrawrnw['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+
+    #pivot table
+    dfatt=pd.pivot_table(dfraw,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfatt=dfatt.rename(columns={'day0':'ATT_0','day1':'ATT_1','day7':'ATT_7'})
+    dfsuc=pd.pivot_table(rawsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfsuc=dfsuc.rename(columns={'day0':'SUC_0','day1':'SUC_1','day7':'SUC_7'})
+    dfbmoatt=pd.pivot_table(dfrawbmo,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfbmoatt=dfbmoatt.rename(columns={'day0':'BMOATT_0','day1':'BMOATT_1','day7':'BMOATT_7'})
+    dfbmosuc=pd.pivot_table(rawbmosuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfbmosuc=dfbmosuc.rename(columns={'day0':'BMOSUC_0','day1':'BMOSUC_1','day7':'BMOSUC_7'})
+    dfbmtatt=pd.pivot_table(dfrawbmt,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfbmtatt=dfbmtatt.rename(columns={'day0':'BMTATT_0','day1':'BMTATT_1','day7':'BMTATT_7'})
+    dfbmtsuc=pd.pivot_table(rawbmtsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfbmtsuc=dfbmtsuc.rename(columns={'day0':'BMTSUC_0','day1':'BMTSUC_1','day7':'BMTSUC_7'})
+    dfdigatt=pd.pivot_table(dfrawdig,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfdigatt=dfdigatt.rename(columns={'day0':'DIGATT_0','day1':'DIGATT_1','day7':'DIGATT_7'})
+    dfdigsuc=pd.pivot_table(rawdigsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfdigsuc=dfdigsuc.rename(columns={'day0':'DIGSUC_0','day1':'DIGSUC_1','day7':'DIGSUC_7'})
+    dfsmoatt=pd.pivot_table(dfrawsmo,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfsmoatt=dfsmoatt.rename(columns={'day0':'SMOATT_0','day1':'SMOATT_1','day7':'SMOATT_7'})
+    dfsmosuc=pd.pivot_table(rawsmosuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfsmosuc=dfsmosuc.rename(columns={'day0':'SMOSUC_0','day1':'SMOSUC_1','day7':'SMOSUC_7'})
+    dfsmtatt=pd.pivot_table(dfrawsmt,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfsmtatt=dfsmtatt.rename(columns={'day0':'SMTATT_0','day1':'SMTATT_1','day7':'SMTATT_7'})
+    dfsmtsuc=pd.pivot_table(rawsmtsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    dfsmtsuc=dfsmtsuc.rename(columns={'day0':'SMTSUC_0','day1':'SMTSUC_1','day7':'SMTSUC_7'})
+    #dfrnwatt=pd.pivot_table(dfrawrnw,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    #dfrnwatt=dfrnwatt.rename(columns={'day0':'RNWATT_0','day1':'RNWATT_1','day7':'RNWATT_7'})
+    #dfrnwsuc=pd.pivot_table(rawrnwsuc,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
+    #dfrnwsuc=dfrnwsuc.rename(columns={'day0':'RNWSUC_0','day1':'RNWSUC_1','day7':'RNWSUC_7'})
+
+    #jointable
+    dfjoin1=pd.merge(pd.merge(dfatt,dfsuc,on=['CDR_HOUR'],how='left'),dfbmoatt,on=['CDR_HOUR'],how='left')
+    dfjoin2=pd.merge(pd.merge(dfjoin1,dfbmosuc,on=['CDR_HOUR'],how='left'),dfbmtatt,on=['CDR_HOUR'],how='left')
+    dfjoin3=pd.merge(pd.merge(dfjoin2,dfbmtsuc,on=['CDR_HOUR'],how='left'),dfdigatt,on=['CDR_HOUR'],how='left')
+    dfjoin4=pd.merge(pd.merge(dfjoin3,dfdigsuc,on=['CDR_HOUR'],how='left'),dfsmoatt,on=['CDR_HOUR'],how='left')
+    dfjoin5=pd.merge(pd.merge(dfjoin4,dfsmosuc,on=['CDR_HOUR'],how='left'),dfsmtatt,on=['CDR_HOUR'],how='left')
+    #dfjoin6=pd.merge(pd.merge(dfjoin5,dfsmtsuc,on=['CDR_HOUR'],how='left'),dfrnwatt,on=['CDR_HOUR'],how='left')
+    joinfinal=pd.merge(dfjoin5,dfsmtsuc,on=['CDR_HOUR'],how='left').reset_index()
+    join_column=joinfinal.columns
+    for c in sdp_colum:
+        if c not in join_column:
+            joinfinal[c]=0
+    dffinal=joinfinal[sdp_colum]
+    dffinal.fillna(0, inplace=True)
+    dffinal.to_csv(outputfile,index=False)
+
+
+
+
+while True :
+    ScpHour()
+    SdpHour()
+    time.sleep(200)

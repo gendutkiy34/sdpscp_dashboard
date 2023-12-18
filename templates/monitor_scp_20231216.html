@@ -1,0 +1,2575 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+
+  <div class="row"> <!-- row1 -->
+
+    <div class="col-lg-4">  <!-- col1 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE TRAFFIC ATTEMPT HOUR WISE</center></th>
+              </tr>
+            </thead >  
+          </table>
+          <div id="lineChart"></div>
+          <!-- Start Chart -->
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart"), {
+                series: [{
+                  name: "today",
+                  data:  {{ datahour['ATT_0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ datahour['ATT_1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ datahour['ATT_7'] | tojson }} 
+                }],
+                chart: {
+                  height: 200,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ datahour['CDR_HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div> <!-- col1 -->  
+
+    <div class="col-lg-4">  <!-- col2 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE TRAFFIC SUCCESS HOUR WISE</center></th>
+              </tr>
+            </thead >  
+          </table>
+          <div id="lineChart2"></div>
+          <!-- Start Chart -->
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart2"), {
+                series: [{
+                  name: "today",
+                  data:  {{ datahour['SUC_0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ datahour['SUC_1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ datahour['SUC_7'] | tojson }} 
+                }],
+                chart: {
+                  height: 200,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ datahour['CDR_HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotate: -90,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div> <!-- col2 --> 
+
+    <div class="col-lg-4">  <!-- col3 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-custom1"">
+            <thead >
+              <tr>
+                <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE NON ROAMING ATTEMPT HOUR WISE</center></th>
+              </tr>
+            </thead >  
+          </table>
+          <div id="lineChart3"></div>
+          <!-- Start Chart -->
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              new ApexCharts(document.querySelector("#lineChart3"), {
+                series: [{
+                  name: "today",
+                  data:  {{ datahour['NONROATT_0'] | tojson }} 
+                        },
+                      {
+                  name: "d-1",
+                  data: {{ datahour['NONROATT_1'] | tojson }}
+                      },
+                      {
+                  name: "d-7",
+                  data: {{ datahour['NONROATT_7'] | tojson }} 
+                }],
+                chart: {
+                  height: 200,
+                  type: 'line',
+                  zoom: {
+                    enabled: false
+                  }
+                },
+                dataLabels: {
+                  enabled: false
+                },
+                stroke: {
+                  curve: 'smooth'
+                },
+                xaxis: {
+                  categories: {{ datahour['CDR_HOUR'] |tojson }},
+                  labels: {
+                    show: true,
+                    rotateAlways: false
+                      },
+                },
+                grid: {
+                  row: {
+                    colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                  },
+                }
+              }).render();
+            });
+          </script>
+          <!-- End Line Chart -->
+        </div>
+      </div>
+    </div> <!-- col3 --> 
+
+</div> <!-- row1 -->
+  
+
+<div class="row"> <!-- row2 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE TRAFFIC ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart4"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart4"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->  
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE TRAFFIC SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart5"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart5"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 --> 
+  
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE NON ROAMING MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart6"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart6"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['NONROATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['NONROATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['NONROATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div> <!-- row2 -->
+
+
+<div class="row"><!-- row3 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE NON ROAMING SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart7"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart7"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['NONROSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['NONROSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['NONROSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->  
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE ROAMING ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart8"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart8"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['ROAMATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['ROAMATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['ROAMATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>VOICE ROAMING SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart9"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart9"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['ROAMSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['ROAMSUC'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['ROAMSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div> <!-- row3 -->
+  
+<div class="row"><!-- row4 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE NON ROAMING SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart10"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart10"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['NONROSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['NONROSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['NONROSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+  
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE ROAMING ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart11"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart11"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['ROAMATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['ROAMATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['ROAMATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>VOICE ROAMING SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart12"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart12"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['ROAMSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['ROAMSUC'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['ROAMSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div> <!-- row4 -->  
+
+<div class="row"><!-- row5 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MOC ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart13"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart13"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MOCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MOCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MOCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 --> 
+  
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MOC SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart14"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart14"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MOCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MOCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MOCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+  
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MTC ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart15"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart15"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MTCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MTCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MTCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div> <!-- row5 -->
+
+<div class="row"><!-- row6 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MOC ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart16"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart16"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MOCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MOCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MOCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MOC SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart17"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart17"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MOCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MOCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MOCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MTC ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart18"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart18"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MTCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MTCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MTCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+
+</div> <!-- row6 -->
+
+<div class="row"><!-- row7 -->
+  
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MTC SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart19"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart19"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MTCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MTCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MTCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MFC ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart20"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart20"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MFCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MFCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MFCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>MFC SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart21"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart21"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['MFCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['MFCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['MFCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div><!-- row7 -->
+
+<div class="row"><!-- row8 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MTC SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart22"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart22"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MTCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MTCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MTCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MFC ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart23"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart23"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MFCATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MFCATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MFCATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>MFC SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart24"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart24"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['MFCSUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['MFCSUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['MFCSUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+  
+</div><!-- row8 -->
+
+
+<div class="row"><!-- row9 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 100 ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart25"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart25"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['100ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['100ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['100ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 100 SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart26"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart26"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['100SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['100SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['100SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 150 ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart27"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart27"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['150ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['150ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['150ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+</div><!-- row9 -->
+
+<div class="row"><!-- row10 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 100 ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart28"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart28"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['100ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['100ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['100ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 100 SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart29"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart29"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['100SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['100SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['100SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 150 ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart30"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart30"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['150ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['150ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['150ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div><!-- row10 -->
+
+<div class="row"><!-- row11 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 150 SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart31"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart31"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['150SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['150SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['150SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 200 ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart32"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart32"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['200ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['200ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['200ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 200 SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart33"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart33"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['200SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['200SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['200SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div><!-- row11 -->
+
+<div class="row"><!-- row12 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 150 SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart34"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart34"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['150SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['150SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['150SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 200 ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart35"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart35"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['200ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['200ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['200ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+  <div class="col-lg-4">  <!-- col3 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 200 SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart36"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart36"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['200SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['200SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['200SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col3 -->
+
+</div><!-- row12 -->
+
+<div class="row"><!-- row13 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 300 ATTEMPT HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart37"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart37"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['300ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['300ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['300ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-increase"><center>SK 300 SUCCESS HOUR WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart38"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart38"), {
+              series: [{
+                name: "today",
+                data:  {{ datahour['300SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datahour['300SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datahour['300SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datahour['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+</div><!-- row13 -->
+
+<div class="row"><!-- row14 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 300 ATTEMPT MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart39"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart39"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['300ATT_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['300ATT_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['300ATT_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col1 -->
+
+  <div class="col-lg-4">  <!-- col2 -->
+    <div class="card">
+      <div class="card-body">
+  
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary data-info"><center>SK 300 SUCCESS MINUTE WISE</center></th>
+            </tr>
+          </thead >  
+        </table>
+        <div id="lineChart40"></div>
+        <!-- Start Chart -->
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#lineChart40"), {
+              series: [{
+                name: "today",
+                data:  {{ datamin['300SUC_0'] | tojson }} 
+                      },
+                    {
+                name: "d-1",
+                data: {{ datamin['300SUC_1'] | tojson }}
+                    },
+                    {
+                name: "d-7",
+                data: {{ datamin['300SUC_7'] | tojson }} 
+              }],
+              chart: {
+                height: 200,
+                type: 'line',
+                zoom: {
+                  enabled: false
+                }
+              },
+              dataLabels: {
+                enabled: false
+              },
+              stroke: {
+                curve: 'smooth'
+              },
+              xaxis: {
+                categories: {{ datamin['CDR_HOUR'] |tojson }},
+                labels: {
+                  show: true,
+                  rotate: -90,
+                  rotateAlways: false
+                    },
+              },
+              grid: {
+                row: {
+                  colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+                  opacity: 0.5
+                },
+              }
+            }).render();
+          });
+        </script>
+        <!-- End Line Chart -->
+      </div>
+    </div>
+  </div> <!-- col2 -->
+
+</div><!-- row14 -->
+
+<div class="row"><!-- row15 -->
+</div><!-- row15 -->
+   
+</section>
+{% endblock %}

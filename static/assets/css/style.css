@@ -1443,7 +1443,29 @@ padding: 80px 20px 10px 20px;
   border-width: 3px;
 }
 
+.data-info{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: rgb(247, 1, 83);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
 
+.data-info2{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: rgb(27, 183, 255);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
+.data-info3{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: rgb(247, 166, 45);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
 
 /*
 table td,
