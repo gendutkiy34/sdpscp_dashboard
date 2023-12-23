@@ -1,0 +1,20 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+   <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-body2">
+         <!-- Area Chart -->
+         <div id="columnChart"></div>
+
+         <script>window.jQuery || document.write('<script src="{{url_for('static', filename='testchart.js') }}">\x3C/script>')</div>script>
+              <!-- End Area Chart -->
+    </div>
+  </div>
+</div> 
+    </div><!--row-->
+
+</section>
+{% endblock %}

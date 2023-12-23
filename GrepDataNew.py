@@ -22,7 +22,9 @@ def GetDataMinute(pathsql=None,pathconnection=None,dat=None):
         cred=ReadJsonFile(conpath)
         string_connection=f'{cred["username"]}/{cred["password"]}@{cred["host"]}:{cred["port"]}/{cred["sid"]}'
         sql=sqltxt.format(day=day,mon=mon,min1=tm1,min2=tm2)
-        sqlcmd=f"""/usr/lib/oracle/18.3/client64/bin/sqlplus -s {string_connection} <<EOF
+        sqlcmd=f"""export ORACLE_HOME=/usr/lib/oracle/18.3/client64
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+sqlplus -s {string_connection} <<EOF
 SET MARKUP CSV ON
 
 
@@ -65,7 +67,10 @@ def GetDataHour(pathsql=None,pathconnection=None,dat=None):
         cred=ReadJsonFile(conpath)
         string_connection=f'{cred["username"]}/{cred["password"]}@{cred["host"]}:{cred["port"]}/{cred["sid"]}'
         sql=sqltxt.format(day=day,mon=mon,min=tm)
-        sqlcmd=f"""/usr/lib/oracle/18.3/client64/bin/sqlplus -s {string_connection} <<EOF
+        #/usr/lib/oracle/18.3/client64/bin/sqlplus
+        sqlcmd=f"""export ORACLE_HOME=/usr/lib/oracle/18.3/client64
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch:$PATH
+sqlplus -s {string_connection} <<EOF
 SET MARKUP CSV ON
 
 
