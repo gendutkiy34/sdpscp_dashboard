@@ -1,0 +1,142 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+<div class="row"> <!-- row1 -->
+
+    <div class="col-md-7">  <!-- col1 -->
+      <div class="card">
+        <div class="card-body2">
+          <table class="table table-collapse">
+            <thead>
+              <tr>
+                <th scope="col"  colspan="7">SCP ATTEMPT MINUTE WISE</th>
+              </tr>
+              <tr>
+                <th scope="col">HOUR_MINUTE</th>
+                <th scope="col">MM_ATTEMPT</th>
+                <th scope="col">MM_BFT</th>
+                <th scope="col">MM_BYPASS</th>
+                <th scope="col">PK_ATTEMPT</th>
+                <th scope="col">PK_BFT</th>
+                <th scope="col">PK_BYPASS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in datascp %}
+              <tr >
+                <td>{{ t['CDR_HOUR']}}</td>
+                {% if t['ATT_MM']> 1000 : %}
+                  <td class="data-increase">{{ t['ATT_MM']}}</td>
+                {% elif t['ATT_MM'] > 0 and t['ATT_MM'] <= 1000 %}
+                  <td>{{ t['ATT_MM']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['ATT_MM']}}</td>
+                {% endif %}
+                {% if t['BFT_MM'] > 0 : %}
+                  <td class="data-info">{{ t['BFT_MM']}}</td>
+                {% else %}
+                <td class="data-increase">{{ t['BFT_MM']}}</td>
+                {% endif %}
+                {% if t['BYP_MM'] > 0 : %}
+                  <td>{{ t['BYP_MM']}}</td>
+                {% else %}
+                <td class="data-increase">{{ t['BYP_MM']}}</td>
+                {% endif %}
+                {% if t['ATT_PK']> 1000 : %}
+                  <td class="data-increase">{{ t['ATT_PK']}}</td>
+                {% elif t['ATT_PK'] > 0 and t['ATT_PK'] <= 1000 %}
+                  <td>{{ t['ATT_PK']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['ATT_PK']}}</td>
+                {% endif %}
+                {% if t['BFT_PK'] > 0 : %}
+                  <td class="data-info">{{ t['BFT_PK']}}</td>
+                {% else %}
+                <td class="data-increase">{{ t['BFT_PK']}}</td>
+                {% endif %}
+                {% if t['BYP_PK'] > 0 : %}
+                  <td>{{ t['BYP_PK']}}</td>
+                {% else %}
+                <td class="data-increase">{{ t['BYP_PK']}}</td>
+                {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+		      </table>
+        </div>
+      </div>
+    </div> <!-- col1 -->  
+
+    <div class="col-md-5">  <!-- col2 -->
+      <div class="card">
+        <div class="card-body2">
+          <table class="table table-collapse">
+            <thead>
+              <tr>
+                <th scope="col"  colspan="7">SDP ATTEMPT MINUTE WISE</th>
+              </tr>
+              <tr>
+                <th scope="col">BULK_MT</th>
+                <th scope="col">BULK_MO</th>
+                <th scope="col">DIG_SRV</th>
+                <th scope="col">SUBS_MT</th>
+                <th scope="col">SUBS_MO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in datasdp %}
+              <tr >
+                {% if t['bulk_mt'] > 100 : %}
+                  <td class="data-increase">{{ t['bulk_mt']}}</td>
+                {% elif t['bulk_mt'] > 0 and t['bulk_mt'] <= 100 %}
+                  <td>{{ t['bulk_mt']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['bulk_mt']}}</td>
+                {% endif %}
+                {% if t['bulk_mo'] > 100 : %}
+                  <td class="data-increase">{{ t['bulk_mo']}}</td>
+                {% elif t['bulk_mo'] > 0 and t['bulk_mo'] <= 100 %}
+                  <td>{{ t['bulk_mo']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['bulk_mo']}}</td>
+                {% endif %}
+                {% if t['dig_srv'] > 100 : %}
+                  <td class="data-increase">{{ t['dig_srv']}}</td>
+                {% elif t['dig_srv'] > 0 and t['dig_srv'] <= 100 %}
+                  <td>{{ t['dig_srv']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['dig_srv']}}</td>
+                {% endif %}
+                {% if t['subs_mt'] > 100 : %}
+                  <td class="data-increase">{{ t['subs_mt']}}</td>
+                {% elif t['subs_mt'] > 0 and t['subs_mt'] <= 100 %}
+                  <td>{{ t['subs_mt']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['subs_mt']}}</td>
+                {% endif %}
+                {% if t['subs_mo'] > 100 : %}
+                  <td class="data-increase">{{ t['subs_mo']}}</td>
+                {% elif t['subs_mo'] > 0 and t['subs_mo'] <= 100 %}
+                  <td>{{ t['subs_mo']}}</td>
+                {% else %}
+                <td class="data-decrease">{{ t['subs_mo']}}</td>
+                {% endif %}
+                
+              </tr>
+              {% endfor %}
+            </tbody>
+		      </table>
+        </div>
+      </div>
+    </div> <!-- col2 -->  
+
+    
+
+   
+
+</div> <!-- row1 -->
+
+  
+</section>
+{% endblock %}

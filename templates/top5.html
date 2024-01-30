@@ -1,0 +1,144 @@
+{% extends "baseappV2.html" %}
+{% block content %}
+<section class="section dashboard">
+
+<div class="row"> <!-- row1 -->
+
+  <div class="col-lg-4">  <!-- col1 -->
+    <div class="card">
+      <div class="card-body2">
+
+        <table class="table table-custom1"">
+          <thead >
+            <tr>
+              <th scope="col"  colspan="4" class="table-secondary table-header6 data-increase"><center>TOP 5 CP BULK MT</center></th>
+            </tr>
+          </thead > 
+          <tbody>
+            <tr>
+              <td>TODAY</td >
+              <td>
+                <div id="donutChart2"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    new ApexCharts(document.querySelector("#donutChart2"), {
+                      series: {{ data[67]['day0']['list_total'] | tojson }} ,
+                    chart: {
+                    type: 'donut',
+                    height: 200,
+                },
+                fill: {
+                  opacity: 0.9
+                },
+                plotOptions: {
+                  pie: {
+                    donut: {
+                      size: '50%'
+                      },
+                    },
+                  value: {
+                    show: false,
+                    },
+                },
+                labels: {{ data[67]['day0']['list_cp'] | tojson }} 
+                    }).render();
+                  });
+                </script>
+                <!-- End Donut Chart -->
+              </td>
+              
+            </tr>
+            <tr>
+              <td>D-1</td >
+              <td>
+                <div id="barchart"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    new ApexCharts(document.querySelector("#barchart"), {
+                      series: [{ 
+                        data : {{ data[67]['day1']['list_total'] | tojson }} ,
+                      }],
+                      chart: {
+                        type: 'bar',
+                        height: 200,
+                        stacked:true
+                        },
+                      plotOptions: {
+                        bar: {
+                          borderRadius: 4,
+                          horizontal: true,
+                        }
+                      },
+                      xaxis: {
+                        show: true,
+                        categories: {{ data[67]['day1']['list_cp'] | tojson }},
+                        labels: {
+                            fontSize: '8px',
+                          },
+                          offsetX: 100,
+                          offsetY: 100,
+                      },
+                      yaxis: {
+                          show: true,
+                          reversed: false,
+                          labels: {
+                            fontSize: '8px',
+                          },
+                          offsetX: 100,
+                          offsetY: 100,
+                      },
+                      legend: {
+                          show: true,
+                      },
+                      colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800']
+                    }).render();
+                  });
+                </script>
+                <!-- End Donut Chart -->
+              </td>
+            </tr>
+            <tr>
+              <td>D-7</td >
+              <td>
+                <div id="donutChart3"></div>
+                <script>
+                  document.addEventListener("DOMContentLoaded", () => {
+                    new ApexCharts(document.querySelector("#donutChart3"), {
+                      series: {{ data[67]['day7']['list_total'] | tojson }} ,
+                    chart: {
+                    type: 'bar',
+                    height: 200,
+                },
+                fill: {
+                  opacity: 0.9
+                },
+                plotOptions: {
+                  pie: {
+                    donut: {
+                      size: '50%'
+                      },
+                    },
+                  value: {
+                    show: false,
+                    },
+                },
+                labels: {{ data[67]['day7']['list_cp'] | tojson }} 
+                    }).render();
+                  });
+                </script>
+                <!-- End Donut Chart -->
+              </td>      
+            </tr>
+          </tbody> 
+        </table>
+      </div>
+      
+        
+    </div>
+  </div>
+
+</div> <!-- row1 -->
+
+  
+</section>
+{% endblock %}

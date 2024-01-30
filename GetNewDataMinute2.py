@@ -31,6 +31,7 @@ sdp_colum=['CDR_HOUR', 'ATT_0', 'ATT_1', 'ATT_7', 'SUC_0', 'SUC_1', 'SUC_7',
        'SMOSUC_1', 'SMOSUC_7', 'SMTATT_0', 'SMTATT_1', 'SMTATT_7', 'SMTSUC_0',
        'SMTSUC_1', 'SMTSUC_7']
 #'RNWATT_0', 'RNWATT_1', 'RNWATT_7', 'RNWSUC_0','RNWSUC_1', 'RNWSUC_7'
+list_diameter=[2001,4010,4012,5030,5031]
 
 def ScpMinute():
     pathdir=os.getcwd()
@@ -210,7 +211,7 @@ def SdpMinute():
     dfraw=pd.DataFrame(list_newdata)
     dfraw.fillna(0, inplace=True)
     dfraw['ACCESSFLAG']=dfraw['ACCESSFLAG'].astype('int')
-    #dfraw['INTERNALCAUSE']=dfraw['INTERNALCAUSE'].astype('int')
+    dfraw['INTERNALCAUSE']=dfraw['INTERNALCAUSE'].astype('int')
     dfraw['TOTAL']=dfraw['TOTAL'].astype('int')
 
     #filter data raw
@@ -220,12 +221,12 @@ def SdpMinute():
     dfrawsmo=dfraw[dfraw['ACCESSFLAG']== 72 ]
     dfrawsmt=dfraw[dfraw['ACCESSFLAG']== 73 ]
     #dfrawrnw=dfraw[dfraw['ACCESSFLAG']== 8 ]
-    rawsuc=dfraw[dfraw['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-    rawbmosuc=dfrawbmo[dfrawbmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-    rawbmtsuc=dfrawbmt[dfrawbmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-    rawdigsuc=dfrawdig[dfrawdig['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-    rawsmosuc=dfrawsmo[dfrawsmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-    rawsmtsuc=dfrawsmt[dfrawsmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+    rawsuc=dfraw[dfraw['INTERNALCAUSE'].isin(list_diameter)]
+    rawbmosuc=dfrawbmo[dfrawbmo['INTERNALCAUSE'].isin(list_diameter)]
+    rawbmtsuc=dfrawbmt[dfrawbmt['INTERNALCAUSE'].isin(list_diameter)]
+    rawdigsuc=dfrawdig[dfrawdig['INTERNALCAUSE'].isin(list_diameter)]
+    rawsmosuc=dfrawsmo[dfrawsmo['INTERNALCAUSE'].isin(list_diameter)]
+    rawsmtsuc=dfrawsmt[dfrawsmt['INTERNALCAUSE'].isin(list_diameter)]
     #rawrnwsuc=dfrawrnw[dfrawrnw['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
 
     #pivot table

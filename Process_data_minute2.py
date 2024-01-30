@@ -38,6 +38,7 @@ sdp_colum=['CDR_HOUR', 'ATT_0', 'ATT_1', 'ATT_7', 'SUC_0', 'SUC_1', 'SUC_7',
        'SMOSUC_1', 'SMOSUC_7', 'SMTATT_0', 'SMTATT_1', 'SMTATT_7', 'SMTSUC_0',
        'SMTSUC_1', 'SMTSUC_7']
 #'RNWATT_0', 'RNWATT_1', 'RNWATT_7', 'RNWSUC_0','RNWSUC_1', 'RNWSUC_7'
+list_diameter=[2001,4010,4012,5030,5031]
 
 def SftpFile():
     pathdir=os.getcwd()
@@ -76,18 +77,18 @@ def ScpProcessMinute():
         dfraw300=dfraw[dfraw['SERVICE_KEY']== 300 ]
         dfrawmm=dfraw[dfraw['INSTANCE_ID'] == 'MM' ]
         dfrawpk=dfraw[dfraw['INSTANCE_ID'] == 'PK' ]
-        rawsuc=dfraw[dfraw['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawmocsuc=dfrawmoc[dfrawmoc['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawmtcsuc=dfrawmtc[dfrawmtc['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawmfcsuc=dfrawmfc[dfrawmfc['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawroamsuc=dfrawroam[dfrawroam['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawnonroamsuc=dfrawnonroam[dfrawnonroam['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        raw100suc=dfraw100[dfraw100['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        raw150suc=dfraw150[dfraw150['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        raw200suc=dfraw200[dfraw200['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        raw300suc=dfraw300[dfraw300['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawmmsuc=dfrawmm[dfrawmm['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
-        rawpksuc=dfrawpk[dfrawpk['DIAMETER_RESULT_CODES'].isin([2001,4010,4012,5030,5031])]
+        rawsuc=dfraw[dfraw['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawmocsuc=dfrawmoc[dfrawmoc['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawmtcsuc=dfrawmtc[dfrawmtc['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawmfcsuc=dfrawmfc[dfrawmfc['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawroamsuc=dfrawroam[dfrawroam['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawnonroamsuc=dfrawnonroam[dfrawnonroam['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        raw100suc=dfraw100[dfraw100['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        raw150suc=dfraw150[dfraw150['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        raw200suc=dfraw200[dfraw200['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        raw300suc=dfraw300[dfraw300['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawmmsuc=dfrawmm[dfrawmm['DIAMETER_RESULT_CODES'].isin(list_diameter)]
+        rawpksuc=dfrawpk[dfrawpk['DIAMETER_RESULT_CODES'].isin(list_diameter)]
         
 
 
@@ -218,12 +219,12 @@ def SdpProcessMinute():
         dfrawdig=dfraw[dfraw['ACCESSFLAG']== 68 ]
         dfrawsmo=dfraw[dfraw['ACCESSFLAG']== 72 ]
         dfrawsmt=dfraw[dfraw['ACCESSFLAG']== 73 ]
-        rawsuc=dfraw[dfraw['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-        rawbmosuc=dfrawbmo[dfrawbmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-        rawbmtsuc=dfrawbmt[dfrawbmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-        rawdigsuc=dfrawdig[dfrawdig['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-        rawsmosuc=dfrawsmo[dfrawsmo['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
-        rawsmtsuc=dfrawsmt[dfrawsmt['INTERNALCAUSE'].isin(['2001','4010','4012','5030','5031'])]
+        rawsuc=dfraw[dfraw['INTERNALCAUSE'].isin(list_diameter)]
+        rawbmosuc=dfrawbmo[dfrawbmo['INTERNALCAUSE'].isin(list_diameter)]
+        rawbmtsuc=dfrawbmt[dfrawbmt['INTERNALCAUSE'].isin(list_diameter)]
+        rawdigsuc=dfrawdig[dfrawdig['INTERNALCAUSE'].isin(list_diameter)]
+        rawsmosuc=dfrawsmo[dfrawsmo['INTERNALCAUSE'].isin(list_diameter)]
+        rawsmtsuc=dfrawsmt[dfrawsmt['INTERNALCAUSE'].isin(list_diameter)]
 
         #pivot table
         dfatt=pd.pivot_table(dfraw,values="TOTAL",index=["CDR_HOUR"],columns=["REMARK"],aggfunc={'TOTAL': "sum"}).reset_index()
