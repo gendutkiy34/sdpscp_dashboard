@@ -1470,6 +1470,7 @@ padding: 80px 20px 10px 20px;
 .cell_bg_ok{
   --bs-table-bg: rgb(140, 240, 10);
   color: var(--bs-table-color);
+  
 }
 
 .cell_bg_nok{
