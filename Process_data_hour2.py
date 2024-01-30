@@ -1,7 +1,6 @@
 import pandas as pd
 import time
 import os
-import schedule
 from datetime import datetime, timedelta
 from modules.general import GetToday
 from modules.connection import OracleCon
@@ -232,7 +231,69 @@ def SdpProcessHour():
         dffinal.to_csv(outputfile,index=False)
 
 
+
+def ErrorMonitor():
+    flag=0
+    pathdir=os.getcwd()
+    outputfile=f'{pathdir}/rawdata/sdpscp_error_monitor.csv'
+    try :
+        rawsdp=pd.read_csv(inputsdp)
+        rawscp=pd.read_csv(inputscp)
+        flag=1
+    except Exception :
+        pass
+
+    if flag == 1 :
+        list_col=['CDR_DATE', 'CDR_HOUR', 'ERR_5000', 'ERR_6000', 'ERR_5005', 'ERR_5004', 'ERR_83',
+       'ERR_601', 'ERR_940']
+        
+        #scp
+        scp_today=rawscp[rawscp['REMARK']== 'day0']
+        raw_bft=scp_today[ (rawscp['ISBFT']==1 ) & ( rawscp['REMARK']== 'day0')]
+        raw_bft['DIAMETER_RESULT_CODES']=raw_bft['DIAMETER_RESULT_CODES'].astype(int)
+        df_hour=scp_today[['CDR_DATE','CDR_HOUR']].drop_duplicates()
+        bft_pivot=pd.pivot_table(raw_bft,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["DIAMETER_RESULT_CODES"],aggfunc={'TOTAL': "sum"}).reset_index()
+        bft_pivot.fillna(0,inplace=True)
+        for c in bft_pivot.columns :
+            if c == 'DIAMETER_RESULT_CODES' or c == 'CDR_DATE'  or c == 'CDR_HOUR' :
+                pass
+            else :
+                bft_pivot[c]=bft_pivot[c].astype(int)
+        
+        #sdp
+        sdp_today=rawsdp[rawsdp['REMARK']== 'day0']   
+        noncharging_base=sdp_today[sdp_today['BASICCAUSE'].isin([601,83])]
+        charging_base=sdp_today[(sdp_today['BASICCAUSE']==940) & (sdp_today['INTERNALCAUSE'].isna())]                       
+        noncharging_pivot=pd.pivot_table(noncharging_base,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["BASICCAUSE"],aggfunc={'TOTAL': "sum"}).reset_index()
+        noncharging_pivot.fillna(0,inplace=True)
+        for c in noncharging_pivot.columns :
+            if c == 'BASICCAUSE' or c == 'CDR_DATE'  or c == 'CDR_HOUR' :
+                pass
+            else :
+                noncharging_pivot[c]=noncharging_pivot[c].astype(int)
+        charging_pivot=pd.pivot_table(charging_base,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["BASICCAUSE"],aggfunc={'TOTAL': "sum"}).reset_index()
+        charging_pivot.fillna(0,inplace=True)        
+        
+        #join
+        join1=df_hour.merge(bft_pivot,how='left',on=['CDR_DATE','CDR_HOUR'])
+        join2=join1.merge(noncharging_pivot,how='left',on=['CDR_DATE','CDR_HOUR'])
+        finaljoin=join2.merge(charging_pivot,how='left',on=['CDR_DATE','CDR_HOUR'])
+        finaljoin.fillna(0,inplace=True)
+        for c in finaljoin.columns :
+            if c == 'BASICCAUSE' or c == 'CDR_DATE'  or c == 'CDR_HOUR' :
+                pass
+            else :
+                finaljoin[c]=finaljoin[c].astype(int)
+                finaljoin.rename(columns={c:f'ERR_{c}'}, inplace = True)
+        for c in list_col :
+            if c not in finaljoin.columns :
+                finaljoin[c] = 0 
+        dffinal=finaljoin[list_col]
+        dffinal.to_csv(outputfile,index=False)
+
+
 SftpFile()
 ScpProcessHour()
 SdpProcessHour()
+ErrorMonitor()
 

@@ -1,0 +1,67 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+
+<div class="row"> <!-- row1 -->
+
+    <div class="col-lg-12">  <!-- col1 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-sm text-center">
+            <thead>
+              <tr>
+                <th scope="col"  colspan="4" class="table-header6 data-info4 table-sm"><center>SDP ERROR HOURLY</center></th>
+                <th></th> 
+                <th scope="col"  colspan="6" class="table-header6 data-info6 table-sm"><center>SCP BFT ERROR HOURLY</center></th>
+              </tr>
+              <tr class="">
+                <th scope="col" class="table-header1">HOUR</th>
+                <th scope="col" class="table-header1">SMSC_TIMEOUT</th>
+                <th scope="col" class="table-header1">CPNOTIF_FAIL</th>
+                <th scope="col" class="table-header1">BILLING_TIMEOUT</th>
+                <th>    </th>
+                <th scope="col" class="table-header4">HOUR</th>
+                <th scope="col" class="table-header4">ERR_5000</th>
+                <th scope="col" class="table-header4">ERR_6000</th>
+                <th scope="col" class="table-header4">ERR_5005</th>
+                <th scope="col" class="table-header4">ERR_5004</th>
+              </tr>
+            </thead> 
+            <body>
+              {% for t in data %}
+              <tr>
+                <td class="cell_txt_bold">{{ t['CDR_HOUR'] }}</td>
+                <td class ="{{ t['ERR_83_CLR']  }}">{{ t['ERR_83'] }}</td>
+                <td class ="{{ t['ERR_601_CLR']  }}">{{ t['ERR_601'] }}</td>
+                <td class ="{{ t['ERR_940_CLR']  }}">{{ t['ERR_940'] }}</td>
+                <td></td>
+                <td class="cell_txt_bold">{{ t['CDR_HOUR'] }}</td>
+                <td class ="{{ t['ERR_5000_CLR']  }}">{{ t['ERR_5000'] }}</td>
+                <td class ="{{ t['ERR_6000_CLR']  }}">{{ t['ERR_6000'] }}</td>
+                <td class ="{{ t['ERR_5005_CLR']  }}">{{ t['ERR_5005'] }}</td>
+                <td class ="{{ t['ERR_5004_CLR']  }}">{{ t['ERR_5004'] }}</td>
+              </tr>
+              {% endfor %}
+            </body> 
+          </table>
+          
+        </div>
+      </div>
+    </div> <!-- col1 -->  
+
+    
+          
+        </div>
+      </div>
+    </div> <!-- col2 -->  
+
+    
+
+</div> <!-- row1 -->
+
+
+
+
+</section>
+{% endblock %}

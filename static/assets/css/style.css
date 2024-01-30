@@ -1467,6 +1467,24 @@ padding: 80px 20px 10px 20px;
   text-align: left;
 }
 
+.cell_bg_ok{
+  --bs-table-bg: rgb(140, 240, 10);
+  color: var(--bs-table-color);
+}
+
+.cell_bg_nok{
+  --bs-table-bg: rgb(243, 24, 24);
+  color: var(--bs-table-color);
+}
+
+.cell_bg_tres{
+  --bs-table-bg: rgb(255, 255, 255);
+  color: var(--bs-table-color);
+}
+
+.cell_txt_bold{
+  font-weight: bold;
+}
 /*
 table td,
 table th {
