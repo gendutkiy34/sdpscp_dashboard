@@ -1417,9 +1417,47 @@ padding: 80px 20px 10px 20px;
   --bs-table-bg: rgb(200, 204, 201);
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
-  text-align: left;
+  text-align: center;
   text-justify: auto;
 }
+
+.table-header7{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: #1b872d;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+  text-justify: auto;
+}
+
+.table-header8{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: #0d0085;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+  text-justify: auto;
+}
+
+.table-header9{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: #b51a0e;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+  text-justify: auto;
+}
+
+.table-header10{
+  --bs-table-color: #131438;
+  --bs-table-bg: #f59518;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: center;
+  text-justify: auto;
+}
+
+
 
 .data-increase{
   --bs-table-color: #000000;
@@ -1467,6 +1505,14 @@ padding: 80px 20px 10px 20px;
   text-align: left;
 }
 
+.data-info5{
+  --bs-table-color: #8b9ed6;
+  --bs-table-bg: rgb(247, 166, 45);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
 .cell_bg_ok{
   --bs-table-bg: rgb(140, 240, 10);
   color: var(--bs-table-color);
@@ -1483,8 +1529,23 @@ padding: 80px 20px 10px 20px;
   color: var(--bs-table-color);
 }
 
+
 .cell_txt_bold{
   font-weight: bold;
+}
+
+.card-body2a {
+  /*  t   r   b   l*/
+margin: 0px 0px 0px 0px;
+padding: 70px 20px 10px 20px;
+background-color: #296610 ;
+color: #ffffff;
+text-shadow: 0 0 40px white;
+}
+
+.h1a {
+  color: #031136;
+  text-decoration: underline;
 }
 /*
 table td,

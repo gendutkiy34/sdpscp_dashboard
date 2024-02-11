@@ -21,7 +21,6 @@ minsdp='./rawdata/sdp_data_minute.csv'
 hourscp='./rawdata/scp_newdata_hour.csv'
 hoursdp='./rawdata/sdp_newdata_hour.csv'
 errfl='./rawdata/sdpscp_error_monitor.csv'
-rawsdp='./rawdata/sdp_raw_hour.csv'
 
 def bgError(data):
     if int(data) == 0 :
@@ -91,53 +90,6 @@ def errormon():
     dtstr=ConvertDatetoStr(dtnow,format='%H:%M')
     nowstr=f"{data['CDR_DATE'][0]} {dtstr}"
     return render_template('monitor_error.html',data=data_error,now=nowstr)
-
-@app.route('/sdptoday') 
-def sdptoday() :
-    dataraw=pd.read_csv(rawsdp)
-    raw_today=dataraw[dataraw['REMARK']=='day0']
-    item={}
-
-    #traffic
-    for acc in [66,67,68,72,73] :
-        raw_temp=raw_today[raw_today['ACCESSFLAG']==acc]
-        raw_succ=raw_today[(raw_today['ACCESSFLAG']==acc) & (raw_today['INTERNALCAUSE'].isin([2001,4010,4012,5030,5031]))]
-        att=sum(raw_temp['TOTAL'].to_list())
-        suc=sum(raw_succ['TOTAL'].to_list())
-        dfrank=raw_temp[['CP_NAME','TOTAL']].groupby('CP_NAME')['TOTAL'].sum().reset_index()
-        dfrank.sort_values(by='TOTAL', ascending=False,inplace=True)
-        dfrank['RANK']=dfrank['TOTAL'].rank(ascending=False)
-        dfrank=dfrank[dfrank['RANK'] <= 5]
-        dftemp=dfrank[['CP_NAME','TOTAL']]
-        dftemp['TOTAL']=dftemp['TOTAL'].apply(lambda x : "{:,}".format(x))
-        item[f'top{acc}']=dftemp.to_dict('records')
-        item[f'att{acc}']=f'{att:,}' 
-        item[f'suc{acc}']=f'{suc:,}' 
-        item[f'sucpercent{acc}']=round((suc/att)*100,2)
-
-    #top basiccause
-    error_raw=raw_today[(raw_today['BASICCAUSE'].isin([601,83]) ) & (raw_today['REMARK']=='day0')]
-    for bc in [83,601] :
-      raw_temp=error_raw[error_raw['BASICCAUSE']==bc]
-      dfrank=raw_temp[['CP_NAME','TOTAL']].groupby('CP_NAME')['TOTAL'].sum().reset_index()
-      dfrank.sort_values(by='TOTAL', ascending=False,inplace=True)
-      dfrank['RANK']=dfrank['TOTAL'].rank(ascending=False)
-      dfrank=dfrank[dfrank['RANK'] <= 5]
-      dftemp=dfrank[['CP_NAME','TOTAL']]
-      dftemp['TOTAL']=dftemp['TOTAL'].apply(lambda x : "{:,}".format(x))
-      item[f'top{bc}']=dftemp.to_dict('records')
-    raw_ocs=raw_today[(raw_today['BASICCAUSE']==940) & (raw_today['INTERNALCAUSE'].isna())]
-    dfrank=raw_ocs[['CP_NAME','TOTAL']].groupby('CP_NAME')['TOTAL'].sum().reset_index()
-    dfrank.sort_values(by='TOTAL', ascending=False,inplace=True)
-    dfrank['RANK']=dfrank['TOTAL'].rank(ascending=False)
-    dfrank=dfrank[dfrank['RANK'] <= 5]
-    dftemp=dfrank[['CP_NAME','TOTAL']]
-    dftemp['TOTAL']=dftemp['TOTAL'].apply(lambda x : "{:,}".format(x))
-    item[f'topocs']=dftemp.to_dict('records')
-    dtnow=GetToday()
-    dtstr=ConvertDatetoStr(dtnow,format='%H:%M')
-    nowstr=f"{raw_today['CDR_DATE'][0]} {dtstr}"
-    return render_template('monitor_sdp_today.html',data=item,now=nowstr)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8686')

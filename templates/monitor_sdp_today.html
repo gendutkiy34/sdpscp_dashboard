@@ -1,0 +1,308 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+
+  <div class="row">
+
+    <div class="col-md-2">
+      <div class="card">
+        <div class="card-body2a">
+            <H6 class=''>BULK MT</H6>
+            <center>
+                <H1>{{data['att66']}}</H1>
+            </center>
+            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>    {{ data['sucpercent66'] }} %</H7> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card">
+          <div class="card-body2a">
+              <H6>BULK MO </H6>
+              <center>
+                <H1>{{data['att67']}}</H1>
+            </center>
+            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent67'] }} %</H7> -->
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card">
+          <div class="card-body2a">
+              <H6>DIGITAL SERVICE</H6>
+              <center>
+                <H1>{{data['att68']}}</H1>
+            </center>
+            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent68'] }} %</H7> -->
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card">
+          <div class="card-body2a">
+              <H6>SUBSCRIPTION MO</H6>
+              <center>
+                <H1>{{data['att72']}}</H1>
+            </center>
+            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent72'] }} %</H7> -->
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+          <div class="card-body2a">
+              <H6>SUBSCRIPTION MT</H6>
+              <center>
+                <H1>{{data['att73']}}</H1>
+            </center>
+            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent73'] }} %</H7> -->
+          </div>
+        </div>
+    </div>
+
+    
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 BULK MT</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header8">CP NAME</th>
+                    <th scope="col" class="table-header8">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top66'] %}
+                    <tr class="">
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 BULK MO</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header8">CP NAME</th>
+                    <th scope="col" class="table-header8">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top67'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 DIGITAL SERVICE</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header8">CP NAME</th>
+                    <th scope="col" class="table-header8">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top68'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 SUBSCRIPTION MO</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header8">CP NAME</th>
+                    <th scope="col" class="table-header8">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top72'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+  </di>
+
+  <div class="row">
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 SUBSCRIPTION MT</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header8">CP NAME</th>
+                    <th scope="col" class="table-header8">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top73'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 SMSC TIMEOUT (83)</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header10">CP NAME</th>
+                    <th scope="col" class="table-header10">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top83'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 CP NOTIF FAILED (601)</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header10">CP NAME</th>
+                    <th scope="col" class="table-header10">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['top601'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+
+            <table class="table table-striped table-bordered table-sm ">
+                <thead>
+                  <tr>
+                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 BILLING TIMEOUT</center></th>
+                  </tr>
+                  <tr>
+                    <th scope="col" class="table-header10">CP NAME</th>
+                    <th scope="col" class="table-header10">TOTAL</th>
+                  </tr>
+                </thead>
+                <body>
+                    {% for t in data['topocs'] %}
+                    <tr>
+                      <td >{{ t['CP_NAME'] }}</td>
+                      <td >{{ t['TOTAL'] }}</td>
+                    </tr>
+                    {% endfor %}
+                  </body> 
+            </table>
+        
+          </div>
+        </div>
+    </div>
+
+  </div>
+   
+</section>
+{% endblock %}
