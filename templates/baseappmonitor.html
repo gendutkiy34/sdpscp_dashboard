@@ -28,7 +28,7 @@
     function autoRefresh() {
         window.location = window.location.href;
     }
-    setInterval('autoRefresh()', 70000);
+    setInterval('autoRefresh()', 30000);
 </script>
 
   <!-- =======================================================
@@ -64,6 +64,9 @@
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link" href="{{ url_for('sdp')  }}">sdp</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="{{ url_for('TrafficAttempt')  }}">traffic attempt</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link" href="{{ url_for('errormon')  }}">error monitoring</a>

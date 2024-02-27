@@ -22,6 +22,7 @@ hourscp='./rawdata/scp_newdata_hour.csv'
 hoursdp='./rawdata/sdp_newdata_hour.csv'
 errfl='./rawdata/sdpscp_error_monitor.csv'
 rawsdp='./rawdata/sdp_raw_hour.csv'
+realtm='./rawdata/data_realtime_minute.csv'
 
 def bgError(data):
     if int(data) == 0 :
@@ -138,6 +139,17 @@ def sdptoday() :
     dtstr=ConvertDatetoStr(dtnow,format='%H:%M')
     nowstr=f"{raw_today['CDR_DATE'][0]} {dtstr}"
     return render_template('monitor_sdp_today.html',data=item,now=nowstr)
+
+
+@app.route('/trafficall') 
+def TrafficAttempt() :
+    dataraw=pd.read_csv(realtm)
+    for c in ['MM', 'PK', 'BULK_MO', 'BULK_MT', 'DIGITAL_SERVICE','SUBSCRIPTIONBULK_MO', 'SUBSCRIPTIONBULK_MT'] :
+        newcol=f'{c}_colour'
+        dataraw[newcol]=dataraw[c].apply(lambda x : "cell_bg_ok" if int(x) >= 100 else ("cell_bg_tres" if int(x) < 100 and int(x) > 0 else "cell_bg_nok"))
+    datadict=dataraw.to_dict('records')
+    nowstr=f"{datadict[0]['CDR_DATE']} {datadict[0]['HOURMINUTE']}"
+    return render_template('monitor_traffic.html',data=datadict,now=nowstr)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8686')

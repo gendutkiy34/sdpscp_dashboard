@@ -1,0 +1,67 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+
+<div class="row"> <!-- row1 -->
+
+    <div class="col-lg-12">  <!-- col1 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-sm text-center">
+            <thead>
+              <tr>
+                <th scope="col"  colspan="3" class="table-header6 data-info4 table-sm"><center>SCP TRAFFIC</center></th>
+                <th></th> 
+                <th scope="col"  colspan="6" class="table-header6 data-info6 table-sm"><center>SDP TRAFFIC</center></th>
+              </tr>
+              <tr class="">
+                <th scope="col" class="table-header1">HOUR MINUTE</th>
+                <th scope="col" class="table-header1">VOICE MM</th>
+                <th scope="col" class="table-header1">VOICE PK</th>
+                <th>    </th>
+                <th scope="col" class="table-header4">HOUR MINUTE</th>
+                <th scope="col" class="table-header4">BULK MO</th>
+                <th scope="col" class="table-header4">BULK MT</th>
+                <th scope="col" class="table-header4">DIGITAL SERVICE</th>
+                <th scope="col" class="table-header4">SUBSCRIPTIONBULK MO</th>
+                <th scope="col" class="table-header4">SUBSCRIPTIONBULK MT</th>
+              </tr>
+            </thead> 
+            <body>
+              {% for t in data %}
+              <tr>
+                <td class="cell_txt_bold">{{ t['HOURMINUTE'] }}</td>
+                <td class ="{{ t['MM_colour']  }}">{{ t['MM'] }}</td>
+                <td class ="{{ t['PK_colour']  }}">{{ t['PK'] }}</td>
+                <td></td>
+                <td class="cell_txt_bold">{{ t['HOURMINUTE'] }}</td>
+                <td class ="{{ t['BULK_MO_colour']  }}">{{ t['BULK_MO'] }}</td>
+                <td class ="{{ t['BULK_MT_colour']  }}">{{ t['BULK_MT'] }}</td>
+                <td class ="{{ t['DIGITAL_SERVICE_colour']  }}">{{ t['DIGITAL_SERVICE'] }}</td>
+                <td class ="{{ t['SUBSCRIPTIONBULK_MO_colour']  }}">{{ t['SUBSCRIPTIONBULK_MO'] }}</td>
+                <td class ="{{ t['SUBSCRIPTIONBULK_MT_colour']  }}">{{ t['SUBSCRIPTIONBULK_MT'] }}</td>
+              </tr>
+              {% endfor %}
+            </body> 
+          </table>
+          
+        </div>
+      </div>
+    </div> <!-- col1 -->  
+
+    
+          
+        </div>
+      </div>
+    </div> <!-- col2 -->  
+
+    
+
+</div> <!-- row1 -->
+
+
+
+
+</section>
+{% endblock %}
