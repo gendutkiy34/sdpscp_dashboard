@@ -244,7 +244,7 @@ def ErrorMonitor():
         pass
 
     if flag == 1 :
-        list_col=['CDR_DATE', 'CDR_HOUR', 'ERR_5000', 'ERR_6000', 'ERR_5005', 'ERR_5004', 'ERR_83',
+        list_col=['CDR_DATE', 'CDR_HOUR','ERR_5012', 'ERR_5000', 'ERR_6000', 'ERR_5005', 'ERR_5004', 'ERR_83',
        'ERR_601', 'ERR_940']
         
         #scp

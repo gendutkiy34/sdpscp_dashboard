@@ -23,6 +23,7 @@
                 <th>    </th>
                 <th scope="col" class="table-header4">HOUR</th>
                 <th scope="col" class="table-header4">ERR_5000</th>
+                <th scope="col" class="table-header4">ERR_5012</th>
                 <th scope="col" class="table-header4">ERR_6000</th>
                 <th scope="col" class="table-header4">ERR_5005</th>
                 <th scope="col" class="table-header4">ERR_5004</th>
@@ -38,11 +39,18 @@
                 <td></td>
                 <td class="cell_txt_bold">{{ t['CDR_HOUR'] }}</td>
                 <td class ="{{ t['ERR_5000_CLR']  }}">{{ t['ERR_5000'] }}</td>
+                <td class ="{{ t['ERR_5012_CLR']  }}">{{ t['ERR_5012'] }}</td>
                 <td class ="{{ t['ERR_6000_CLR']  }}">{{ t['ERR_6000'] }}</td>
                 <td class ="{{ t['ERR_5005_CLR']  }}">{{ t['ERR_5005'] }}</td>
                 <td class ="{{ t['ERR_5004_CLR']  }}">{{ t['ERR_5004'] }}</td>
               </tr>
               {% endfor %}
+              <tr>
+                <td colspan="12"></left><h7 class="h7a">** 5000 : Delay in receiving response from OCS, 5004 : DIAMETER_MISSING_AVP ,5005 : DIAMETER_MISSING_AVP ,5012 : DIAMETER_UNABLE_TO_COMPLY </h7></td>
+              </tr>
+              <tr>                
+                <td colspan="12"><h7 class="h7a">**  6000 : Packet loss within the ussdscp to diameter server </h7></td>
+              </tr>
             </body> 
           </table>
           

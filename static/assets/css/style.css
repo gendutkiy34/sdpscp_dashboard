@@ -1547,6 +1547,13 @@ text-shadow: 0 0 40px white;
   color: #031136;
   text-decoration: underline;
 }
+
+.h7a {
+  color: #e6630c;
+  font-size: 13px;
+  font-style: italic;
+}
+
 /*
 table td,
 table th {

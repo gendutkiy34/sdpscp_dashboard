@@ -53,10 +53,12 @@ def NewDataProcess():
 def CompareDataNewOld():
     pathdir=os.getcwd()
     newraw=NewDataProcess()
+    newraw['CDR_DATE']=pd.to_datetime(newraw['CDR_DATE'], format='%d-%m-%Y').dt.date
     try :
         tempraw=pd.read_csv(outputfile)
-        list_date=tempraw['CDR_DATE'].values.tolist()
         list_hour=tempraw['HOURMINUTE'].values.tolist()
+        tempraw['CDR_DATE']=pd.to_datetime(tempraw['CDR_DATE'], format='%Y-%m-%d').dt.date 
+        list_date=tempraw['CDR_DATE'].values.tolist()
         oldraw=tempraw[col]
     except :
         oldraw=None
@@ -76,8 +78,9 @@ def CompareDataNewOld():
         df_final=pd.concat([oldraw,df_new])
     else :
         df_final=newraw
-    df_result=df_final.sort_values(by='HOURMINUTE',ascending=False)
-    df_result[:17][col].to_csv(outputfile,index=False)
+    df_final['CDR_DATE']=pd.to_datetime(df_final['CDR_DATE'], format='%Y-%m-%d').dt.date
+    df_result=df_final.sort_values(by=['CDR_DATE','HOURMINUTE'],ascending=False)
+    df_result[col][:17].to_csv(outputfile,index=False)
 
 
 SftpFile()
