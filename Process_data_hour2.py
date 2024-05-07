@@ -150,7 +150,6 @@ def ScpProcessHour():
         dfjoin11=pd.merge(pd.merge(dfjoin10,dfmmsuc,on=['CDR_HOUR'],how='left'),dfpkatt,on=['CDR_HOUR'],how='left')
         joinfinal=pd.merge(dfjoin11,dfpksuc,on=['CDR_HOUR'],how='left').reset_index()
         join_column=joinfinal.columns
-        print(joinfinal.info())
         for c in scp_colum:
             if c not in join_column:
                 joinfinal[c]=0
@@ -263,7 +262,8 @@ def ErrorMonitor():
         #sdp
         sdp_today=rawsdp[rawsdp['REMARK']== 'day0']   
         noncharging_base=sdp_today[sdp_today['BASICCAUSE'].isin([601,83])]
-        charging_base=sdp_today[(sdp_today['BASICCAUSE']==940) & (sdp_today['INTERNALCAUSE'].isna())]                       
+        noncharging_base['BASICCAUSE']=noncharging_base['BASICCAUSE'].astype(int)
+        charging_base=sdp_today[(sdp_today['BASICCAUSE'].isin([940,950,948])) & (sdp_today['INTERNALCAUSE'].isna())]                       
         noncharging_pivot=pd.pivot_table(noncharging_base,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["BASICCAUSE"],aggfunc={'TOTAL': "sum"}).reset_index()
         noncharging_pivot.fillna(0,inplace=True)
         for c in noncharging_pivot.columns :
@@ -271,8 +271,9 @@ def ErrorMonitor():
                 pass
             else :
                 noncharging_pivot[c]=noncharging_pivot[c].astype(int)
-        charging_pivot=pd.pivot_table(charging_base,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["BASICCAUSE"],aggfunc={'TOTAL': "sum"}).reset_index()
-        charging_pivot.fillna(0,inplace=True)        
+        #charging_pivot=pd.pivot_table(charging_base,values="TOTAL",index=['CDR_DATE','CDR_HOUR'],columns=["BASICCAUSE"],aggfunc={'TOTAL': "sum"}).reset_index()
+        charging_pivot=charging_base.groupby(['CDR_DATE','CDR_HOUR'])['TOTAL'].sum().reset_index()
+        charging_pivot.rename(columns={'TOTAL':940},inplace=True)
         
         #join
         join1=df_hour.merge(bft_pivot,how='left',on=['CDR_DATE','CDR_HOUR'])

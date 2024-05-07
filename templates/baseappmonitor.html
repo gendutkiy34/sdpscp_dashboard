@@ -56,7 +56,7 @@
       <nav class="navbar navbar-expand-lg ">
         <div class="btn-group">
           <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-           others
+           menu
           </button>
           <ul class="dropdown-menu">
             <li class="nav-item dropdown">
@@ -69,7 +69,10 @@
               <a class="nav-link" href="{{ url_for('TrafficAttempt')  }}">traffic attempt</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link" href="{{ url_for('errormon')  }}">error monitoring</a>
+              <a class="nav-link" href="{{ url_for('errormon')  }}">error hourly</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="{{ url_for('ErrorMinute')  }}">error minute wise</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link" href="{{ url_for('sdptoday')  }}">sdp today</a>

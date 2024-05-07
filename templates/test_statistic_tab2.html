@@ -1,0 +1,54 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+  <div class="row"> <!---header  tsummary-->
+          <div class="card">
+            <div class="card-body2">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link"  href="{{ url_for('Statistic')  }}">Chart1</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{ url_for('RadialChart')  }}">Chart2</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('ColumnChart')  }}">Chart3</a>
+                </li>
+              </ul>
+              <div class="col-lg-4">
+                      <table class="table table-custom1"">
+                        <thead >
+                          <tr>
+                            <th scope="col"  colspan="6" class="table-secondary table-header6 data-increase"><center>TEST STATISTIC</center></th>
+                          </tr>
+                        </thead >  
+                      </table>
+                
+              
+              <!-- Donut Chart -->
+              <div id="donutChart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  new ApexCharts(document.querySelector("#donutChart"), {
+                    series: {{ val }},
+                    chart: {
+                      height: 350,
+                      type: 'donut',
+                      toolbar: {
+                        show: true
+                      }
+                    },
+                    labels:{{ col | tojson }} ,
+                  }).render();
+                });
+              </script>
+              <!-- End Donut Chart -->
+
+            </div>
+          </div>
+        </div> <!---header  top CP-->
+  </div><!---header  tsummary-->
+</section>
+
+{% endblock %}

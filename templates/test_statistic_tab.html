@@ -1,0 +1,77 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+  <div class="row"> <!---header  tsummary-->
+          <div class="card">
+            <div class="card-body2">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{ url_for('Statistic')  }}">Chart1</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('RadialChart')  }}">Chart2</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('ColumnChart')  }}">Chart3</a>
+                </li>
+              </ul>
+              <div class="col-lg-6">
+                      <table class="table table-custom1"">
+                        <thead >
+                          <tr>
+                            <th scope="col"  colspan="6" class="table-secondary table-header6 data-increase"><center>TEST STATISTIC</center></th>
+                          </tr>
+                        </thead >  
+                      </table>
+                
+              <!-- Area Chart -->
+            <div id="lineChart"></div>
+            
+          <!-- Start Chart -->
+      <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    new ApexCharts(document.querySelector("#lineChart"), {
+      series: [{
+        name: "total_attempt",
+        data:  {{ data['newlist'] | tojson }} 
+      }],
+      chart: {
+        height: 350,
+        type: 'area',
+        zoom: {
+          enabled: false
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2,
+      },
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          show: true,
+          rotateAlways: false,
+          format: 'dd-MM-yyyy',
+            },
+      },
+      grid: {
+        row: {
+          colors: ['#ffffff', 'transparent'], // takes an array which will be repeated on columns
+          opacity: 0.5
+        },
+      }
+    }).render();
+  });
+</script>
+<!-- End Line Chart -->
+
+            </div>
+          </div>
+        </div> <!---header  top CP-->
+  </div><!---header  tsummary-->
+</section>
+
+{% endblock %}

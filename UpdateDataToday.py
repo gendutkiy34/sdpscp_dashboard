@@ -49,5 +49,5 @@ EOF
 while True :
     GetDataUpdate(env='scp')
     GetDataUpdate(env='sdp')
-    time.sleep(300)
+    time.sleep(120)
 

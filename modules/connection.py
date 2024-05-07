@@ -16,8 +16,9 @@ def OracleCon(patfile):
         connection = cx_Oracle.connect(user=username, password=password,
                                dsn="{0}:{1}/{2}".format(host,port,sid),
                                encoding="UTF-8")
-    except Exception :
-        connection="connection failed !!!!"  
+    except Exception  as e:
+        connection="connection failed !!!!" 
+        print(f'{connection} failed due to :\n\n {e} \n\n') 
     return connection
 
 def OracleConPd(patfile):
@@ -29,6 +30,7 @@ def OracleConPd(patfile):
     port=json_cred['port']
     try :
         connection = cx_Oracle.connect('{0}/{1}@{2}:{3}/{4}'.format(password,username,host,port,sid))
-    except Exception :
+    except Exception as e:
         connection="connection failed !!!!"  
+        print(f'{connection} failed due to :\n\n {e} \n\n') 
     return connection

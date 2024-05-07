@@ -2,7 +2,9 @@
 {% block content %}
 <section class="section dashboard">
 
-  <div class="row">
+  
+
+  <div class="row"> <!---header  tsummary-->
 
     <div class="col-md-2">
       <div class="card">
@@ -11,10 +13,12 @@
             <center>
                 <H1>{{data['att66']}}</H1>
             </center>
+            <i class="bi bi-wallet-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <H7 class=''>IDR&nbsp;&nbsp;{{data['rev66']}}</H7>
             <!--<i class="bi bi-bar-chart-line-fill"></i><H7>    {{ data['sucpercent66'] }} %</H7> -->
         </div>
       </div>
-    </div>
+    </div> <!---header  top CP-->
 
     <div class="col-md-2">
         <div class="card">
@@ -23,6 +27,8 @@
               <center>
                 <H1>{{data['att67']}}</H1>
             </center>
+            <i class="bi bi-wallet-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <H7 class=''>IDR&nbsp;&nbsp;{{data['rev67']}}</H7> 
             <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent67'] }} %</H7> -->
           </div>
         </div>
@@ -35,6 +41,8 @@
               <center>
                 <H1>{{data['att68']}}</H1>
             </center>
+            <i class="bi bi-wallet-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <H7 class=''>IDR&nbsp;&nbsp;{{data['rev68']}}</H7>
             <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent68'] }} %</H7> -->
           </div>
         </div>
@@ -47,6 +55,8 @@
               <center>
                 <H1>{{data['att72']}}</H1>
             </center>
+            <i class="bi bi-wallet-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp;
+            <H7 class=''>IDR&nbsp;&nbsp;{{data['rev72']}}</H7>
             <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent72'] }} %</H7> -->
           </div>
         </div>
@@ -59,16 +69,30 @@
               <center>
                 <H1>{{data['att73']}}</H1>
             </center>
-            <!--<i class="bi bi-bar-chart-line-fill"></i><H7>   {{ data['sucpercent73'] }} %</H7> -->
+            <i class="bi bi-wallet-fill"></i>&nbsp;&nbsp;&nbsp;&nbsp; 
+            <H7 class='txtright'>IDR&nbsp;&nbsp;{{data['rev73']}}</H7>
+            
           </div>
         </div>
     </div>
 
     
-  </div>
+  </div> <!---header  tsummary-->
 
-  <div class="row">
-
+	<div class="row"> <!---header  top CP-->
+		<table class="table table-striped table-bordered table-sm ">
+			<thead>
+				<tr>
+					<th scope="col"  colspan="12" class="table-header7"><center>TOP 5 CP</center></th>
+				</tr>
+			</thead>
+			<body>
+			</body> 
+		</table>    
+	</div> <!---header  top CP-->
+  
+   <div class="row"> <!---top CP1-->
+   
     <div class="col-md-3">
         <div class="card">
           <div class="card-body">
@@ -76,7 +100,7 @@
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 BULK MT</center></th>
+                    <th scope="col"  colspan="2" class="table-header7"><center>TOP 5 BULK MT</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header8">CP NAME</th>
@@ -94,18 +118,18 @@
 
             </table>
         
-          </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
+			    </div>
+		    </div>
+	    </div>
+	
+	<div class="col-md-3">
         <div class="card">
           <div class="card-body">
 
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 BULK MO</center></th>
+                    <th scope="col"  colspan="2" class="table-header7"><center>TOP 5 BULK MO</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header8">CP NAME</th>
@@ -126,15 +150,15 @@
           </div>
         </div>
     </div>
-
-    <div class="col-md-3">
+	
+	<div class="col-md-3">
         <div class="card">
           <div class="card-body">
 
             <table class="table table-striped table-bordered table-sm">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 DIGITAL SERVICE</center></th>
+                    <th scope="col"  colspan="2" class="table-header7"><center>TOP 5 DIGITAL SERVICE</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header8">CP NAME</th>
@@ -155,15 +179,15 @@
           </div>
         </div>
     </div>
-
-    <div class="col-md-3">
+	
+	<div class="col-md-3">
         <div class="card">
           <div class="card-body">
 
             <table class="table table-striped table-bordered table-sm ">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 SUBSCRIPTION MO</center></th>
+                    <th scope="col"  colspan="2" class="table-header7"><center>TOP 5 SUBSCRIPTION MO</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header8">CP NAME</th>
@@ -184,11 +208,11 @@
           </div>
         </div>
     </div>
-
-  </di>
-
-  <div class="row">
-
+	
+   </div> <!---top CP1-->
+   
+   <div class="row"><!---top CP2-->
+     
     <div class="col-md-3">
         <div class="card">
           <div class="card-body">
@@ -196,7 +220,7 @@
             <table class="table table-striped table-bordered table-sm ">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header7 data-info4 table-sm"><center>TOP 5 SUBSCRIPTION MT</center></th>
+                    <th scope="col"  colspan="2" class="table-header7"><center>TOP 5 SUBSCRIPTION MT</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header8">CP NAME</th>
@@ -225,7 +249,7 @@
             <table class="table table-striped table-bordered table-sm ">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 SMSC TIMEOUT (83)</center></th>
+                    <th scope="col"  colspan="2" class="table-header9"><center>TOP 5 SMSC TIMEOUT (83)</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header10">CP NAME</th>
@@ -253,7 +277,7 @@
             <table class="table table-striped table-bordered table-sm ">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 CP NOTIF FAILED (601)</center></th>
+                    <th scope="col"  colspan="2" class="table-header9"><center>TOP 5 CP NOTIF FAILED (601)</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header10">CP NAME</th>
@@ -281,7 +305,7 @@
             <table class="table table-striped table-bordered table-sm ">
                 <thead>
                   <tr>
-                    <th scope="col"  colspan="2" class="table-header9 data-info4 table-sm"><center>TOP 5 BILLING TIMEOUT</center></th>
+                    <th scope="col"  colspan="2" class="table-header9"><center>TOP 5 BILLING TIMEOUT</center></th>
                   </tr>
                   <tr>
                     <th scope="col" class="table-header10">CP NAME</th>
@@ -301,8 +325,180 @@
           </div>
         </div>
     </div>
-
-  </div>
+	
+   </div><!---top CP2-->
    
+  <div class="row"> <!---header  top ERROR-->
+         <table class="table table-striped table-bordered table-sm ">
+              <thead>
+                <tr>
+                  <th scope="col"  colspan="12" class="table-header9"><center>TOP 5 SDP ERROR</center></th>
+                </tr>
+			   </thead>
+              <body>
+              </body> 
+          </table>    
+  </div> <!---header  top CP-->
+  
+  <div class="row"> <!---top ERROR1-->
+	
+	 <div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<table class="table table-striped table-bordered table-sm ">
+					<thead>
+						<tr>
+							<th scope="col"  colspan="3" class="table-header9"><center>BULK MO</center></th>
+						</tr>
+						<tr>
+							<th scope="col" class="table-header10">ERROR CODE</th>
+							<th scope="col" class="table-header10">DESCRIPTION</th>
+							<th scope="col" class="table-header10">TOTAL</th>
+						</tr>
+					</thead>
+					<body>
+						{% for t in data['toperror'][66] %}
+						<tr>
+							<td >{{ t['BASICCAUSE'] }}</td>
+							<td >{{ t['DESCRIPTION'] }}</td>
+							<td >{{ t['TOTAL'] }}</td>
+						</tr>
+						{% endfor %}
+					</body> 
+				</table>
+      
+			</div>
+		</div>
+    </div>
+	
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<table class="table table-striped table-bordered table-sm ">
+					<thead>
+						<tr>
+							<th scope="col"  colspan="3" class="table-header9"><center>BULK MT</center></th>
+						</tr>
+						<tr>
+							<th scope="col" class="table-header10">ERROR CODE</th>
+							<th scope="col" class="table-header10">DESCRIPTION</th>
+							<th scope="col" class="table-header10">TOTAL</th>
+						</tr>
+					</thead>
+					<body>
+						{% for t in data['toperror'][67] %}
+						<tr>
+							<td >{{ t['BASICCAUSE'] }}</td>
+							<td >{{ t['DESCRIPTION'] }}</td>
+							<td >{{ t['TOTAL'] }}</td>
+						</tr>
+						{% endfor %}
+					</body> 
+				</table>
+      
+			</div>
+		</div>
+    </div>
+	
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<table class="table table-striped table-bordered table-sm ">
+					<thead>
+						<tr>
+							<th scope="col"  colspan="3" class="table-header9"><center>DIGITAL SERVICE</center></th>
+						</tr>
+						<tr>
+							<th scope="col" class="table-header10">ERROR CODE</th>
+							<th scope="col" class="table-header10">DESCRIPTION</th>
+							<th scope="col" class="table-header10">TOTAL</th>
+						</tr>
+					</thead>
+					<body>
+						{% for t in data['toperror'][68] %}
+						<tr>
+							<td >{{ t['BASICCAUSE'] }}</td>
+							<td >{{ t['DESCRIPTION'] }}</td>
+							<td >{{ t['TOTAL'] }}</td>
+						</tr>
+						{% endfor %}
+					</body> 
+				</table>
+      
+			</div>
+		</div>
+    </div>
+	
+  </div> <!---top ERROR1-->
+  
+  <div class="row"> <!---top ERROR2-->
+	
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<table class="table table-striped table-bordered table-sm ">
+					<thead>
+						<tr>
+							<th scope="col"  colspan="3" class="table-header9"><center>SUBSCRIPTIONBULK MO</center></th>
+						</tr>
+						<tr>
+							<th scope="col" class="table-header10">ERROR CODE</th>
+							<th scope="col" class="table-header10">DESCRIPTION</th>
+							<th scope="col" class="table-header10">TOTAL</th>
+						</tr>
+					</thead>
+					<body>
+						{% for t in data['toperror'][72] %}
+						<tr>
+							<td >{{ t['BASICCAUSE'] }}</td>
+							<td >{{ t['DESCRIPTION'] }}</td>
+							<td >{{ t['TOTAL'] }}</td>
+						</tr>
+						{% endfor %}
+					</body> 
+				</table>
+      
+			</div>
+		</div>
+    </div>
+	
+	<div class="col-md-4">
+		<div class="card">
+			<div class="card-body">
+
+				<table class="table table-striped table-bordered table-sm ">
+					<thead>
+						<tr>
+							<th scope="col"  colspan="3" class="table-header9"><center>SUBSCRIPTIONBULK MT</center></th>
+						</tr>
+						<tr>
+							<th scope="col" class="table-header10">ERROR CODE</th>
+							<th scope="col" class="table-header10">DESCRIPTION</th>
+							<th scope="col" class="table-header10">TOTAL</th>
+						</tr>
+					</thead>
+					<body>
+						{% for t in data['toperror'][73] %}
+						<tr>
+							<td >{{ t['BASICCAUSE'] }}</td>
+							<td >{{ t['DESCRIPTION'] }}</td>
+							<td >{{ t['TOTAL'] }}</td>
+						</tr>
+						{% endfor %}
+					</body> 
+				</table>
+      
+			</div>
+		</div>
+    </div>
+	
+  </div> <!---top ERROR2-->
+  
+  
+  
 </section>
 {% endblock %}

@@ -1505,9 +1505,33 @@ padding: 80px 20px 10px 20px;
   text-align: left;
 }
 
+.data-info6{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: rgb(192, 61, 61);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
+.data-info4{
+  --bs-table-color: #ffffff;
+  --bs-table-bg: rgb(179, 179, 179);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
 .data-info5{
-  --bs-table-color: #8b9ed6;
+  --bs-table-color: #ffffff;
   --bs-table-bg: rgb(247, 166, 45);
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+  text-align: left;
+}
+
+.data-info-basic{
+  --bs-table-color: #0d4fdd;
+  --bs-table-bg: rgb(255, 255, 255);
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
   text-align: left;

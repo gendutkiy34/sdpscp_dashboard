@@ -1,0 +1,152 @@
+{% extends "baseappmonitor.html" %}
+{% block content %}
+<section class="section dashboard">
+
+<div class="row"> <!-- row1 -->
+
+    <div class="col-lg-7">  <!-- col1 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		      <table class="table table-sm text-center">
+            <thead>
+              <tr>
+                <th scope="col"  colspan="7" class="table-header6 data-info6 table-sm"><center>SDP</center></th>
+              </tr>
+              <tr>
+                <th scope="col"  colspan="7" class="table-header6 data-info-basic table-sm"><center>Diameter Server Inte</center></th>
+              </tr>
+              <tr>
+                <th scope="col"  colspan="3" class="table-header4"><center>Diameter Server MM</center></th>
+                <th></th> 
+                <th scope="col"  colspan="3" class="table-header4"><center>Diameter Server PK</center></th>
+              </tr>
+              <tr class="">
+				<th scope="col" class="table-header1">Instance</th>
+				<th scope="col" class="table-header1">System Error</th>
+				<th scope="col" class="table-header1">Connection Error</th>
+				<th></th>
+				<th scope="col" class="table-header1">Instance</th>
+				<th scope="col" class="table-header1">System Error</th>
+				<th scope="col" class="table-header1">Connection Error</th>
+              </tr>
+            </thead> 
+            <body>
+              <tr>
+			    <td class="cell_txt_bold">jktmmpsdpprov01</td>
+				<td class="{{ data['jktmmpsdpprov01']['cell_colour'] }}">{{ data['jktmmpsdpprov01']['error_count'] }}</td>
+				<td class="{{ data['jktmmpsdpprov01']['con_cell_colour'] }}">{{ data['jktmmpsdpprov01']['connection_error'] }}</td>
+				<td></td>
+				<td class="cell_txt_bold">jktpkpsdpprov01</td>
+				<td class="{{ data['jktpkpsdpprov01']['cell_colour'] }}">{{ data['jktpkpsdpprov01']['error_count'] }}</td>
+				<td class="{{ data['jktpkpsdpprov01']['con_cell_colour'] }}">{{ data['jktpkpsdpprov01']['connection_error'] }}</td>
+			  </tr>
+			  <tr>
+			    <td class="cell_txt_bold">jktmmpsdpprov02</td>
+				<td class="{{ data['jktmmpsdpprov01']['cell_colour'] }}">{{ data['jktmmpsdpprov02']['error_count'] }}</td>
+				<td class="{{ data['jktmmpsdpprov01']['con_cell_colour'] }}">{{ data['jktmmpsdpprov02']['connection_error'] }}</td>
+				<td></td>
+				<td class="cell_txt_bold">jktpkpsdpprov02</td>
+				<td class="{{ data['jktpkpsdpprov01']['cell_colour'] }}">{{ data['jktpkpsdpprov02']['error_count'] }}</td>
+				<td class="{{ data['jktpkpsdpprov01']['con_cell_colour'] }}">{{ data['jktpkpsdpprov02']['connection_error'] }}</td>
+			  </tr>
+			  <tr>
+			    <td class="cell_txt_bold">jktmmpsdpprov03</td>
+				<td class="{{ data['jktmmpsdpprov01']['cell_colour'] }}">{{ data['jktmmpsdpprov03']['error_count'] }}</td>
+				<td class="{{ data['jktmmpsdpprov01']['con_cell_colour'] }}">{{ data['jktmmpsdpprov03']['connection_error'] }}</td>
+				<td></td>
+				<td class="cell_txt_bold">jktpkpsdpprov03</td>
+				<td class="{{ data['jktpkpsdpprov01']['cell_colour'] }}">{{ data['jktpkpsdpprov03']['error_count'] }}</td>
+				<td class="{{ data['jktpkpsdpprov01']['con_cell_colour'] }}">{{ data['jktpkpsdpprov03']['connection_error'] }}</td>
+			  </tr>
+            </body> 
+          </table>
+          
+        </div>
+      </div>
+    </div> <!-- col1 -->  
+
+     <div class="col-lg-5">  <!-- col2 -->
+      <div class="card">
+        <div class="card-body2">
+		
+		<table class="table table-sm text-center">
+          <thead>
+            <tr>
+              <th scope="col"  colspan="5" class="table-header6 data-info6 table-sm"><center>SMSC </center></th>
+            </tr>
+            <tr>
+              <th scope="col"  colspan="5" class="table-header6 data-info-basic table-sm"><center>SMSC QUEUE</center></th>
+            </tr>
+            <tr>
+              <th scope="col"  colspan="2" class="table-header4"><center>SMSC MM</center></th>
+              <th></th> 
+              <th scope="col"  colspan="2" class="table-header4"><center>SMSC PK</center></th>
+            </tr>
+            <tr class="">
+              <th scope="col" class="table-header1">instance</th>
+              <th scope="col" class="table-header1">total queue</th>
+			  <th></th>
+			  <th scope="col" class="table-header1">instance</th>
+              <th scope="col" class="table-header1">total queue</th>
+            </tr>
+          </thead> 
+          <body>
+            <tr>
+			  <td class="cell_txt_bold">smsapp1</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp1_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp1'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp1</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp1_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp1'] }}</td>
+			</tr>
+			<tr>
+			  <td class="cell_txt_bold">smsapp2</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp2_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp2'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp2</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp2_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp2'] }}</td>
+			</tr>
+			<tr>
+			  <td class="cell_txt_bold">smsapp3</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp3_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp3'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp3</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp3_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp3'] }}</td>
+			</tr>
+			<tr>
+			  <td class="cell_txt_bold">smsapp4</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp4_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp4'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp4</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp4_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp4'] }}</td>
+			</tr>
+			<tr>
+			  <td class="cell_txt_bold">smsapp5</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp5_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp5'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp5</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp5_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp5'] }}</td>
+			</tr>
+			<tr>
+			  <td class="cell_txt_bold">smsapp6</td>
+              <td class="{{ data2['jktmmpussdlplog02']['smsapp6_colour'] }}">{{ data2['jktmmpussdlplog02']['smsapp6'] }}</td>
+			  <td></td>
+			  <td class="cell_txt_bold">smsapp6</td>
+              <td class="{{ data2['jktpkpussdlplog02']['smsapp6_colour'] }}">{{ data2['jktpkpussdlplog02']['smsapp6'] }}</td>
+			</tr>
+          </body> 
+        </table>
+          
+        </div>
+      </div>
+    </div> <!-- col2 -->  
+
+    
+
+</div> <!-- row1 -->
+
+
+
+
+</section>
+{% endblock %}

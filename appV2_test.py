@@ -1,4 +1,5 @@
 import os
+import datetime
 from flask import Flask,render_template,url_for,redirect,request
 from modules.general import ReadJsonFile,ReadTxtFile,ConvertListToDict,GetToday,ConvertDatetoStr,Sum2list
 from modules.DataProcess import ScpData,SdpData,ScpDataD017,SdpDataD017
@@ -25,6 +26,7 @@ scprtm='./rawdata/scp_data_realtime.csv'
 sdprtm='./rawdata/sdp_data_realtime.csv'
 sdptop5='./rawdata/sdp_raw_top5cp.csv'
 rawsdp='./rawdata/sdp_raw_hour.csv'
+rawdim='/home/gendutkiy/Downloads/internal_diameter_statistic.json'
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -52,15 +54,21 @@ def index():
 def scptoday():
     return render_template('baseappV2.html')
 
-@app.route('/sdpd017')
-def sdpd017():
+@app.route('/sdp')
+def sdp():
     return render_template('baseappV2.html')
 
-@app.route('/scpd017')
-def scpd017():
-   
+@app.route('/errmon')
+def errormon():
     return render_template('baseappV2.html')
 
+@app.route('/trafficall')
+def TrafficAttempt():
+    return render_template('baseappV2.html')
+
+@app.route('/errminute')
+def ErrorMinute():
+    return render_template('baseappV2.html')
 
 @app.route("/test_chart")
 def dynamic_chart():
@@ -83,59 +91,6 @@ def upload():
                 status=1
     print(status)
     return render_template('test_upload.html',status=status )
-
-
-def chart():
-    chartscript="""new ApexCharts(document.querySelector("#columnChart"), {
-                    series: [{
-                      name: 'Net Profit',
-                      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-                    }, {
-                      name: 'Revenue',
-                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                    }, {
-                      name: 'Free Cash Flow',
-                      data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-                    }],
-                    chart: {
-                      type: 'bar',
-                      height: 350
-                    },
-                    plotOptions: {
-                      bar: {
-                        horizontal: false,
-                        columnWidth: '55%',
-                        endingShape: 'rounded'
-                      },
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      show: true,
-                      width: 2,
-                      colors: ['transparent']
-                    },
-                    xaxis: {
-                      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                    },
-                    yaxis: {
-                      title: {
-                        text: '$ (thousands)'
-                      }
-                    },
-                    fill: {
-                      opacity: 1
-                    },
-                    tooltip: {
-                      y: {
-                        formatter: function(val) {
-                          return "$ " + val + " thousands"
-                        }
-                      }
-                    }
-                  }).render();"""
-    return chartscript
 
 @app.route('/realtime')
 def realtime() :
@@ -216,7 +171,77 @@ def sdptoday() :
     item[f'topocs']=dftemp.to_dict('records')
     print(raw_today['CDR_DATE'][0])
     return render_template('sdp_today_monitor.html',data=item)
-    
+
+@app.route('/errnode') 
+def ErrorNode() :
+    dimjson=ReadJsonFile(pathfile=rawdim)
+    for k,v in dimjson.items():
+      if int(v['error_count']) < 1 :
+        v['cell_colour']='cell_bg_ok'
+      else :
+        v['cell_colour']='cell_bg_nok'
+    nowstr=dimjson['jktmmpsdpprov01']['timestamp']
+    return render_template('monitor_errnode.html',data=dimjson,now=nowstr)
+
+
+@app.route('/statistic')
+def Statistic() :
+    item={}
+    raw_data=pd.read_csv('/home/gendutkiy/Downloads/test_statistic_horly.csv')
+    raw_data['date2']=pd.to_datetime(raw_data['CDR_DATE'],format='%d-%m-%Y %H')
+    #raw_data['unixtime']=pd.to_datetime(raw_data['CDR_DATE'],format='%d-%m-%Y %H').map(pd.Timestamp.timestamp)
+    raw_data['unixtime']=raw_data['date2'].apply(lambda x : datetime.datetime.timestamp(x)*1000)
+    raw_data.sort_values(['date2'],ascending=True,inplace=True)
+    item['date']=raw_data['unixtime'].tolist()
+    item['trx']=raw_data['TOTAL_TRX'].tolist()
+    new_list=[]
+    for a,b in zip(raw_data['unixtime'].tolist(),raw_data['TOTAL_TRX'].tolist()) :
+        sublist=[]
+        sublist.append(a)
+        sublist.append(b)
+        new_list.append(sublist)
+    item['newlist']=new_list
+    dt=GetToday()
+    dtstr=ConvertDatetoStr(dt,format='%Y%m%d%H%M%S')
+    return render_template('test_statistic_tab.html',data=item,now=dtstr)
+
+@app.route('/radialchart')
+def RadialChart() :
+    item={}
+    raw_data=pd.read_csv('/home/gendutkiy/Downloads/scp_raw_hour.csv')
+    raw_today=raw_data[raw_data['REMARK']=='day0']
+    raw_success=raw_today[raw_today['DIAMETER_RESULT_CODES']==2001]
+    raw_bf=raw_today[raw_today['DIAMETER_RESULT_CODES'].isin([4010,4012,5030,5031])]
+    df_att=raw_today.groupby(['CDR_DATE'])['TOTAL'].sum().reset_index()
+    df_att.rename(columns={'TOTAL':'ATT'},inplace=True)
+    df_suc=raw_success.groupby(['CDR_DATE'])['TOTAL'].sum().reset_index()
+    df_suc.rename(columns={'TOTAL':'SUCCESS'},inplace=True)
+    df_bf=raw_bf.groupby(['CDR_DATE'])['TOTAL'].sum().reset_index()
+    df_bf.rename(columns={'TOTAL':'BUSSINES_FAIL'},inplace=True)
+    df_merge1=pd.merge(df_att,df_suc,how='left',on=['CDR_DATE'])
+    df_final=pd.merge(df_merge1,df_bf,how='left',on=['CDR_DATE'])
+    df_final['FAILURE']=df_final['ATT']-(df_final['SUCCESS']+df_final['BUSSINES_FAIL'])
+    sum_dict=df_final.to_dict('tight')
+    list_col=[]
+    list_val=[]
+    for c in df_final.columns:
+        item={}
+        print(c)
+        if c not in ['CDR_DATE','ATT']:
+            list_col.append(c)
+            list_val.append(df_final[c][0])
+
+    dt=GetToday()
+    dtstr=ConvertDatetoStr(dt,format='%Y%m%d%H%M%S')
+    print(list_val,list_col)
+    return render_template('test_statistic_tab2.html',col=list_col,val=list_val,now=dtstr)
+
+@app.route('/columchart')
+def ColumnChart() :
+    dt=GetToday()
+    dtstr=ConvertDatetoStr(dt,format='%Y%m%d%H%M%S')
+    return render_template('test_statistic_tab3.html',now=dtstr)
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='3034')
     #app.run(debug=True,port='3034')

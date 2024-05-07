@@ -8,7 +8,7 @@ from modules.connection import OracleCon
 
 
 
-def GetDataNow(env=None):
+def GetNewDataPd(env=None):
     #variable
     pathdir=os.getcwd()
     today=GetToday()
@@ -33,31 +33,21 @@ def GetDataNow(env=None):
     sql=sqltxt.format(day=day,mon=mon,tm1=tm1,tm2=tm2)
     list1=[]
     try :
-        dfold=pd.read_csv(output)
         conn=OracleCon(conpath)
         if conn != "connection failed !!!!"  :
             dfnew=pd.read_sql(sql, con=conn)
         else :
             dfnew=pd.DataFrame(list1)
-        dftemp=dfnew[~dfnew['CDRDATE'].isin(dfold['CDRDATE'].tolist())]
-        dfraw=pd.concat([dfold[list_column],dftemp[list_column]], ignore_index=True).reset_index()
     except Exception :
-        try :
-            conn=OracleCon(conpath)
-            if conn != "connection failed !!!!"  :
-                dfraw=pd.read_sql(sql, con=conn)
-            else :
-                dfraw=pd.DataFrame(list1)
-        except Exception :
-            dfraw=pd.DataFrame(list1)
-        dfold=pd.DataFrame(list1)  
-    print(len(dfraw.index))   
+        dfnew=pd.DataFrame(list1)  
+    print(len(dfraw.index)) 
+    dfnew.to_csv(output,index=False) 
     #dfraw[list_column].iloc[-50000:].to_csv(output,index=False)
     #print('data SCP wrap to file done !!!')
     
 
 
-def GetDataNew(env=None):
+def GetDataNewCur(env=None):
     #variable
     pathdir=os.getcwd()
     today=GetToday()
@@ -82,7 +72,6 @@ def GetDataNew(env=None):
     sql=sqltxt.format(day=day,mon=mon,tm1=tm1,tm2=tm2)
     list1=[]
     try :
-        dfold=pd.read_csv(output)
         conn=OracleCon(conpath)
         if conn != "connection failed !!!!"  :
             cur=conn.cursor()
@@ -93,26 +82,12 @@ def GetDataNew(env=None):
         [list_raw.append(d) for d in tempdata]
         if len(list_raw) > 0 :
             dfnew=pd.DataFrame(list_raw,columns=list_column)
-            dftemp=dfnew[~dfnew['CDRDATE'].isin(dfold['CDRDATE'].tolist())]
-            dfraw=pd.concat([dfold[list_column],dftemp[list_column]], ignore_index=True).reset_index()
         else :
-            dfraw=pd.DataFrame(list1)
-        print(tempdata)
+            dfnew=pd.DataFrame(list1,columns=list_column)
     except Exception :
-        try :
-            conn=OracleCon(conpath)
-            if conn != "connection failed !!!!"  :
-                cur=conn.cursor()
-                tempdata=cur.execute(sql)
-            else :
-                tempdata=list1
-            list_raw=[]
-            [list_raw.append(d) for d in tempdata]
-            dfraw=pd.DataFrame(list_raw,columns=list_column)
-        except Exception :
-            dfraw=pd.DataFrame(list1)
-        dfold=pd.DataFrame(list1) 
-    dfraw[list_column].iloc[-50000:].to_csv(output,index=False)
+        dfnew=pd.DataFrame(list1,columns=list_column)
+    print(conn)
+    dfnew.to_csv(output,index=False)
     print('data SCP wrap to file done !!!')
 
 
@@ -153,11 +128,11 @@ def GetData3DPd(day0=None,env=None):
                 dfnew['REMARK']=remark
         else :
                 dfnew=pd.DataFrame(list1)
-        listtmp=dfnew[list_column].values.tolist()
+        listtmp=dfnew.values.tolist()
         [list_raw.append(t) for t in listtmp]
         print(f'Get data day {n} done !!!')
     dfraw=pd.DataFrame(list_raw,columns=list_column)
-    dfraw[list_column].to_csv(output,index=False)
+    dfraw.to_csv(output,index=False)
     print('data SCP wrap to file done !!!')    
 
 
@@ -204,9 +179,9 @@ def GetData3DCur(day0=None,env=None):
                 dfnew['REMARK']=remark
         else :
                 dfnew=pd.DataFrame(list1)   
-        listtmp=dfnew[list_column].values.tolist()
+        listtmp=dfnew.values.tolist()
         [list_raw.append(t) for t in listtmp]
         print(f'Get data day {n} done !!!')
     dfraw=pd.DataFrame(list_raw,columns=list_column)
-    dfraw[list_column].to_csv(output,index=False)
+    dfraw.to_csv(output,index=False)
     print('data SCP wrap to file done !!!')

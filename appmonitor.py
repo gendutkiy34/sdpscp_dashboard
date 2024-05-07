@@ -23,6 +23,10 @@ hoursdp='./rawdata/sdp_newdata_hour.csv'
 errfl='./rawdata/sdpscp_error_monitor.csv'
 rawsdp='./rawdata/sdp_raw_hour.csv'
 realtm='./rawdata/data_realtime_minute.csv'
+errrealtm='./rawdata/error_realtime_minute.csv'
+rawdim='/home/scpsdpdev/alert/Scripts/output/internal_diameter_statistic.json'
+smsque='/home/scpsdpdev/alert/Scripts/output/smsc_queue_statistic.json'
+sdperrorcode='sdp_error_code.json'
 
 def bgError(data):
     if int(data) == 0 :
@@ -96,8 +100,22 @@ def errormon():
 @app.route('/sdptoday') 
 def sdptoday() :
     dataraw=pd.read_csv(rawsdp)
+    errcode=ReadJsonFile(sdperrorcode)
     raw_today=dataraw[dataraw['REMARK']=='day0']
     item={}
+
+    #toperror
+    raw_err=raw_today[~raw_today['INTERNALCAUSE'].isin([2001,4010,4012,5030,5031])]
+    df_sum=raw_err.groupby(['CDR_DATE','ACCESSFLAG','BASICCAUSE'])['TOTAL'].sum().reset_index()
+    df_sum['RANK']=df_sum.groupby(['ACCESSFLAG'])['TOTAL'].rank(method='dense',ascending=False)
+    df_top5=df_sum[df_sum['RANK'] <= 5]
+    df_top5.sort_values(by=['ACCESSFLAG','TOTAL'],ascending=[False,False],inplace=True)
+    df_top5['DESCRIPTION']=df_top5['BASICCAUSE'].apply(lambda x : errcode.get(str(x)))
+    dict_top={}
+    for ac in [66,67,68,72,73] :
+        temp=df_top5[df_top5['ACCESSFLAG']==ac].sort_values(['TOTAL'],ascending=False)
+        dict_top[ac]=temp.to_dict('records')
+    item['toperror']=dict_top
 
     #traffic
     for acc in [66,67,68,72,73] :
@@ -145,11 +163,48 @@ def sdptoday() :
 def TrafficAttempt() :
     dataraw=pd.read_csv(realtm)
     for c in ['MM', 'PK', 'BULK_MO', 'BULK_MT', 'DIGITAL_SERVICE','SUBSCRIPTIONBULK_MO', 'SUBSCRIPTIONBULK_MT'] :
+        dataraw[c]=dataraw[c].astype('int')
         newcol=f'{c}_colour'
         dataraw[newcol]=dataraw[c].apply(lambda x : "cell_bg_ok" if int(x) >= 100 else ("cell_bg_tres" if int(x) < 100 and int(x) > 0 else "cell_bg_nok"))
     datadict=dataraw.to_dict('records')
     nowstr=f"{datadict[0]['CDR_DATE']} {datadict[0]['HOURMINUTE']}"
     return render_template('monitor_traffic.html',data=datadict,now=nowstr)
+
+@app.route('/errminute') 
+def ErrorMinute() :
+    dataraw=pd.read_csv(errrealtm)
+    for c in ['err83', 'err601', 'billing_timeout','err5000', 'err5004', 'err5005', 'err5012', 'err6000'] :
+        dataraw[c]=dataraw[c].astype('int')
+        newcol=f'{c}_colour'
+        dataraw[newcol]=dataraw[c].apply(lambda x : "cell_bg_ok" if int(x) < 1 else "cell_bg_nok")
+    datadict=dataraw.to_dict('records')
+    nowstr=f"{datadict[0]['CDR_DATE']} {datadict[0]['HOURMINUTE']}"
+    return render_template('monitor_errminute.html',data=datadict,now=nowstr)
+
+@app.route('/errnode') 
+def ErrorNode() :
+    dimjson=ReadJsonFile(pathfile=rawdim)
+    smscjson=ReadJsonFile(pathfile=smsque)
+    for k,v in dimjson.items():
+      if int(v['error_count']) < 1 :
+        v['cell_colour']='cell_bg_ok'
+      elif int(v['error_count']) >= 1 :
+        v['cell_colour']='cell_bg_nok'
+      if int(v['connection_error']) < 1 :
+        v['con_cell_colour']='cell_bg_ok'   
+      elif int(v['connection_error']) >= 1 :
+        v['con_cell_colour']='cell_bg_nok'
+    nowstr=dimjson['jktmmpsdpprov01']['timestamp']
+    for k,v in smscjson.items():
+      for i in range (1,7) :
+            if int(v[f'smsapp{i}']) < 1 :
+                v[f'smsapp{i}_colour']='cell_bg_ok'
+            elif int(v[f'smsapp{i}']) >= 1 and int(v[f'smsapp{i}']) <= 1000 :
+                v[f'smsapp{i}_colour']='cell_bg_tres'    
+            elif int(v[f'smsapp{i}']) >= 1001:
+                v[f'smsapp{i}_colour']='cell_bg_nok'
+    os.system(f'echo {smscjson}')
+    return render_template('monitor_errnode.html',data=dimjson,now=nowstr,data2=smscjson)
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0',port='8686')
